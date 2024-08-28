@@ -1,0 +1,31 @@
+Nova estrutura do sistema
+
+comabem/
+│
+├── config/
+│   └── database.js       // Configurações do banco de dados
+├── controllers/
+│   ├── AuthController.js  // Controle de autenticação (login, cadastro)
+│   ├── ProductController.js // Controle de produtos (frutas, legumes, etc.)
+│   └── CartController.js  // Controle do carrinho
+├── models/
+│   ├── User.js            // Modelo do usuário
+│   ├── Product.js         // Modelo de produtos
+│   └── Cart.js            // Modelo do carrinho
+├── routes/
+│   ├── auth.js            // Rotas de autenticação
+│   ├── products.js        // Rotas de produtos
+│   └── cart.js            // Rotas do carrinho
+├── views/
+│   ├── index.ejs          // Página inicial
+│   ├── login.ejs          // Página de login
+│   ├── cadastro.ejs       // Página de cadastro
+│   ├── produtos.ejs       // Páginas de produtos (frutas, legumes, etc.)
+│   └── cart.ejs           // Página do carrinho
+├── public/
+│   ├── css/
+│   ├── images/
+│   └── scripts/
+├── app.js                 // Arquivo principal do servidor
+├── package.json
+└── README.md

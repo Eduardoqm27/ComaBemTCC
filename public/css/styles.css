@@ -1,0 +1,169 @@
+/* Estilo geral */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff; /* Corpo branco */
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+header {
+    background-color: #007f00; /* Verde para o sistema */
+    color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1000; /* Garantir que o header fique acima de outros elementos */
+}
+
+header .logo img {
+    height: 50px; /* Ajuste o tamanho conforme necessário */
+    cursor: pointer;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-right a img {
+    height: 30px; /* Ajuste o tamanho conforme necessário */
+    margin-right: 20px;
+}
+
+#menu-button {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Dropdown Menu */
+.dropdown {
+    position: absolute;
+    top: 60px; /* Ajuste conforme a altura do header */
+    left: 0;
+    width: 200px; /* Largura do dropdown */
+    background-color: #007f00; /* Verde para o dropdown */
+    color: #ffffff;
+    display: none;
+    z-index: 999; /* Garantir que o dropdown fique acima de outros elementos */
+}
+
+.dropdown-content {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #005600; /* Verde escuro */
+}
+
+/* Mostrar dropdown ao clicar */
+.show-dropdown {
+    display: block;
+}
+
+/* Main content */
+main {
+    padding: 20px;
+    margin-top: 60px; /* Garantir que o conteúdo não sobreponha o header */
+}
+
+.produto-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.produto-card {
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: calc(20% - 20px); /* 5 cards por linha, ajustando o espaço entre eles */
+    transition: transform 0.2s ease;
+}
+
+.produto-card:hover {
+    transform: scale(1.05);
+}
+
+.produto-card img {
+    width: 100%;
+    height: auto;
+}
+
+.produto-card p {
+    margin: 10px;
+}
+
+/* Footer */
+footer {
+    background-color: #cccccc; /* Cinza para o footer */
+    color: #000000;
+    padding: 10px 20px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Página de produto */
+.produto-page {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    margin-top: 60px; /* Garantir que o conteúdo não sobreponha o header */
+}
+
+.produto-page .imagem {
+    width: 50%;
+}
+
+.produto-page .imagem img {
+    width: 100%;
+}
+
+.produto-page .detalhes {
+    width: 45%;
+}
+
+.produto-page .detalhes p {
+    margin-bottom: 10px;
+}
+
+.produto-page .preco {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.produto-page .adicionar-carrinho {
+    margin-top: 20px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .produto-card {
+        width: calc(50% - 20px); /* 2 cards por linha em telas menores */
+    }
+
+    .produto-page {
+        flex-direction: column;
+    }
+
+    .produto-page .imagem, .produto-page .detalhes {
+        width: 100%;
+    }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "comabemtcc",
+  "version": "1.0.0",
+  "description": "Repositório do Sistema Coma Bem - TCC",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.18.0",
+    "sequelize": "^6.30.0",
+    "sqlite3": "^5.1.7",
+    "ejs": "^3.1.8"
+  }
+}

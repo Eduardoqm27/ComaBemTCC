@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kits</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <!-- Inclua o conteúdo do header aqui -->
+    </header>
+    <main>
+        <h1>Kits</h1>
+        <div class="products">
+            <% kits.forEach(kit => { %>
+                <div class="product-card">
+                    <img src="<%= kit.imagem %>" alt="<%= kit.nome %>" class="product-image">
+                    <div class="product-description" style="display: none;">
+                        <p><%= kit.descricao %></p>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </main>
+    <footer>
+        <!-- Inclua o conteúdo do footer aqui -->
+    </footer>
+</body>
+</html>

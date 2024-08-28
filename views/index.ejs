@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComaBem - Produtos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <img src="/img/logo.png" alt="Logo">
+        </a>
+        <div class="header-right">
+            <a href="/carrinho">
+                <img src="/img/carrinho.png" alt="Carrinho">
+            </a>
+            <button id="menu-button">Menu</button>
+        </div>
+    </header>
+
+    <div id="dropdown-menu" class="dropdown">
+        <ul class="dropdown-content">
+            <li><a href="/frutas">Frutas</a></li>
+            <li><a href="/legumes">Legumes</a></li>
+            <li><a href="/verduras">Verduras</a></li>
+            <li><a href="/kits">Kits</a></li>
+        </ul>
+    </div>
+
+    <main>
+        <div class="produto-lista">
+            <% produtos.forEach(produto => { %>
+                <div class="produto-card">
+                    <a href="/produto/<%= produto.id %>">
+                        <img src="<%= produto.imagem %>" alt="<%= produto.nome %>">
+                        <p><%= produto.nome %></p>
+                        <p>R$ <%= produto.preco %></p>
+                    </a>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 ComaBem. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="/js/scripts.js"></script>
+</body>
+</html>
