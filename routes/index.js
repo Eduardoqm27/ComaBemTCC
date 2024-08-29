@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const ProdutoController = require('../controllers/ProdutoController');
 
-// Adicione as rotas principais aqui
-router.get('/', (req, res) => {
-    res.redirect('/'); // Redireciona para a página principal dos produtos
-});
+// Páginas específicas para cada categoria
+router.get('/', ProdutoController.getAllProdutos);
+router.get('/frutas', ProdutoController.getFrutas);
+router.get('/legumes', ProdutoController.getLegumes);
+router.get('/verduras', ProdutoController.getVerduras);
+router.get('/kits', ProdutoController.getKits);
 
 module.exports = router;

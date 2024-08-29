@@ -1,0 +1,153 @@
+/* Reset CSS para garantir consistência entre navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos gerais */
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #fff;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #4CAF50; /* Verde */
+    color: white;
+}
+
+header img {
+    height: 50px;
+}
+
+.menu-button {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: white;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    background-color: #4CAF50;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.menu ul {
+    list-style: none;
+}
+
+.menu ul li {
+    padding: 10px;
+}
+
+.menu ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.menu ul li a:hover {
+    background-color: #45a049;
+}
+
+.menu.show {
+    display: block;
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    background-color: #4CAF50;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.dropdown a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+}
+
+.dropdown a:hover {
+    background-color: #45a049;
+}
+
+footer {
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+    color: #333;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 10px;
+    padding: 10px;
+    width: calc(20% - 20px); /* 5 produtos por linha */
+    display: inline-block;
+    vertical-align: top;
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product-card h3 {
+    margin: 10px 0;
+}
+
+.product-card p {
+    color: #666;
+}
+
+.product-page {
+    display: flex;
+}
+
+.product-page .product-image {
+    flex: 1;
+}
+
+.product-page .product-info {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.product-page .product-info h2 {
+    margin-top: 0;
+}
+
+.product-page .product-info p {
+    margin-bottom: 10px;
+}
+
+.product-page .product-info .price {
+    font-size: 24px;
+    color: #4CAF50;
+}
+
+.product-page .product-info .add-to-cart {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

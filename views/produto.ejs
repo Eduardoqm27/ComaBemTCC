@@ -3,53 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= produto.nome %> - ComaBem</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <title><%= produto.nome %></title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <header>
-        <a href="/" class="logo">
-            <img src="/img/logo.png" alt="Logo">
-        </a>
-        <div class="header-right">
-            <a href="/carrinho">
-                <img src="/img/carrinho.png" alt="Carrinho">
-            </a>
-            <button id="menu-button">Menu</button>
+        <a href="/"><img src="/img/logo.png" alt="Logo"></a>
+        <button class="menu-button" onclick="toggleMenu()">☰ Menu</button>
+        <div id="menu" class="menu">
+            <ul>
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/cadastro">Cadastro</a></li>
+                <li><a href="/carrinho"><img src="/img/cart.png" alt="Carrinho"></a></li>
+            </ul>
         </div>
     </header>
-
-    <div id="dropdown-menu" class="dropdown">
-        <ul class="dropdown-content">
-            <li><a href="/frutas">Frutas</a></li>
-            <li><a href="/legumes">Legumes</a></li>
-            <li><a href="/verduras">Verduras</a></li>
-            <li><a href="/kits">Kits</a></li>
-        </ul>
-    </div>
-
-    <main>
-        <div class="produto-page">
-            <div class="imagem">
-                <img src="<%= produto.imagem %>" alt="<%= produto.nome %>">
-                <p><%= produto.descricao %></p>
-                <p><strong>Para o que serve:</strong> <%= produto.utilidade %></p>
-                <p><strong>Benefícios:</strong> <%= produto.beneficios %></p>
-            </div>
-            <div class="detalhes">
-                <p class="preco">R$ <%= produto.preco %></p>
-                <form action="/carrinho/adicionar" method="post">
-                    <input type="hidden" name="produtoId" value="<%= produto.id %>">
-                    <button type="submit" class="adicionar-carrinho">Adicionar ao Carrinho</button>
-                </form>
-            </div>
+    <div class="product-page">
+        <div class="product-image">
+            <img src="<%= produto.imagem %>" alt="<%= produto.nome %>">
         </div>
-    </main>
-
+        <div class="product-info">
+            <h2><%= produto.nome %></h2>
+            <p><%= produto.descricao %></p>
+            <p><%= produto.para_que %></p>
+            <p><%= produto.bens_que_da %></p>
+            <p class="price">R$ <%= produto.preco %></p>
+            <button class="add-to-cart">Adicionar ao Carrinho</button>
+        </div>
+    </div>
     <footer>
-        <p>&copy; 2024 ComaBem. Todos os direitos reservados.</p>
+        <p>&copy; 2024 ComaBem TCC</p>
     </footer>
-
     <script src="/js/scripts.js"></script>
 </body>
 </html>

@@ -15,10 +15,10 @@ app.use(session({
 app.set('view engine', 'ejs');
 
 // Rotas
-app.use('/', require('./routes')); // Verifique se a rota está correta
-app.use('/auth', require('./routes/Auth'));
+app.use('/', require('./routes/index')); // Ajuste aqui
+app.use('/auth', require('./routes/auth'));
 app.use('/carrinho', require('./routes/carrinho'));
-app.use('/produto', require('./routes/Produto')); // Certifique-se de que a rota está correta
+app.use('/produto', require('./routes/produto'));
 
 // Sincronizar DB e iniciar servidor
 sequelize.sync().then(() => {
