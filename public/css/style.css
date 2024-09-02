@@ -39,7 +39,7 @@ header .actions img {
 header .actions .menu-button {
     background: none;
     border: none;
-    color: #fff;
+    color: #ffffff;
     font-size: 24px; /* Ajuste conforme necessário */
     margin-left: 15px;
     cursor: pointer;
@@ -61,9 +61,9 @@ header .actions .menu-button {
 }
 
 .categories-dropdown button {
-    background-color: #fff;
-    color: #333;
-    border: none;
+    background-color: #28a745;
+    color: #ffffff;
+    border-color: green 1px;
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;

@@ -51,3 +51,15 @@ Nova estrutura do sistema
   - app.js                   
   - package.json             
   - package-lock.json        
+
+
+
+
+Código para inicializar o sistema no IF
+npm install
+npm uninstall sqlite3
+npm install sqlite3
+npm rebuild sqlite3
+sudo apt-get install build-essential
+npm rebuild
+node app / npm start

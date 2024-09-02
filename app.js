@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth'); // Adicione esta linha
 const { Sequelize } = require('sequelize');
 
 // Configuração do Sequelize com SQLite
@@ -29,6 +30,7 @@ app.set('view engine', 'ejs');
 
 // Configuração das rotas
 app.use('/', indexRouter);
+app.use('/auth', authRouter); // Adicione esta linha
 
 // Inicialização do servidor
 const PORT = 3000;
