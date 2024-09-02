@@ -1,54 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= categoria %> - Coma Bem</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categoria - ComaBemTCC</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <header>
-        <a href="/" class="logo"><img src="/images/logo.png" alt="Logo"></a>
-        <div class="header-right">
-            <a href="/carrinho"><img src="/images/carrinho.png" alt="Carrinho"></a>
-            <button id="menu-button">Menu</button>
-            <div id="dropdown-menu" class="dropdown-menu">
-                <a href="/auth/login">Login</a>
-                <a href="/auth/cadastro">Cadastro</a>
-            </div>
+  <header>
+    <img src="/img/logo.png" alt="Logo" class="logo">
+    <button class="cart-button">Carrinho</button>
+    <button class="menu-button">Menu</button>
+  </header>
+  <main>
+    <div class="product-list">
+      <% produtos.forEach(produto => { %>
+        <div class="product">
+          <img src="<%= produto.imagem %>" alt="<%= produto.nome %>">
+          <h2><%= produto.nome %></h2>
+          <p><%= produto.descricao %></p>
+          <p>Preço: <%= produto.preco %></p>
+          <a href="/produto/<%= produto.id %>" class="view-product">Ver Produto</a>
         </div>
-    </header>
-    <div class="dropdown">
-        <button class="dropdown-button">Categorias</button>
-        <div class="dropdown-content">
-            <a href="/produto/frutas">Frutas</a>
-            <a href="/produto/legumes">Legumes</a>
-            <a href="/produto/verduras">Verduras</a>
-            <a href="/produto/kits">Kits</a>
-        </div>
+      <% }) %>
     </div>
-    <main>
-        <h1>Categoria: <%= categoria %></h1>
-        <div class="produto-lista">
-            <% for (let i = 0; i < produtos.length; i += 5) { %>
-                <div class="linha-produtos">
-                    <% for (let j = i; j < i + 5 && j < produtos.length; j++) { %>
-                        <div class="produto-card">
-                            <a href="/produto/<%= produtos[j].id %>">
-                                <img src="<%= produtos[j].imagem %>" alt="<%= produtos[j].nome %>">
-                                <p><%= produtos[j].nome %></p>
-                                <p>R$ <%= produtos[j].preco %></p>
-                            </a>
-                        </div>
-                    <% } %>
-                </div>
-            <% } %>
-        </div>
-    </main>
-    <footer>
-        <p>&copy; 2024 Coma Bem - Todos os direitos reservados.</p>
-        <a href="/sobre-nos" class="footer-link">Sobre Nós</a>
-    </footer>
-    <script src="/js/scripts.js"></script>
+  </main>
+  <footer>
+    <button class="about-button">Sobre Nós</button>
+  </footer>
 </body>
 </html>

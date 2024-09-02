@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const CarrinhoController = require('../controllers/CarrinhoController');
 
-// Rota do carrinho
-router.get('/', CarrinhoController.getCarrinho);
+router.post('/add', CarrinhoController.addToCarrinho);
 
 module.exports = router;

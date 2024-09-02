@@ -5,32 +5,49 @@ Nova estrutura do sistema
 
 /ComaBemTCC
   /config
-    - database.js
+    - database.js            
+
   /controllers
-    - AuthController.js
-    - CarrinhoController.js
-    - ProdutoController.js
+    - AuthController.js     
+    - CarrinhoController.js 
+    - ProdutoController.js  
+
   /models
-    - Usuario.js
-    - Produto.js
+    - Usuario.js            
+    - Produto.js            
+    - Carrinho.js     
+
   /public
     /css
-      - style.css
+      - style.css        
     /js
-      - scripts.js
+      - scripts.js           
     /img
-      - logo.png
+      - logo.png          
+
   /routes
-    - auth.js
-    - carrinho.js
-    - produto.js
-    - index.js
+    - auth.js               
+    - carrinho.js            
+    - produto.js             
+    - index.js               
+
   /views
-    - login.ejs
-    - cadastro.ejs
-    - carrinho.ejs
-    - index.ejs
-    - produto.ejs
-  - app.js
-  - package.json
-  
+    /partials                
+      - header.ejs
+      - footer.ejs
+    /produtos               
+      - index.ejs            
+      - show.ejs             
+    /categorias              
+      - frutas.ejs
+      - kits.ejs
+      - legumes.ejs
+      - verduras.ejs
+    - login.ejs              
+    - cadastro.ejs           
+    - carrinho.ejs           
+    - sobre.ejs              
+
+  - app.js                   
+  - package.json             
+  - package-lock.json        

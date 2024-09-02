@@ -1,66 +1,69 @@
+const { Op } = require('sequelize');
 const Produto = require('../models/Produto');
 
+
+// Função para obter todos os produtos
 exports.getAllProdutos = async (req, res) => {
-    try {
-        const produtos = await Produto.findAll();
-        res.render('index', { produtos });
-    } catch (error) {
-        console.error("Erro ao buscar produtos:", error);
-        res.status(500).send("Erro ao carregar a página");
-    }
+  try {
+    const produtos = await Produto.findAll();
+    res.render('index', { produtos });
+  } catch (error) {
+    console.error('Erro ao buscar produtos:', error);
+    res.status(500).send('Erro ao buscar produtos');
+  }
 };
 
-// Adicione métodos para cada categoria
-exports.getFrutas = async (req, res) => {
-    try {
-        const frutas = await Produto.findAll({ where: { categoria: 'fruta' } });
-        res.render('frutas', { produtos: frutas });
-    } catch (error) {
-        console.error("Erro ao buscar frutas:", error);
-        res.status(500).send("Erro ao carregar a página");
-    }
-};
-
-exports.getLegumes = async (req, res) => {
-    try {
-        const legumes = await Produto.findAll({ where: { categoria: 'legume' } });
-        res.render('legumes', { produtos: legumes });
-    } catch (error) {
-        console.error("Erro ao buscar legumes:", error);
-        res.status(500).send("Erro ao carregar a página");
-    }
-};
-
-exports.getVerduras = async (req, res) => {
-    try {
-        const verduras = await Produto.findAll({ where: { categoria: 'verdura' } });
-        res.render('verduras', { produtos: verduras });
-    } catch (error) {
-        console.error("Erro ao buscar verduras:", error);
-        res.status(500).send("Erro ao carregar a página");
-    }
-};
-
-exports.getKits = async (req, res) => {
-    try {
-        const kits = await Produto.findAll({ where: { categoria: 'kit' } });
-        res.render('kits', { produtos: kits });
-    } catch (error) {
-        console.error("Erro ao buscar kits:", error);
-        res.status(500).send("Erro ao carregar a página");
-    }
-};
-
+// Função para obter produto por ID
 exports.getProdutoById = async (req, res) => {
-    try {
-        const produto = await Produto.findByPk(req.params.id);
-        if (produto) {
-            res.render('produto', { produto });
-        } else {
-            res.status(404).send("Produto não encontrado");
+  try {
+    const produto = await Produto.findByPk(req.params.id);
+    if (produto) {
+      res.render('produto', { produto });
+    } else {
+      res.status(404).send('Produto não encontrado');
+    }
+  } catch (error) {
+    console.error('Erro ao buscar produto:', error);
+    res.status(500).send('Erro ao buscar produto');
+  }
+};
+
+// Função para obter produtos por categoria
+exports.getProdutosPorCategoria = async (req, res) => {
+  try {
+    const produtos = await Produto.findAll({ where: { categoria: req.params.categoria } });
+    res.render('index', { produtos });
+  } catch (error) {
+    console.error('Erro ao buscar produtos por categoria:', error);
+    res.status(500).send('Erro ao buscar produtos por categoria');
+  }
+};
+
+// Função para pesquisar produtos
+exports.searchProdutos = async (req, res) => {
+  try {
+    const query = req.query.query;
+    const produtos = await Produto.findAll({
+      where: {
+        nome: {
+          [Op.like]: `%${query}%`
         }
+      }
+    });
+    res.render('index', { produtos });
+  } catch (error) {
+    console.error('Erro ao buscar produtos:', error);
+    res.status(500).send('Erro ao buscar produtos');
+  }
+};
+
+exports.addProduto = async (req, res) => {
+    try {
+        const { nome, categoria, descricao, preco, imagem } = req.body;
+        await Produto.create({ nome, categoria, descricao, preco, imagem });
+        res.redirect('/');
     } catch (error) {
-        console.error("Erro ao buscar produto:", error);
-        res.status(500).send("Erro ao carregar a página");
+        console.error('Erro ao adicionar produto:', error);
+        res.status(500).send('Erro ao adicionar produto');
     }
 };

@@ -1,11 +1,17 @@
 const { Sequelize } = require('sequelize');
 
-// Substitua 'database', 'username', 'password' pelos valores corretos
-const sequelize = new Sequelize('database', 'username', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    storage: './database.sqlite', // Para SQLite
-    logging: false
+// Configuração para SQLite
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'database.sqlite'
 });
+
+sequelize.authenticate()
+  .then(() => {
+    console.log('Conectado ao banco de dados com sucesso.');
+  })
+  .catch(err => {
+    console.error('Não foi possível conectar ao banco de dados:', err);
+  });
 
 module.exports = sequelize;

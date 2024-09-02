@@ -1,39 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= produto.nome %></title>
-    <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= produto.nome %> - ComaBemTCC</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <header>
-        <a href="/"><img src="/img/logo.png" alt="Logo"></a>
-        <button class="menu-button" onclick="toggleMenu()">☰ Menu</button>
-        <div id="menu" class="menu">
-            <ul>
-                <li><a href="/auth/login">Login</a></li>
-                <li><a href="/auth/cadastro">Cadastro</a></li>
-                <li><a href="/carrinho"><img src="/img/cart.png" alt="Carrinho"></a></li>
-            </ul>
-        </div>
-    </header>
-    <div class="product-page">
-        <div class="product-image">
-            <img src="<%= produto.imagem %>" alt="<%= produto.nome %>">
-        </div>
-        <div class="product-info">
-            <h2><%= produto.nome %></h2>
-            <p><%= produto.descricao %></p>
-            <p><%= produto.para_que %></p>
-            <p><%= produto.bens_que_da %></p>
-            <p class="price">R$ <%= produto.preco %></p>
-            <button class="add-to-cart">Adicionar ao Carrinho</button>
-        </div>
+  <header>
+    <img src="/img/logo.png" alt="Logo" class="logo">
+    <button class="cart-button">Carrinho</button>
+    <button class="menu-button">Menu</button>
+  </header>
+  <main>
+    <div class="product-detail">
+      <img src="<%= produto.imagem %>" alt="<%= produto.nome %>">
+      <h1><%= produto.nome %></h1>
+      <p><%= produto.descricao %></p>
+      <p>Preço: <%= produto.preco %></p>
+      <form action="/carrinho/add" method="post">
+        <input type="hidden" name="produtoId" value="<%= produto.id %>">
+        <button type="submit">Adicionar ao Carrinho</button>
+      </form>
     </div>
-    <footer>
-        <p>&copy; 2024 ComaBem TCC</p>
-    </footer>
-    <script src="/js/scripts.js"></script>
+  </main>
+  <footer>
+    <button class="about-button">Sobre Nós</button>
+  </footer>
 </body>
 </html>

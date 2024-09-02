@@ -1,36 +1,25 @@
 const Usuario = require('../models/Usuario');
 
-exports.getLogin = (req, res) => {
-    res.render('login');
-};
-
-exports.postLogin = async (req, res) => {
-    const { email, senha } = req.body;
-    try {
-        const usuario = await Usuario.findOne({ where: { email, senha } });
-        if (usuario) {
-            req.session.usuarioId = usuario.id;
-            res.redirect('/');
-        } else {
-            res.send('Usuário ou senha incorretos');
-        }
-    } catch (error) {
-        console.error("Erro ao carregar a página:", error);
-        res.status(500).send("Erro ao carregar a página");
-    }
-};
-
-exports.getCadastro = (req, res) => {
-    res.render('cadastro');
-};
-
+// Função para registrar um novo usuário
 exports.postCadastro = async (req, res) => {
+  try {
     const { nome, email, senha } = req.body;
-    try {
-        await Usuario.create({ nome, email, senha });
-        res.redirect('/auth/login');
-    } catch (error) {
-        console.error("Erro ao cadastrar usuário:", error);
-        res.status(500).send("Erro ao cadastrar usuário");
-    }
+    await Usuario.create({ nome, email, senha });
+    res.redirect('/login');
+  } catch (error) {
+    console.error("Erro ao cadastrar usuário:", error);
+    res.redirect('/cadastro');
+  }
+};
+
+// Função para login (implementação de autenticação necessária)
+exports.postLogin = async (req, res) => {
+  try {
+    const { email, senha } = req.body;
+    // Implementar lógica de autenticação aqui
+    res.redirect('/');
+  } catch (error) {
+    console.error("Erro ao fazer login:", error);
+    res.redirect('/login');
+  }
 };

@@ -1,17 +1,18 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Usuario = require('./Usuario');
-const Produto = require('./Produto');
 
 const Carrinho = sequelize.define('Carrinho', {
-    quantidade: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 1,
+  produtoId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'Produtos',
+      key: 'id'
     }
+  },
+  quantidade: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
 });
-
-Carrinho.belongsTo(Usuario);
-Carrinho.belongsTo(Produto);
 
 module.exports = Carrinho;
