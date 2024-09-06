@@ -3,60 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/style.css">
     <title>ComaBemTCC</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <header>
-        <img src="/img/logo.png" alt="Logo" class="logo" onclick="window.location.href='/'">
-        <div class="actions">
-            <img src="/img/cart.png" alt="Carrinho" onclick="window.location.href='/carrinho'">
-            <button class="menu-button" onclick="toggleMenu()">☰</button>
+        <div class="logo" onclick="window.location.href='/'">
+            <img src="/img/logo.png" alt="Logo">
+        </div>
+        <div class="menu">
+            <button id="cart-icon">🛒</button>
+            <button id="menu-button">☰</button>
         </div>
     </header>
-
-    <div class="categories-dropdown">
-        <button onclick="window.location.href='/categoria/verduras'">Verduras</button>
-        <button onclick="window.location.href='/categoria/legumes'">Legumes</button>
-        <button onclick="window.location.href='/categoria/frutas'">Frutas</button>
-        <button onclick="window.location.href='/categoria/kits'">Kits</button>
+    <div class="search-bar">
+        <input type="text" id="search" placeholder="Pesquisar produtos...">
     </div>
-
-    <div class="menu" id="menu">
-        <button onclick="window.location.href='/login'">Login</button>
-        <button onclick="window.location.href='/cadastro'">Cadastro</button>
+    <div class="sidebar">
+        <select id="category-filter">
+            <option value="">Todas as Categorias</option>
+            <option value="verduras">Verduras</option>
+            <option value="legumes">Legumes</option>
+            <option value="frutas">Frutas</option>
+            <option value="kits">Kits</option>
+        </select>
     </div>
-
-    <main>
-        <div class="search-bar">
-            <form action="/search" method="get">
-                <input type="text" name="query" placeholder="Pesquisar produtos..." required>
-                <button type="submit">Pesquisar</button>
-            </form>
-        </div>
-        <div class="products">
-            <% produtos.forEach(produto => { %>
-                <div class="product">
-                    <img src="<%= produto.imagem %>" alt="<%= produto.nome %>">
-                    <h3><%= produto.nome %></h3>
-                    <p><%= produto.descricao %></p>
-                    <p>R$ <%= produto.preco %></p>
-                    <a href="/produto/<%= produto.id %>">Ver detalhes</a>
-                </div>
-            <% }) %>
-        </div>
-    </main>
-
+    <div class="product-menu">
+        <button onclick="window.location.href='/produtos'">Listagem de Produtos</button>
+        <!-- Aqui você pode adicionar o conteúdo dinâmico para a listagem e gerenciamento dos produtos -->
+    </div>
     <footer>
-        <p>&copy; 2024 ComaBemTCC - Todos os direitos reservados.</p>
-        <button class="about-button" onclick="window.location.href='/sobre-nos'">Sobre Nós</button>
+        <p>&copy; 2024 ComaBemTCC - <a href="/sobre">Sobre Nós</a></p>
     </footer>
-
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('menu');
-            menu.style.display = menu.style.display === 'none' || !menu.style.display ? 'flex' : 'none';
-        }
-    </script>
+    <script src="/js/scripts.js"></script>
 </body>
 </html>

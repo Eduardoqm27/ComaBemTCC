@@ -1,17 +1,12 @@
 const { Sequelize } = require('sequelize');
 
-// Configuração para SQLite
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: 'database.sqlite'
+const sequelize = new Sequelize('comabem', 'root', '&du4rdoQuart27', {
+    host: 'localhost',
+    dialect: 'mysql'
 });
 
 sequelize.authenticate()
-  .then(() => {
-    console.log('Conectado ao banco de dados com sucesso.');
-  })
-  .catch(err => {
-    console.error('Não foi possível conectar ao banco de dados:', err);
-  });
+    .then(() => console.log('Conectado ao banco de dados MySQL com sucesso.'))
+    .catch(error => console.error('Erro ao conectar ao banco de dados:', error));
 
 module.exports = sequelize;

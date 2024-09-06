@@ -1,0 +1,22 @@
+
+<div class="search-bar">
+    <form action="/produtos/search" method="get">
+        <input type="text" name="query" placeholder="Pesquisar produtos..." required>
+        <button type="submit">Buscar</button>
+    </form>
+</div>
+
+<div class="dropdown">
+    <select onchange="window.location.href=this.value;">
+        <option value="/produtos/categoria/verduras">Verduras</option>
+        <option value="/produtos/categoria/legumes">Legumes</option>
+        <option value="/produtos/categoria/frutas">Frutas</option>
+        <option value="/produtos/categoria/kits">Kits</option>
+    </select>
+</div>
+
+<div class="button-list">
+    <button onclick="window.location.href='/produtos/adicionar'">Adicionar Novo Produto</button>
+    <button onclick="window.location.href='/produtos/listar'">Listar Produtos</button>
+</div>
+

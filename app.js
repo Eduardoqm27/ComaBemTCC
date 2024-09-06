@@ -1,39 +1,26 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const bodyParser = require('body-parser');
-const indexRouter = require('./routes/index');
-const authRouter = require('./routes/auth'); // Adicione esta linha
-const { Sequelize } = require('sequelize');
+const sequelize = require('./config/database');
+const produtoRoutes = require('./routes/produto');
 
-// Configuração do Sequelize com SQLite
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database.sqlite'
-});
-
-// Teste de conexão
-sequelize.authenticate().then(() => {
-    console.log('Conectado ao banco de dados com sucesso.');
-}).catch(err => {
-    console.error('Erro ao conectar ao banco de dados:', err);
-});
-
-// Configuração do middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Configuração do motor de template
-app.set('views', path.join(__dirname, 'views'));
+// Configuração do EJS
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-// Configuração das rotas
-app.use('/', indexRouter);
-app.use('/auth', authRouter); // Adicione esta linha
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// Inicialização do servidor
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
+// Rotas
+app.use('/produtos', produtoRoutes);
+
+// Sincronizar modelos com o banco de dados e iniciar o servidor
+sequelize.sync({ alter: true }).then(() => {
+    console.log('Modelos sincronizados com o banco de dados');
+    app.listen(3000, () => {
+        console.log('Servidor rodando na porta 3000');
+    });
+}).catch(error => {
+    console.error('Erro ao sincronizar os modelos com o banco de dados:', error);
 });

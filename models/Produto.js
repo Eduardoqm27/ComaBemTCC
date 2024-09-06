@@ -1,29 +1,36 @@
-const { Sequelize, DataTypes } = require('sequelize');
+// models/Produto.js
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const Produto = sequelize.define('Produto', {
-    nome: {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    nome_produto: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
     },
     categoria: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: false
     },
     descricao: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+        type: DataTypes.STRING,
+        allowNull: false
     },
     preco: {
-        type: DataTypes.DECIMAL,
-        allowNull: false,
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: false
     },
     imagem: {
         type: DataTypes.STRING,
-        allowNull: true,
-    },
+        allowNull: true
+    }
 }, {
-    timestamps: true,
+    tableName: 'TbProduto', // Nome da tabela
+    timestamps: true // Para gerar createdAt e updatedAt
 });
 
 module.exports = Produto;
