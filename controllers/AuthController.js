@@ -1,6 +1,5 @@
 const Usuario = require('../models/Usuario');
 
-// Função para registrar um novo usuário
 exports.postCadastro = async (req, res) => {
   try {
     const { nome, email, senha } = req.body;
@@ -12,7 +11,6 @@ exports.postCadastro = async (req, res) => {
   }
 };
 
-// Função para login (implementação de autenticação necessária)
 exports.postLogin = async (req, res) => {
   try {
     const { email, senha } = req.body;

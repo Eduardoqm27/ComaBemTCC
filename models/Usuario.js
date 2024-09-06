@@ -1,6 +1,5 @@
-// models/Usuario.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // ajuste o caminho conforme necessário
+const sequelize = require('../config/database');
 
 const Usuario = sequelize.define('Usuario', {
     nome: {
