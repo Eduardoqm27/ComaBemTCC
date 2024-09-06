@@ -1,15 +1,16 @@
 const Produto = require('../models/Produto');
 
-// Função para obter todos os produtos
 exports.getAllProdutos = async (req, res) => {
     try {
         const produtos = await Produto.findAll();
-        res.render('produto', { produtos });
+        res.render('pages/index', { produtos }); // Atualize o caminho para 'pages/index'
     } catch (error) {
-        console.error('Erro ao buscar produtos:', error);
+        console.error(error);
         res.status(500).send('Erro ao buscar produtos');
     }
 };
+
+
 
 // Função para exibir o formulário de adição de produto
 exports.getAddProdutoForm = (req, res) => {

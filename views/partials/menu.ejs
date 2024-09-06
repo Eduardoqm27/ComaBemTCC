@@ -1,0 +1,13 @@
+<nav id="dropdown-menu" style="display: none;">
+    <ul>
+        <li><a href="/login">Login</a></li>
+        <li><a href="/cadastro">Cadastrar</a></li>
+        <li><a href="/produtos">Listagem de Produtos</a></li>
+    </ul>
+</nav>
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('dropdown-menu');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+</script>

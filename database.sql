@@ -1,16 +1,8 @@
--- Criação do banco de dados, apenas se não existir
-CREATE DATABASE IF NOT EXISTS ComaBem;
+-- Criação do banco de dados
+CREATE DATABASE ComaBem;
 
 -- Uso do banco de dados
 USE ComaBem;
-
--- Apagar tabelas se existirem para evitar conflitos
-DROP TABLE IF EXISTS TbEntrega;
-DROP TABLE IF EXISTS TbPedido;
-DROP TABLE IF EXISTS TbProduto;
-DROP TABLE IF EXISTS TbEntregador;
-DROP TABLE IF EXISTS TbCliente;
-DROP TABLE IF EXISTS TbEndereco;
 
 -- Tabela de Endereços
 CREATE TABLE TbEndereco (
@@ -29,7 +21,7 @@ CREATE TABLE TbCliente (
     nome VARCHAR(50) NOT NULL,
     endereco_id INT NOT NULL,
     senha VARCHAR(30) NOT NULL,
-    FOREIGN KEY (endereco_id) REFERENCES TbEndereco(id_endereco) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (endereco_id) REFERENCES TbEndereco(id_endereco)
 );
 
 -- Tabela de Entregadores
@@ -58,7 +50,7 @@ CREATE TABLE TbPedido (
     total DECIMAL(10, 2) NOT NULL,
     pagto DECIMAL(10, 2) NOT NULL,
     id_cliente INT NOT NULL,
-    FOREIGN KEY (id_cliente) REFERENCES TbCliente(id_cliente) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_cliente) REFERENCES TbCliente(id_cliente)
 );
 
 -- Tabela de Entregas
@@ -68,7 +60,7 @@ CREATE TABLE TbEntrega (
     id_pedido INT NOT NULL,
     id_entregador INT NOT NULL,
     data DATE NOT NULL,
-    FOREIGN KEY (id_cliente) REFERENCES TbCliente(id_cliente) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_pedido) REFERENCES TbPedido(id_pedido) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (id_entregador) REFERENCES TbEntregador(id_entregador) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (id_cliente) REFERENCES TbCliente(id_cliente),
+    FOREIGN KEY (id_pedido) REFERENCES TbPedido(id_pedido),
+    FOREIGN KEY (id_entregador) REFERENCES TbEntregador(id_entregador)
 );

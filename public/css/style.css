@@ -3,6 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 /* Cabeçalho */
@@ -13,6 +14,15 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+header:hover {
+    background-color: darkgreen;
 }
 
 header .logo {
@@ -30,13 +40,16 @@ header .menu button {
 
 /* Barra de Pesquisa */
 .search-bar {
-    margin: 10px 0;
+    margin: 60px 0 20px 0; /* Margin top adjusted to fit below header */
     display: flex;
+    justify-content: center;
 }
 
 .search-bar input {
-    width: 100%;
-    padding: 5px;
+    width: 60%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 /* Dropdown */
@@ -44,17 +57,56 @@ header .menu button {
     width: 200px;
     float: left;
     background-color: #f4f4f4;
-    padding: 10px;
+    padding: 20px;
+    height: calc(100vh - 80px); /* Adjust height considering header */
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
 }
 
 .sidebar select {
     width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 /* Menu de Produtos */
 .product-menu {
     margin-left: 220px;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Card de Produtos */
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 200px;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.product-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.product-card .details {
     padding: 10px;
+}
+
+.product-card .details h4 {
+    margin: 0;
+}
+
+.product-card .details p {
+    margin: 5px 0;
 }
 
 /* Rodapé */
@@ -62,7 +114,7 @@ footer {
     background-color: #f4f4f4;
     padding: 10px;
     text-align: center;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
 }

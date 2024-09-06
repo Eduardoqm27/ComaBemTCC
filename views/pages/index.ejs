@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+<%- include('../partials/menu') %>
+
+<div class="search-bar">
+    <input type="text" placeholder="Pesquisar produtos...">
+</div>
+
+<div class="sidebar">
+    <select onchange="window.location.href=this.value">
+        <option value="/verduras">Verduras</option>
+        <option value="/legumes">Legumes</option>
+        <option value="/frutas">Frutas</option>
+        <option value="/kits">Kits</option>
+    </select>
+</div>
+
+<div class="product-menu">
+    <% produtos.forEach(produto => { %>
+        <div class="product-card">
+            <img src="<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+            <div class="details">
+                <h4><%= produto.nome_produto %></h4>
+                <p>R$ <%= produto.preco %></p>
+            </div>
+        </div>
+    <% }) %>
+</div>
+
+<%- include('../partials/footer') %>
