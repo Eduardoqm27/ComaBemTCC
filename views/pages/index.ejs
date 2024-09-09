@@ -1,29 +1,55 @@
-<%- include('../partials/header') %>
-<%- include('../partials/menu') %>
-
-<div class="search-bar">
-    <input type="text" placeholder="Pesquisar produtos...">
-</div>
-
-<div class="sidebar">
-    <select onchange="window.location.href=this.value">
-        <option value="/verduras">Verduras</option>
-        <option value="/legumes">Legumes</option>
-        <option value="/frutas">Frutas</option>
-        <option value="/kits">Kits</option>
-    </select>
-</div>
-
-<div class="product-menu">
-    <% produtos.forEach(produto => { %>
-        <div class="product-card">
-            <img src="<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
-            <div class="details">
-                <h4><%= produto.nome_produto %></h4>
-                <p>R$ <%= produto.preco %></p>
-            </div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComaBemTCC</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/img/logo.png" alt="Logo" onclick="window.location.href='/'">
         </div>
-    <% }) %>
-</div>
+        <div class="menu">
+            <button class="cart-button" onclick="window.location.href='/carrinho'">🛒</button>
+            <button class="menu-button">☰</button>
+        </div>
+    </header>
 
-<%- include('../partials/footer') %>
+    <div class="sidebar">
+        <select onchange="window.location.href='/produtos/categoria/' + this.value">
+            <option value="">Selecione uma Categoria</option>
+            <option value="Verduras">Verduras</option>
+            <option value="Legumes">Legumes</option>
+            <option value="Frutas">Frutas</option>
+            <option value="Kits">Kits</option>
+        </select>
+    </div>
+
+    <div class="search-bar">
+        <form id="search-form" action="/produtos/search" method="GET">
+            <input type="text" id="search-input" name="q" placeholder="Buscar produtos...">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+
+    <div class="menu-lateral">
+        <ul>
+            <li onclick="window.location.href='/login'">Login</li>
+            <li onclick="window.location.href='/cadastro'">Cadastro</li>
+            <li onclick="window.location.href='/produtos/listagem'">Listagem de Produtos</li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <!-- Conteúdo principal -->
+    </div>
+
+    <footer>
+        <p>&copy; 2024 ComaBemTCC</p>
+    </footer>
+
+    <script src="/js/scripts.js"></script>
+</body>
+</html>

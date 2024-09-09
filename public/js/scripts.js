@@ -1,31 +1,28 @@
-// Função para alternar a visibilidade do menu dropdown
-function toggleDropdown() {
-    const dropdown = document.querySelector('.dropdown');
-    if (dropdown.style.display === 'block') {
-        dropdown.style.display = 'none';
-    } else {
-        dropdown.style.display = 'block';
+// Função para alternar a visibilidade do menu lateral
+function initMenuLateral() {
+    const menuButton = document.querySelector('.menu-button');
+    const menuLateral = document.querySelector('.menu-lateral');
+
+    if (menuButton && menuLateral) {
+        menuButton.addEventListener('click', () => {
+            menuLateral.classList.toggle('show'); // Alterna a visibilidade do menu
+        });
     }
 }
 
-// Fechar o dropdown ao clicar fora dele
-window.onclick = function(event) {
-    if (!event.target.matches('.user-menu img')) {
-        const dropdown = document.querySelector('.dropdown');
-        if (dropdown && dropdown.style.display === 'block') {
-            dropdown.style.display = 'none';
-        }
-    }
-};
+// Função para inicializar eventos do carrinho
+function initCart() {
+    const cartButton = document.querySelector('.cart-button');
 
-// Função para abrir e fechar o menu dropdown no header
-document.addEventListener('DOMContentLoaded', function() {
-    const menuButton = document.querySelector('.user-menu img');
-    if (menuButton) {
-        menuButton.addEventListener('click', toggleDropdown);
+    if (cartButton) {
+        cartButton.addEventListener('click', () => {
+            window.location.href = '/carrinho'; // Redireciona para a página do carrinho
+        });
     }
+}
 
-    // Função para enviar pesquisa
+// Função para enviar pesquisa
+function initSearch() {
     const searchForm = document.querySelector('#search-form');
     if (searchForm) {
         searchForm.addEventListener('submit', function(event) {
@@ -34,9 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = `/search?q=${encodeURIComponent(query)}`;
         });
     }
+}
 
-    // Função para exibir a descrição ao passar o mouse sobre a imagem do produto
-    const productImages = document.querySelectorAll('.product-image');
+// Função para exibir a descrição ao passar o mouse sobre a imagem do produto
+function initProductImageHover() {
+    const productImages = document.querySelectorAll('.product-card img');
     productImages.forEach(image => {
         image.addEventListener('mouseover', function() {
             const description = image.nextElementSibling; // A descrição está no próximo elemento
@@ -51,4 +50,15 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
+}
+
+// Função para inicializar todos os scripts necessários
+function init() {
+    initMenuLateral();
+    initCart();
+    initSearch();
+    initProductImageHover();
+}
+
+// Inicializar scripts ao carregar a página
+document.addEventListener('DOMContentLoaded', init);

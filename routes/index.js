@@ -13,6 +13,16 @@ router.get('/', (req, res) => {
     console.log('Rota / chamada');
     ProdutoController.getAllProdutos(req, res);
 });
+
+// Rotas para categorias específicas
+router.get('/verduras', ProdutoController.getProdutosPorCategoria);
+router.get('/legumes', ProdutoController.getProdutosPorCategoria);
+router.get('/frutas', ProdutoController.getProdutosPorCategoria);
+router.get('/kits', ProdutoController.getProdutosPorCategoria);
+
+// Rota para obter um produto específico pelo ID
+router.get('/produtos/:id', ProdutoController.getProdutoById);
+
 router.get('/sobre-nos', (req, res) => res.render('pages/sobre-nos'));
 router.get('/login', (req, res) => res.render('auth/login'));
 router.get('/cadastro', (req, res) => res.render('auth/cadastro'));

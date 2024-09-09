@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem de Produtos</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/"><img src="/img/logo.png" alt="Logo"></a>
+        </div>
+        <div class="menu">
+            <button class="menu-button">Menu</button>
+            <button class="cart-button">Carrinho</button>
+        </div>
+    </header>
+    <main>
+        <div class="search-bar">
+            <form id="search-form" action="/produtos/search" method="GET">
+                <input type="text" id="search-input" name="q" placeholder="Buscar produtos..." />
+            </form>
+        </div>
+        <div class="content">
+            <h1>Listagem de Produtos</h1>
+            <div class="product-menu">
+                <% produtos.forEach(produto => { %>
+                    <div class="product-card">
+                        <img src="<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                        <div class="details">
+                            <h4><%= produto.nome_produto %></h4>
+                            <p>R$ <%= produto.preco %></p>
+                            <a href="/produtos/editar/<%= produto.id %>">Editar</a>
+                            <a href="/produtos/excluir/<%= produto.id %>">Excluir</a>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+            <a href="/produtos/adicionar">Adicionar Novo Produto</a>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 ComaBem. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>

@@ -2,22 +2,17 @@ const express = require('express');
 const router = express.Router();
 const ProdutoController = require('../controllers/ProdutoController');
 
-// Rota para listar produtos
-router.get('/produtos', ProdutoController.getAllProdutos);
+// Página de listagem de produtos
+router.get('/listagem', ProdutoController.getAllProdutos);
 
-// Rota para exibir o formulário de adição de produto
-router.get('/produtos/adicionar', ProdutoController.getAddProdutoForm);
+// Rota para categorias
+router.get('/:categoria', ProdutoController.getProdutosPorCategoria); // Captura categorias como parâmetro
 
-// Rota para adicionar um novo produto
-router.post('/produtos/adicionar', ProdutoController.addProduto);
-
-// Rota para exibir o formulário de edição de produto
-router.get('/produtos/editar/:id', ProdutoController.getEditProdutoForm);
-
-// Rota para editar um produto
-router.post('/produtos/editar/:id', ProdutoController.editProduto);
-
-// Rota para excluir um produto
-router.post('/produtos/deletar/:id', ProdutoController.deleteProduto);
+// Outras rotas
+router.get('/adicionar', ProdutoController.getAddProdutoForm);
+router.post('/adicionar', ProdutoController.addProduto);
+router.get('/editar/:id', ProdutoController.getEditProdutoForm);
+router.post('/editar/:id', ProdutoController.editProduto);
+router.get('/excluir/:id', ProdutoController.deleteProduto);
 
 module.exports = router;
