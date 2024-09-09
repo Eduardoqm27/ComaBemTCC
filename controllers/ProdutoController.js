@@ -24,7 +24,7 @@ exports.getProdutosPorCategoria = async (req, res) => {
         if (!produtos || produtos.length === 0) {
             return res.status(404).send('Produtos não encontrados para a categoria selecionada');
         }
-        res.render(`produtos/categoria/${categoria}`, { produtos }); // Envia a variável 'produtos' para a view
+        res.render(`produtos/categoria/${categoria}`, { produtos }); // Certifique-se de que o arquivo correspondente existe
     } catch (error) {
         console.error('Erro ao buscar produtos por categoria:', error);
         res.status(500).send('Erro ao buscar produtos por categoria');
