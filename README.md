@@ -32,17 +32,15 @@ Nova estrutura do sistema
     - index.js               
 
   /views
-    /partials                
-      - header.ejs
-      - footer.ejs
-    /produtos               
-      - index.ejs            
+    /pages
+      - index.ejs 
+    /produtos  
+      /categorias              
+        - frutas.ejs
+        - kits.ejs
+        - legumes.ejs
+        - verduras.ejs           
       - show.ejs             
-    /categorias              
-      - frutas.ejs
-      - kits.ejs
-      - legumes.ejs
-      - verduras.ejs
     - login.ejs              
     - cadastro.ejs           
     - carrinho.ejs           
@@ -57,9 +55,4 @@ Nova estrutura do sistema
 
 Código para inicializar o sistema no IF
 npm install
-npm uninstall sqlite3
-npm install sqlite3
-npm rebuild sqlite3
-sudo apt-get install build-essential
-npm rebuild
-node app / npm start
+
