@@ -9,6 +9,7 @@
 
 body {
     height: 100vh;
+    margin-left: 100px;
 }
 
 nav.menu-lateral {
@@ -22,6 +23,7 @@ nav.menu-lateral {
     left: 0;
     overflow: hidden;
     transition: 0.5s;
+    position: fixed;
 }
 
 nav.menu-lateral:hover {

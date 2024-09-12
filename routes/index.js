@@ -6,11 +6,11 @@ const ProdutoController = require('../controllers/ProdutoController');
 const CarrinhoController = require('../controllers/CarrinhoController');
 const AuthController = require('../controllers/AuthController');
 
-console.log('Rotas carregadas');
+console.log('carregadas');
 
 // Definições das rotas
 router.get('/', (req, res) => {
-    console.log('Rota / chamada');
+    console.log('/');
     ProdutoController.getAllProdutos(req, res);
 });
 
