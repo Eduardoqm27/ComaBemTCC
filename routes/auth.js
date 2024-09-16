@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const AuthController = require('../controllers/AuthController');
 
-router.post('/cadastro', AuthController.postCadastro);
-router.get('/login', (req, res) => {
-    res.render('login'); 
+router.post('/cadastro', (req, res) => {
+    console.log('routes/cadastro');
+    AuthController.postCadastro(req, res);
 });
-
-router.post('/login', AuthController.postLogin);
-router.get('/cadastro', (req, res) => {
-    res.render('cadastro'); 
+router.post('/login', (req, res) => {
+    console.log('routes/login');
+    AuthController.postLogin(req, res);
 });
 
 module.exports = router;
+

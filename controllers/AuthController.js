@@ -14,7 +14,7 @@ exports.postCadastro = async (req, res) => {
 exports.postLogin = async (req, res) => {
   try {
     const { email, senha } = req.body;
-    // Implementar lógica de autenticação aqui
+   
     res.redirect('/');
   } catch (error) {
     console.error("Erro ao fazer login:", error);

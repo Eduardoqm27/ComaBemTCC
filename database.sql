@@ -1,10 +1,7 @@
--- Criação do banco de dados
 CREATE DATABASE ComaBem;
 
--- Uso do banco de dados
 USE ComaBem;
 
--- Tabela de Endereços
 CREATE TABLE TbEndereco (
     id_endereco INT AUTO_INCREMENT PRIMARY KEY,
     cidade VARCHAR(255) NOT NULL,
@@ -15,16 +12,15 @@ CREATE TABLE TbEndereco (
     cep CHAR(8) NOT NULL
 );
 
--- Tabela de Clientes
-CREATE TABLE TbCliente (
-    id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE User (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
-    endereco_id INT NOT NULL,
     senha VARCHAR(30) NOT NULL,
+    data_nasc date not null,
+    endereco_id INT NOT NULL,
     FOREIGN KEY (endereco_id) REFERENCES TbEndereco(id_endereco)
 );
 
--- Tabela de Entregadores
 CREATE TABLE TbEntregador (
     id_entregador INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -32,7 +28,6 @@ CREATE TABLE TbEntregador (
     avaliacao VARCHAR(50) NOT NULL
 );
 
--- Tabela de Produtos
 CREATE TABLE TbProduto (
     id_produto INT AUTO_INCREMENT PRIMARY KEY,
     nome_produto VARCHAR(25) NOT NULL,
@@ -43,7 +38,6 @@ CREATE TABLE TbProduto (
     preco DECIMAL(10, 2) NOT NULL
 );
 
--- Tabela de Pedidos
 CREATE TABLE TbPedido (
     id_pedido INT AUTO_INCREMENT PRIMARY KEY,
     data DATE NOT NULL,
@@ -53,7 +47,6 @@ CREATE TABLE TbPedido (
     FOREIGN KEY (id_cliente) REFERENCES TbCliente(id_cliente)
 );
 
--- Tabela de Entregas
 CREATE TABLE TbEntrega (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT NOT NULL,
