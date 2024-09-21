@@ -11,6 +11,9 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Configuração para servir arquivos estáticos da pasta 'public'
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Usar rotas
 app.use('/user', userRoutes);
 

@@ -13,7 +13,7 @@ body {
 }
 
 nav.menu-lateral {
-    width: 70px;
+    width: 80px;
     height: 100%;
     background-color: #000000;
     padding: 40px 0 40px 1%;
@@ -72,4 +72,23 @@ ul li.item-menu a .txt-link {
 ul li.item-menu a .icon > i {
     font-size: 30px;
     margin-left: 5px;
+}
+
+.content {
+    transition: transform 0.3s ease; 
+    transform: translateX(0); 
+    margin-left: 70px; 
+}
+
+.menu-lateral:hover + .content {
+    transform: translateX(230px); 
+}
+
+footer {
+    background-color: #123f0f;
+    color: white;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    margin-left: 800px;
 }

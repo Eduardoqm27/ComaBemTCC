@@ -1,15 +1,15 @@
-const db = require('../config/db');
+const db = require('../config/database');
 
 const User = {
-    create: (user, callback) => {
-        const query = 'INSERT INTO User (nome, senha, data_nasc, endereco_id) VALUES (?, ?, ?, ?)';
-        db.query(query, [user.nome, user.senha, user.data_nasc, user.endereco_id], (err, results) => {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, results.insertId);
-        });
-    },
+  create: (user, callback) => {
+    const query = 'INSERT INTO User (nome, senha, data_nasc, endereco_id) VALUES (?, ?, ?, ?)';
+    db.query(query, [user.nome, user.senha, user.data_nasc, user.endereco_id], (err, results) => {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, results.insertId);
+    });
+  },
 
     findById: (id, callback) => {
         const query = 'SELECT * FROM User WHERE id = ?';

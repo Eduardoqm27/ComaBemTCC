@@ -1,64 +1,43 @@
-// Função para alternar a visibilidade do menu lateral
-function initMenuLateral() {
-    const menuButton = document.querySelector('.menu-button');
-    const menuLateral = document.querySelector('.menu-lateral');
-
-    if (menuButton && menuLateral) {
-        menuButton.addEventListener('click', () => {
-            menuLateral.classList.toggle('show'); // Alterna a visibilidade do menu
-        });
+// Função para carregar conteúdo dinamicamente
+function loadContent(content) {
+    const contentDiv = document.querySelector('.content');
+    
+    if (contentDiv) {
+        // Simulação de carregamento de conteúdo baseado no botão clicado
+        switch(content) {
+            case 'home':
+                contentDiv.innerHTML = '<h2>Bem-vindo à Página Inicial</h2><p>Aqui está o conteúdo da página inicial.</p>';
+                break;
+            case 'categorias':
+                contentDiv.innerHTML = '<h2>Categorias</h2><p>Aqui estão as categorias de produtos.</p>';
+                break;
+            case 'usuario':
+                contentDiv.innerHTML = '<h2>Página do Usuário</h2><p>Aqui estão as informações do usuário.</p>';
+                break;
+            case 'carrinho':
+                contentDiv.innerHTML = '<h2>Carrinho de Compras</h2><p>Aqui está o carrinho de compras.</p>';
+                break;
+            default:
+                contentDiv.innerHTML = '<h2>Conteúdo Não Encontrado</h2>';
+        }
     }
 }
 
-// Função para inicializar eventos do carrinho
-function initCart() {
-    const cartButton = document.querySelector('.cart-button');
-
-    if (cartButton) {
-        cartButton.addEventListener('click', () => {
-            window.location.href = '/carrinho'; // Redireciona para a página do carrinho
-        });
-    }
-}
-
-// Função para enviar pesquisa
-function initSearch() {
-    const searchForm = document.querySelector('#search-form');
-    if (searchForm) {
-        searchForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Evita o envio padrão do formulário
-            const query = document.querySelector('#search-input').value;
-            window.location.href = `/search?q=${encodeURIComponent(query)}`;
-        });
-    }
-}
-
-// Função para exibir a descrição ao passar o mouse sobre a imagem do produto
-function initProductImageHover() {
-    const productImages = document.querySelectorAll('.product-card img');
-    productImages.forEach(image => {
-        image.addEventListener('mouseover', function() {
-            const description = image.nextElementSibling; // A descrição está no próximo elemento
-            if (description) {
-                description.style.display = 'block';
-            }
-        });
-        image.addEventListener('mouseout', function() {
-            const description = image.nextElementSibling;
-            if (description) {
-                description.style.display = 'none';
-            }
+// Função para inicializar os eventos de navegação dinâmica
+function initNavigation() {
+    const menuItems = document.querySelectorAll('.item-menu a');
+    
+    menuItems.forEach(item => {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            const content = this.getAttribute('data-content');
+            loadContent(content); // Carregar o conteúdo ao clicar
         });
     });
 }
 
-// Função para inicializar todos os scripts necessários
-function init() {
-    initMenuLateral();
-    initCart();
-    initSearch();
-    initProductImageHover();
-}
-
-// Inicializar scripts ao carregar a página
-document.addEventListener('DOMContentLoaded', init);
+// Inicializar navegação dinâmica
+document.addEventListener('DOMContentLoaded', function() {
+    initNavigation();
+    init();  // Preserva as outras funcionalidades do script
+});

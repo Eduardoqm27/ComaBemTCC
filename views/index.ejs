@@ -11,74 +11,52 @@
     <header>
         <img src="/img/logoCB.png" alt="Imagem Logo"/>
     </header>
-    <nav class="menu-lateral" > 
+    <nav class="menu-lateral"> 
         <div class="btn-expandir">
             <i class="bi bi-list"></i>
         </div>
 
         <ul class="ul">
             <li class="item-menu">
-                <a href="/">
+                <a href="/" data-link="/views/home.ejs">
                     <span class="icon"><i class="bi bi-house"></i></span>
                     <span class="txt-link">Início</span>
                 </a>
             </li>
 
             <li class="item-menu">
-                <a href="/views/categoria/categoria.ejs">
+                <a href="/categoria" data-link="/views/categoria/categoria.ejs">
                     <span class="icon"><i class="bi bi-columns-gap"></i></span>
                     <span class="txt-link">Categorias</span>
                 </a>
             </li>
 
             <li class="item-menu">
-                <a href="/views/user/login.ejs">
+                <a href="/login" data-link="/views/user/login.ejs">
                     <span class="icon"><i class="bi bi-person-bounding-box"></i></span>
                     <span class="txt-link">Usuário</span>
                 </a>
             </li>
 
-            <br>
-            <br>
-            <br>    
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-
-
             <li class="item-menu">
-                <a href="#">
+                <a href="/carrinho" data-link="/views/carrinho.ejs">
                     <span class="icon"><i class="bi bi-cart4"></i></span>
                     <span class="txt-link">Carrinho</span>
                 </a>
             </li>
         </ul>
-
     </nav>
 
     <div class="content">
-        <!-- Conteúdo principal -->
+        <!-- Conteúdo dinâmico carregado aqui -->
+        <h2>Bem-vindo ao ComaBemTCC!</h2>
+        <p>Selecione uma opção no menu ao lado.</p>
     </div>
 
     <footer>
         <p>&copy; 2024 ComaBemTCC</p>
     </footer>
 
-    <script src="/js/scripts.js"></script>
+    <script src="/public/js/scripts.js"></script>
 </body>
 </html>
