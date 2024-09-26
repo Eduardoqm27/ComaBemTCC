@@ -1,29 +1,67 @@
 const express = require('express');
-const app = express();
 const path = require('path');
-const userRoutes = require('./routes/user');
+const sequelize = require('./config/database');
 
-// Configurações do Express
+// Importando os modelos
+const Usuario = require('./models/Usuario');
+const Produto = require('./models/Produto');
+const Pedido = require('./models/Pedido');
+const Entrega = require('./models/Entrega');
+const Entregador = require('./models/Entregador');
+const Endereco = require('./models/Endereco'); // Certifique-se de importar todos os modelos
+
+// Importando as rotas
+const authRoutes = require('./routes/auth');
+const produtoRoutes = require('./routes/produto');
+const carrinhoRoutes = require('./routes/carrinho');
+
+const app = express();
+
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Configuração do EJS como motor de template
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Configuração para servir arquivos estáticos da pasta 'public'
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Usar rotas
-app.use('/user', userRoutes);
-
-// Rota padrão para servir a página inicial
+// Rota para a página inicial
 app.get('/', (req, res) => {
-    res.render('index');  // Renderiza a página inicial
+    res.render('index');
 });
 
-// Inicializa o servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
-});
+// Definindo associações
+const defineAssociations = (models) => {
+    Usuario.associate(models);
+    Produto.associate(models);
+    Pedido.associate(models);
+    Entrega.associate(models);
+    Entregador.associate(models);
+    Endereco.associate(models); // Certifique-se de que Endereco também é associado
+};
+
+// Rotas
+app.use('/user', authRoutes);
+app.use('/produto', produtoRoutes); // Alterando para '/produto'
+app.use('/carrinho', carrinhoRoutes); // Especificando a rota
+
+// Sincroniza os modelos e inicia o servidor
+sequelize.sync()
+    .then(() => {
+        console.log('Conexão com o banco de dados estabelecida.');
+        
+        // Definindo associações após a sincronização
+        const models = {
+            Usuario,
+            Produto,
+            Pedido,
+            Entrega,
+            Entregador,
+            Endereco,
+        };
+        defineAssociations(models);
+        
+        app.listen(3000, () => {
+            console.log('Servidor rodando na porta 3000');
+        });
+    })
+    .catch(err => console.error('Erro ao conectar ao banco de dados:', err));

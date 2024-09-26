@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias</title>
+    <link rel="stylesheet" href="/css/style.css"> <!-- Ajuste conforme necessário -->
+</head>
+<body>
+    <header>
+        <h1>ComaBem</h1>
+        <div class="menu-icon">Menu</div>
+    </header>
+
+    <div class="container">
+        <!-- Navegação Lateral -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/produto/categoria">Categorias</a></li>
+                <li><a href="/carrinho">Carrinho</a></li>
+                <li><a href="/user/login">Login</a></li>
+                <li><a href="/user/cadastro">Cadastro</a></li>
+            </ul>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main>
+            <h2>Categorias de Produtos</h2>
+            <ul>
+                <% produtos.forEach(produto => { %>
+                    <li>
+                        <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                        <p><%= produto.nome_produto %> - R$ <%= produto.preco.toFixed(2) %></p>
+                    </li>
+                <% }); %>
+            </ul>
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2024 ComaBem</p>
+    </footer>
+
+    <script src="/js/scripts.js"></script> <!-- Ajuste conforme necessário -->
+</body>
+</html>
