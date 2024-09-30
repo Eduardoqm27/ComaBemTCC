@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const Produto = require('../models/Produto'); // Certifique-se de ter o modelo correto
+const Produto = require('../models/Produto');
 
-// Rota para a página de categorias
 router.get('/categoria', async (req, res) => {
     try {
-        const produtos = await Produto.findAll(); // Busque os produtos do banco de dados
-        res.render('categoria', { produtos }); // Renderize a view 'categoria' e passe os produtos
+        const produtos = await Produto.findAll();
+        res.render('categoria', { produtos, layout: false });  // layout: false renderiza só o conteúdo
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Erro ao carregar a categoria');
+        res.status(500).send('Erro ao carregar categorias');
     }
 });
 

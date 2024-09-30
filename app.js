@@ -8,7 +8,10 @@ const Produto = require('./models/Produto');
 const Pedido = require('./models/Pedido');
 const Entrega = require('./models/Entrega');
 const Entregador = require('./models/Entregador');
-const Endereco = require('./models/Endereco'); // Certifique-se de importar todos os modelos
+const Endereco = require('./models/Endereco'); // Certifique-se de importar todos os modelosconst userRoutes = require('./routes/user');
+
+app.use('/user', userRoutes);
+
 
 // Importando as rotas
 const authRoutes = require('./routes/auth');
