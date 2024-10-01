@@ -30,6 +30,10 @@ const Produto = sequelize.define('Produto', {
     preco: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
+    },
+    promocao: { // Adicione esta linha
+        type: DataTypes.BOOLEAN,
+        defaultValue: false // Valor padrão, se não for especificado
     }
 });
 

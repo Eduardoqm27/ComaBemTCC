@@ -32,12 +32,12 @@
             </li>
 
             <li class="item-menu">
-                <a href="/usuario" data-link="/views/user/login.ejs">
+                <a href="/user/login" data-link="/views/user/login.ejs">
                     <span class="icon"><i class="bi bi-person-bounding-box"></i></span>
                     <span class="txt-link">Usuário</span>
                 </a>
             </li>
-
+    
             <li class="item-menu">
                 <a href="/carrinho" data-link="/views/carrinho.ejs">
                     <span class="icon"><i class="bi bi-cart4"></i></span>
@@ -48,11 +48,26 @@
     </nav>
 
     <div class="content">
-        <!-- Conteúdo dinâmico carregado aqui -->
         <h2>Bem-vindo ao ComaBemTCC!</h2>
         <p>Selecione uma opção no menu ao lado.</p>
-    </div>
 
+        <h3>Produtos em Promoção</h3>
+        <div class="produtos-grid">
+            <% if (produtos && produtos.length > 0) { %> <!-- Verifica se produtos existe e não está vazio -->
+                <% produtos.forEach(produto => { %>
+                    <div class="card-produto">
+                        <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                        <h4><%= produto.nome_produto %></h4>
+                        <p>Preço: R$ <%= produto.preco.toFixed(2) %></p>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>Nenhum produto em promoção disponível.</p>
+            <% } %>
+        </div>
+
+    </div>
+    
     <footer>
         <p>&copy; 2024 ComaBemTCC</p>
     </footer>

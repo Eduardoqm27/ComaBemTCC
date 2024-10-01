@@ -1,18 +1,19 @@
-// routes/carrinho.js
 const express = require('express');
-const router = express.Router();
-const Carrinho = require('../models/Carrinho'); // Supondo que você tenha um modelo de Carrinho
+const router = express.Router();  // Definindo o router
+const Carrinho = require('../models/Carrinho'); // Importe o modelo Carrinho, se necessário
 
-// Rota para a página do carrinho
-router.get('/', async (req, res) => {
+// Rota para adicionar item ao carrinho
+router.post('/adicionar', async (req, res) => {
     try {
-        // Aqui você deve buscar os itens do carrinho. Vou presumir que você tem uma função para isso
-        const itens = await Carrinho.findAll(); // Altere para o método adequado de busca
+        const { produtoId, quantidade } = req.body;
 
-        res.render('carrinho', { itens }); // Passando a lista de itens para a view
+        // Lógica para adicionar o produto ao carrinho
+        const novoItem = await Carrinho.create({ produtoId, quantidade });
+
+        res.status(201).json(novoItem);  // Envie uma resposta de sucesso
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Erro ao carregar o carrinho');
+        console.error('Erro ao adicionar produto ao carrinho:', error);
+        res.status(500).send('Erro ao adicionar produto ao carrinho');
     }
 });
 

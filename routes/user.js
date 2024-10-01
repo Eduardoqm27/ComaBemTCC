@@ -27,4 +27,33 @@ router.get('/perfil', isAuthenticated, async (req, res) => {
     }
 });
 
+// Lógica para login do usuário
+router.post('/login', async (req, res) => {
+    const { email, senha } = req.body;
+    try {
+        const usuario = await Usuario.findOne({ where: { email } });
+        if (!usuario || !(await usuario.verificaSenha(senha))) { // Supondo que você tenha um método verificaSenha
+            return res.status(401).send('Email ou senha inválidos');
+        }
+        req.session.userId = usuario.id; // Armazenar o ID do usuário na sessão
+        res.redirect('/user/perfil'); // Redirecionar para o perfil do usuário após login
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erro ao processar o login.');
+    }
+});
+
+// Lógica para cadastro do usuário
+router.post('/cadastro', async (req, res) => {
+    const { nome, email, senha, data_nasc } = req.body; // Adicionando data_nasc aqui
+    try {
+        const usuario = await Usuario.create({ nome, email, senha, data_nasc }); // Incluindo data_nasc
+        req.session.userId = usuario.id; // Armazenar o ID do usuário na sessão
+        res.redirect('/user/perfil'); // Redirecionar para o perfil do usuário após cadastro
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Erro ao cadastrar o usuário.');
+    }
+});
+
 module.exports = router;

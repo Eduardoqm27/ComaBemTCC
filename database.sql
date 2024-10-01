@@ -11,7 +11,7 @@ CREATE TABLE User (
 
 CREATE TABLE TbEndereco (
     id_endereco INT AUTO_INCREMENT PRIMARY KEY,
-    usuarioId INT, -- Ajuste o nome da chave estrangeira
+    usuarioId INT,
     cidade VARCHAR(255) NOT NULL,
     estado VARCHAR(20) NOT NULL,
     bairro VARCHAR(255) NOT NULL,
@@ -24,8 +24,8 @@ CREATE TABLE TbEndereco (
 CREATE TABLE TbEntregador (
     id_entregador INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    endereco VARCHAR(50) NOT NULL,
-    avaliacao VARCHAR(50) NOT NULL
+    endereco VARCHAR(255) NOT NULL, 
+    avaliacao DECIMAL(3, 2) NOT NULL 
 );
 
 CREATE TABLE TbProduto (
@@ -35,7 +35,8 @@ CREATE TABLE TbProduto (
     imagem VARCHAR(255) NOT NULL,
     marca VARCHAR(255) NOT NULL,
     origem VARCHAR(255) NOT NULL,
-    preco DECIMAL(10, 2) NOT NULL
+    preco DECIMAL(10, 2) NOT NULL,
+    promocao BOOLEAN DEFAULT FALSE 
 );
 
 CREATE TABLE TbPedido (

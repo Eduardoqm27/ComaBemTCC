@@ -92,3 +92,40 @@ footer {
     bottom: 0;
     margin-left: 800px;
 }
+
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 cards por linha */
+    gap: 20px;
+}
+
+.card-produto {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+
+.card-produto img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.card-produto h4 {
+    margin: 10px 0;
+}
+
+.card-produto p {
+    color: #333;
+    font-weight: bold;
+}
+
+.card-produto a {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+.card-produto:hover {
+    transform: scale(1.05);
+}

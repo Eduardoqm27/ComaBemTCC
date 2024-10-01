@@ -1,5 +1,8 @@
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const passport = require('./config/passport-setup'); // Importa a configuração do Passport
 const sequelize = require('./config/database');
 
 // Importando os modelos
@@ -8,17 +11,29 @@ const Produto = require('./models/Produto');
 const Pedido = require('./models/Pedido');
 const Entrega = require('./models/Entrega');
 const Entregador = require('./models/Entregador');
-const Endereco = require('./models/Endereco'); // Certifique-se de importar todos os modelosconst userRoutes = require('./routes/user');
-
-app.use('/user', userRoutes);
-
+const Endereco = require('./models/Endereco');
 
 // Importando as rotas
 const authRoutes = require('./routes/auth');
 const produtoRoutes = require('./routes/produto');
 const carrinhoRoutes = require('./routes/carrinho');
+const userRoutes = require('./routes/user');
 
 const app = express();
+
+// Configuração da sessão
+const sessionMiddleware = session({
+    secret: 'seu_segredo_aqui',
+    resave: false,
+    saveUninitialized: false,
+    store: new SequelizeStore({
+        db: sequelize
+    })
+});
+
+app.use(sessionMiddleware); // Adiciona o middleware de sessão ao app
+app.use(passport.initialize()); // Inicializa o Passport
+app.use(passport.session()); // Usar sessões do Passport
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -28,8 +43,16 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // Rota para a página inicial
-app.get('/', (req, res) => {
-    res.render('index');
+app.get('/', async (req, res) => {
+    try {
+        const produtos = await Produto.findAll({
+            where: { promocao: true }
+        });
+        res.render('index', { produtos });
+    } catch (error) {
+        console.error('Erro ao buscar produtos em promoção:', error);
+        res.status(500).send('Erro ao carregar a página inicial');
+    }
 });
 
 // Definindo associações
@@ -39,20 +62,20 @@ const defineAssociations = (models) => {
     Pedido.associate(models);
     Entrega.associate(models);
     Entregador.associate(models);
-    Endereco.associate(models); // Certifique-se de que Endereco também é associado
+    Endereco.associate(models);
 };
 
 // Rotas
-app.use('/user', authRoutes);
-app.use('/produto', produtoRoutes); // Alterando para '/produto'
-app.use('/carrinho', carrinhoRoutes); // Especificando a rota
+app.use('/auth', authRoutes);
+app.use('/produto', produtoRoutes);
+app.use('/carrinho', carrinhoRoutes);
+app.use('/user', userRoutes);
 
 // Sincroniza os modelos e inicia o servidor
 sequelize.sync()
     .then(() => {
         console.log('Conexão com o banco de dados estabelecida.');
         
-        // Definindo associações após a sincronização
         const models = {
             Usuario,
             Produto,

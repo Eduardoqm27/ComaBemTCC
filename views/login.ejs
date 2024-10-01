@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - ComaBemTCC</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <h2>Login</h2>
     <form action="/user/login" method="POST">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required>
-        
-        <label for="senha">Senha:</label>
-        <input type="password" name="senha" id="senha" required>
-        
-        <button type="submit">Login</button>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
+        </div>
+        <div>
+            <label for="senha">Senha:</label>
+            <input type="password" name="senha" required>
+        </div>
+        <button type="submit">Entrar</button>
     </form>
-    <p>Não tem uma conta? <a href="/user/cadastro">Cadastre-se aqui</a>.</p>
+    <p>Não tem uma conta? <a href="/user/cadastro">Cadastre-se aqui</a></p>
 </body>
 </html>
