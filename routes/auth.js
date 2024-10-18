@@ -7,10 +7,11 @@ router.post('/cadastro', AuthController.cadastro); // Rota de cadastro
 
 // Rota de login usando Passport
 router.post('/login', passport.authenticate('local', {
-    successRedirect: '/', // Redireciona para a página inicial em caso de sucesso
+    successRedirect: '/user/perfil', // Redireciona para a página de perfil
     failureRedirect: '/user/login', // Redireciona para a página de login em caso de falha
-    failureFlash: true // Permite mensagens de falha
+    failureFlash: true
 }));
+
 
 router.get('/logout', (req, res) => {
     req.logout(); // Método para sair do usuário

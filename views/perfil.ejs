@@ -3,29 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Usuário</title>
+    <title>Perfil - ComaBemTCC</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Perfil de <%= usuario.nome %></h1>
-
-    <section>
-        <h2>Informações Pessoais</h2>
-        <p><strong>Nome:</strong> <%= usuario.nome %></p>
-        <p><strong>Email:</strong> <%= usuario.email %></p>
-    </section>
-
-    <section>
-        <h2>Últimas Compras</h2>
-        <% if (pedidos.length > 0) { %>
-            <ul>
-                <% pedidos.forEach(pedido => { %>
-                    <li>Pedido <%= pedido.id %> - Data: <%= pedido.createdAt.toDateString() %> - Total: R$ <%= pedido.total.toFixed(2) %></li>
-                <% }); %>
-            </ul>
-        <% } else { %>
-            <p>Você ainda não fez nenhuma compra.</p>
-        <% } %>
-    </section>
+    <h2>Perfil do Usuário</h2>
+    <div>
+        <p><strong>Nome:</strong> <%= user.nome %></p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Data de Nascimento:</strong> <%= user.data_nasc %></p>
+    </div>
+    <a href="/auth/logout">Logout</a>
 </body>
 </html>

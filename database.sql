@@ -2,11 +2,14 @@ CREATE DATABASE ComaBem;
 
 USE ComaBem;
 
-CREATE TABLE User (
+CREATE TABLE Usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE, 
     senha VARCHAR(30) NOT NULL,
-    data_nasc DATE NOT NULL
+    data_nasc DATE NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Coluna para a data de criação
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Coluna para a data de atualização
 );
 
 CREATE TABLE TbEndereco (
@@ -18,7 +21,7 @@ CREATE TABLE TbEndereco (
     numero VARCHAR(255) NOT NULL,
     telefone VARCHAR(255) NOT NULL,
     cep CHAR(8) NOT NULL,
-    FOREIGN KEY (usuarioId) REFERENCES User(id) 
+    FOREIGN KEY (usuarioId) REFERENCES Usuarios(id) 
 );
 
 CREATE TABLE TbEntregador (
@@ -45,7 +48,7 @@ CREATE TABLE TbPedido (
     total DECIMAL(10, 2) NOT NULL,
     pagto DECIMAL(10, 2) NOT NULL,
     id_usuario INT NOT NULL,
-    FOREIGN KEY (id_usuario) REFERENCES User(id)
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id)
 );
 
 CREATE TABLE TbEntrega (
@@ -54,7 +57,7 @@ CREATE TABLE TbEntrega (
     id_pedido INT NOT NULL,
     id_entregador INT NOT NULL,
     data DATE NOT NULL,
-    FOREIGN KEY (id_usuario) REFERENCES User(id),
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id),
     FOREIGN KEY (id_pedido) REFERENCES TbPedido(id_pedido),
     FOREIGN KEY (id_entregador) REFERENCES TbEntregador(id_entregador)
 );
