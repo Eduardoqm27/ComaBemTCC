@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h2>Perfil do Usuário</h2>
-    <div>
-        <p><strong>Nome:</strong> <%= user.nome %></p>
-        <p><strong>Email:</strong> <%= user.email %></p>
-        <p><strong>Data de Nascimento:</strong> <%= user.data_nasc %></p>
+    <div class="perfil-container">
+        <h2>Perfil do Usuário</h2>
+        <div class="perfil-info">
+            <p><strong>Nome:</strong> <%= user.nome %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Data de Nascimento:</strong> <%= user.data_nasc %></p>
+        </div>
+        <a href="/auth/logout">Logout</a>
     </div>
-    <a href="/auth/logout">Logout</a>
 </body>
 </html>

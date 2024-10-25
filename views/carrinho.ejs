@@ -1,14 +1,16 @@
-<% include ../layout %>
-<h2>Seu Carrinho</h2>
-<ul>
-    <% if (itens.length > 0) { %>
-        <% itens.forEach(item => { %>
-            <li>
-                <img src="/img/<%= item.Produto.imagem %>" alt="<%= item.Produto.nome %>">
-                <p><%= item.Produto.nome %> - R$ <%= item.Produto.preco %></p>
-            </li>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrinho</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Seu Carrinho</h1>
+    <ul>
+        <% itensCarrinho.forEach(item => { %>
+            <li><%= item.nome %> - Quantidade: <%= item.quantidade %></li>
         <% }) %>
-    <% } else { %>
-        <p>Seu carrinho está vazio.</p>
-    <% } %>
-</ul>
+    </ul>
+</body>
+</html>

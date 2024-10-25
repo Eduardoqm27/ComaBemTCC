@@ -15,74 +15,49 @@
         <div class="btn-expandir">
             <i class="bi bi-list"></i>
         </div>
-
         <ul class="ul">
-            <li class="item-menu">
-                <a href="/" data-link="/views/home.ejs">
-                    <span class="icon"><i class="bi bi-house"></i></span>
-                    <span class="txt-link">Início</span>
-                </a>
-            </li>
-            <li class="item-menu">
-                <a href="/produto/categoria" data-link="/views/categoria/categoria.ejs">
-                    <span class="icon"><i class="bi bi-columns-gap"></i></span>
-                    <span class="txt-link">Categorias</span>
-                </a>
-            </li>
-            <li class="item-menu">
-                <a href="/usuario" data-link="/views/user/login.ejs">
-                    <span class="icon"><i class="bi bi-person-bounding-box"></i></span>
-                    <span class="txt-link">Usuário</span>
-                </a>
-            </li>
-            <li class="item-menu">
-                <a href="/carrinho" data-link="/views/carrinho.ejs">
-                    <span class="icon"><i class="bi bi-cart4"></i></span>
-                    <span class="txt-link">Carrinho</span>
-                </a>
-            </li>
+            <li class="item-menu"><a href="/" data-link="/views/home.ejs"><span class="icon"><i class="bi bi-house"></i></span><span class="txt-link">Início</span></a></li>
+            <li class="item-menu"><a href="/produto/categoria" data-link="/views/categoria/categoria.ejs"><span class="icon"><i class="bi bi-columns-gap"></i></span><span class="txt-link">Categorias</span></a></li>
+            <li class="item-menu"><a href="/usuario" data-link="/views/user/login.ejs"><span class="icon"><i class="bi bi-person-bounding-box"></i></span><span class="txt-link">Usuário</span></a></li>
+            <li class="item-menu"><a href="/carrinho" data-link="/views/carrinho.ejs"><span class="icon"><i class="bi bi-cart4"></i></span><span class="txt-link">Carrinho</span></a></li>
         </ul>
     </nav>
 
     <div class="content">
         <h2>Categorias de Produtos</h2>
 
-        <!-- Filtro por categorias -->
         <div class="filtro-categorias">
             <button class="filtro" data-categoria="verdura">Verduras</button>
             <button class="filtro" data-categoria="legume">Legumes</button>
             <button class="filtro" data-categoria="fruta">Frutas</button>
             <button class="filtro" data-categoria="kits">Kits</button>
-            <button class="filtro" data-categoria="todas">Todas</button> <!-- Adiciona a opção para exibir todas as categorias -->
+            <button class="filtro" data-categoria="todas">Todas</button>
         </div>
 
-        <!-- Formulário para adicionar novo produto -->
-        <h3>Adicionar Novo Produto</h3>
-        <form action="/produto/adicionar" method="POST" enctype="multipart/form-data">
-            <input type="text" name="nome_produto" placeholder="Nome do Produto" required>
-            <input type="text" name="marca" placeholder="Marca do Produto" required>
-            <input type="text" name="origem" placeholder="Origem do Produto" required>
-            <textarea name="descricao" placeholder="Descrição do Produto"></textarea>
-            <input type="file" name="imagem" accept="image/*" required>
-            <input type="number" name="preco" placeholder="Preço" required>
+        <button id="btnAdicionar" class="btn btn-primary">Adicionar Novo Produto</button>
+        
+        <div id="formContainer" style="display: none;">
+            <h3>Formulário para Adicionar Novo Produto</h3>
+            <form action="/produto/adicionar" method="POST" enctype="multipart/form-data">
+                <input type="text" name="nome_produto" placeholder="Nome do Produto" required>
+                <input type="text" name="marca" placeholder="Marca do Produto" required>
+                <input type="text" name="origem" placeholder="Origem do Produto" required>
+                <textarea name="descricao" placeholder="Descrição do Produto"></textarea>
+                <input type="file" name="imagem" accept="image/*" required>
+                <input type="number" name="preco" placeholder="Preço" required>
+                <select name="categoria" required>
+                    <option value="verdura">Verdura</option>
+                    <option value="legume">Legume</option>
+                    <option value="fruta">Fruta</option>
+                    <option value="kits">Kits</option>
+                </select>
+                <label>
+                    <input type="checkbox" name="promocao"> Em Promoção
+                </label>
+                <button type="submit">Adicionar Produto</button>
+            </form>
+        </div>
 
-            <!-- Seleção de categoria -->
-            <select name="categoria" required>
-                <option value="verdura">Verdura</option>
-                <option value="legume">Legume</option>
-                <option value="fruta">Fruta</option>
-                <option value="kits">Kits</option>
-            </select>
-
-            <!-- Opção de promoção -->
-            <label>
-                <input type="checkbox" name="promocao"> Em Promoção
-            </label>
-
-            <button type="submit">Adicionar Produto</button>
-        </form>
-
-        <!-- Listagem de produtos -->
         <div class="produtos-grid">
             <% produtos.forEach(produto => { %>
                 <div class="card-produto" data-categoria="<%= produto.categoria %>">
@@ -90,7 +65,7 @@
                     <h3><%= produto.nome_produto %></h3>
                     <p>Marca: <%= produto.marca %></p>
                     <p>Origem: <%= produto.origem %></p>
-                    <p>Preço: R$ <%= produto.promocao ? (Number(produto.preco) * 0.9).toFixed(2) : Number(produto.preco).toFixed(2) %></p> <!-- Exemplo com promoção de 10% -->
+                    <p>Preço: R$ <%= produto.promocao ? (Number(produto.preco) * 0.9).toFixed(2) : Number(produto.preco).toFixed(2) %></p>
                     <a href="/produto/<%= produto.id %>">Ver Mais</a>
                 </div>
             <% }) %>
@@ -103,7 +78,6 @@
 
     <script src="/public/js/scripts.js"></script>
     <script>
-        // Script para filtrar produtos por categoria
         document.querySelectorAll('.filtro').forEach(btn => {
             btn.addEventListener('click', () => {
                 const categoria = btn.getAttribute('data-categoria');
@@ -115,6 +89,11 @@
                     }
                 });
             });
+        });
+
+        document.getElementById('btnAdicionar').addEventListener('click', () => {
+            const formContainer = document.getElementById('formContainer');
+            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
         });
     </script>
 </body>

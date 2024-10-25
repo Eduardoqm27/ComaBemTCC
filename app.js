@@ -3,6 +3,7 @@ const path = require('path');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const passport = require('./config/passport-setup'); // Importa a configuração do Passport
+const flash = require('connect-flash'); // Adiciona o connect-flash
 const sequelize = require('./config/database');
 
 // Importando os modelos
@@ -34,6 +35,16 @@ const sessionMiddleware = session({
 app.use(sessionMiddleware); // Adiciona o middleware de sessão ao app
 app.use(passport.initialize()); // Inicializa o Passport
 app.use(passport.session()); // Usar sessões do Passport
+
+// Middleware para flash messages
+app.use(flash());
+
+// Middleware para tornar as mensagens flash disponíveis em todas as views
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+});
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
