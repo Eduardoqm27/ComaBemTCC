@@ -5,9 +5,17 @@ module.exports = {
     exibirCarrinho: async (req, res) => {
         try {
             const itens = await Carrinho.findAll({ include: Produto });
-            res.render('carrinho', { itens });
+            console.log(itens); // Verificando os itens do carrinho
+
+            // Calcular subtotal
+            const subtotal = itens.reduce((total, item) => {
+                return total + (item.Produto.preco * item.quantidade);
+            }, 0);
+
+            res.render('carrinho', { itens: itens || [], subtotal }); // Corrigindo a passagem de itens
         } catch (err) {
-            res.status(500).send("Erro ao exibir carrinho");
+            console.error(err);
+            res.render('carrinho', { itens: [], subtotal: 0 }); // Tratamento de erro
         }
     },
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="produto-detalhe">
+        <h1><%= produto.nome_produto %></h1>
+        <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+        <p><%= produto.descricao %></p>
+        <p>Preço: R$ <%= typeof produto.preco === 'number' ? produto.preco.toFixed(2) : 'Indisponível' %></p>
+
+        <h3>Produtos em Promoção</h3>
+        <div class="produtos-grid">
+            <% produtosPromocao.forEach(produtoPromo => { %>
+                <div class="card-produto">
+                    <img src="/img/<%= produtoPromo.imagem %>" alt="<%= produtoPromo.nome_produto %>">
+                    <h4><%= produtoPromo.nome_produto %></h4>
+                    <p>R$ <%= typeof produtoPromo.preco === 'number' ? produtoPromo.preco.toFixed(2) : 'Indisponível' %></p>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</body>
+</html>

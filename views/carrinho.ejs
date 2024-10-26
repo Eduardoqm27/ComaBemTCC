@@ -1,16 +1,79 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Carrinho</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
+    <title>Carrinho</title>
 </head>
 <body>
-    <h1>Seu Carrinho</h1>
-    <ul>
-        <% itensCarrinho.forEach(item => { %>
-            <li><%= item.nome %> - Quantidade: <%= item.quantidade %></li>
-        <% }) %>
-    </ul>
+    <div class="container" style="background-image: url('/img/logo.png'); background-size: cover;">
+        <nav class="menu-lateral"> 
+            <div class="btn-expandir">
+                <i class="bi bi-list"></i>
+            </div>
+
+            <ul class="ul">
+                <li class="item-menu">
+                    <a href="/" data-link="/views/home.ejs">
+                        <span class="icon"><i class="bi bi-house"></i></span>
+                        <span class="txt-link">Início</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/produto/categoria" data-link="/views/categoria/categoria.ejs">
+                        <span class="icon"><i class="bi bi-columns-gap"></i></span>
+                        <span class="txt-link">Categorias</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/user/login" data-link="/views/user/login.ejs">
+                        <span class="icon"><i class="bi bi-person-bounding-box"></i></span>
+                        <span class="txt-link">Usuário</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/carrinho" data-link="/views/carrinho.ejs">
+                        <span class="icon"><i class="bi bi-cart4"></i></span>
+                        <span class="txt-link">Carrinho</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="content">
+            <h1>Carrinho de Compras</h1>
+            <div class="carrinho-produtos">
+                <% if (itens.length > 0) { %>
+                    <% itens.forEach(item => { %>
+                        <div class="item-carrinho">
+                            <img src="/img/<%= item.Produto.imagem %>" alt="<%= item.Produto.nome_produto %>">
+                            <h4><%= item.Produto.nome_produto %></h4>
+                            <p>Preço: R$ <%= item.Produto.preco.toFixed(2) %></p>
+                            <p>Quantidade: <%= item.quantidade %></p>
+                            <button onclick="removerItem('<%= item.id %>')">Remover</button>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>O carrinho está vazio.</p>
+                <% } %>
+            </div>
+            <p>Subtotal: R$ <%= subtotal.toFixed(2) %></p>
+            <button onclick="finalizarCompra()">Finalizar Compra</button>
+        </div>
+    </div>
+
+    <script>
+        function removerItem(id) {
+            // Lógica para remover item do carrinho
+            alert("Removendo item " + id);
+            // Redirecionar ou atualizar a página conforme necessário
+        }
+
+        function finalizarCompra() {
+            // Lógica para finalizar a compra
+            alert("Finalizando compra");
+            // Redirecionar ou processar a compra conforme necessário
+        }
+    </script>
 </body>
 </html>

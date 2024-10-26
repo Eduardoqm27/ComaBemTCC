@@ -1,4 +1,4 @@
-@import url('http://fonts.googleapis.com/css2?family=Outfit:wght@300&display=swap');
+@import url('http://fonts.googleapis.com/css2?family=Outfit:wght#300&display=swap');
 
 * {
     margin: 0;
@@ -9,15 +9,19 @@
 
 body {
     height: 100vh;
-    margin-left: 100px; /* Mantém espaço para o menu lateral */
-    background: url('path/to/your/background-image.jpg') no-repeat center center fixed;
-    background-size: cover;
+    margin-left: 100px;
+}
+
+.container {
+    height: 100vh;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.8); /* Fundo branco semitransparente */
 }
 
 nav.menu-lateral {
     width: 80px;
     height: 100%;
-    background-color: #000;
+    background-color: #000000;
     padding: 40px 0;
     box-shadow: 10px 0 0 #123f0f;
     position: fixed;
@@ -31,9 +35,9 @@ nav.menu-lateral:hover {
     width: 300px;
 }
 
-.btn-expandir {
+.btn-expandir{
     width: 100%;
-    padding-left: 10px;
+    padding-left: 10px ;
 }
 
 .btn-expandir > i {
@@ -58,20 +62,16 @@ ul li.item-menu:hover {
 ul li.item-menu a {
     color: white;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 30px;
     padding: 20px 4%;
+    padding-left: 25px;
     display: flex;
     margin-bottom: 40px;
     line-height: 40px;
 }
 
 ul li.item-menu a .txt-link {
-    margin-left: 40px;
-}
-
-ul li.item-menu a .icon > i {
-    font-size: 30px;
-    margin-left: 5px;
+    margin-left: 50px;
 }
 
 .content {
@@ -90,13 +90,12 @@ footer {
     text-align: center;
     position: fixed;
     bottom: 0;
-    left: 0; /* Corrigido para garantir que o footer fique alinhado */
-    width: 100%; /* Para ocupar toda a largura */
+    margin-left: 800px;
 }
 
 .produtos-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 cards por linha */
+    grid-template-columns: repeat(5, 1fr);
     gap: 20px;
 }
 
@@ -110,49 +109,10 @@ footer {
 .card-produto img {
     max-width: 100%;
     height: auto;
-    border-radius: 4px;
 }
 
-.card-produto h4 {
+input[type="text"], select {
+    padding: 10px;
     margin: 10px 0;
-}
-
-.card-produto p {
-    color: #333;
-    font-weight: bold;
-}
-
-.card-produto a {
-    text-decoration: none;
-    color: #007BFF;
-}
-
-.card-produto:hover {
-    transform: scale(1.05);
-}
-
-.login-box, .register-box {
-    background-color: rgba(255, 255, 255, 0.9); /* Fundo semi-transparente */
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 300px; /* Largura fixa */
-    margin: 0 auto; /* Centraliza */
-    position: relative; /* Para manter a posição relativa */
-    top: 50%; /* Alinha verticalmente */
-    transform: translateY(-50%); /* Centraliza verticalmente */
-}
-
-.perfil-container {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.perfil-info p {
-    font-size: 18px;
-    color: #333;
+    width: 200px;
 }

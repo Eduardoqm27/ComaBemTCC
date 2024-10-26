@@ -6,22 +6,22 @@ CREATE TABLE Usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE, 
-    senha VARCHAR(30) NOT NULL,
+    senha VARCHAR(255) NOT NULL, -- Aumentar tamanho para armazenar senhas criptografadas
     data_nasc DATE NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Coluna para a data de criação
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- Coluna para a data de atualização
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE TbEndereco (
     id_endereco INT AUTO_INCREMENT PRIMARY KEY,
-    usuarioId INT,
+    usuarioId INT NOT NULL,
     cidade VARCHAR(255) NOT NULL,
     estado VARCHAR(20) NOT NULL,
     bairro VARCHAR(255) NOT NULL,
     numero VARCHAR(255) NOT NULL,
     telefone VARCHAR(255) NOT NULL,
     cep CHAR(8) NOT NULL,
-    FOREIGN KEY (usuarioId) REFERENCES Usuarios(id) 
+    FOREIGN KEY (usuarioId) REFERENCES Usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE TbEntregador (
@@ -48,7 +48,7 @@ CREATE TABLE TbPedido (
     total DECIMAL(10, 2) NOT NULL,
     pagto DECIMAL(10, 2) NOT NULL,
     id_usuario INT NOT NULL,
-    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id)
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE TbEntrega (
@@ -57,14 +57,13 @@ CREATE TABLE TbEntrega (
     id_pedido INT NOT NULL,
     id_entregador INT NOT NULL,
     data DATE NOT NULL,
-    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id),
-    FOREIGN KEY (id_pedido) REFERENCES TbPedido(id_pedido),
-    FOREIGN KEY (id_entregador) REFERENCES TbEntregador(id_entregador)
+    FOREIGN KEY (id_usuario) REFERENCES Usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_pedido) REFERENCES TbPedido(id_pedido) ON DELETE CASCADE,
+    FOREIGN KEY (id_entregador) REFERENCES TbEntregador(id_entregador) ON DELETE CASCADE
 );
 
 CREATE TABLE Carrinhos (
-    id INT NOT NULL AUTO_INCREMENT,
-    produtoId INT,
-    PRIMARY KEY (id),
-    FOREIGN KEY (produtoId) REFERENCES TbProduto(id_produto) ON DELETE NO ACTION ON UPDATE CASCADE
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    produtoId INT NOT NULL,
+    FOREIGN KEY (produtoId) REFERENCES TbProduto(id_produto) ON DELETE CASCADE
 );

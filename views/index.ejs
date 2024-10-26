@@ -23,21 +23,18 @@
                     <span class="txt-link">Início</span>
                 </a>
             </li>
-
             <li class="item-menu">
                 <a href="/produto/categoria" data-link="/views/categoria/categoria.ejs">
                     <span class="icon"><i class="bi bi-columns-gap"></i></span>
                     <span class="txt-link">Categorias</span>
                 </a>
             </li>
-
             <li class="item-menu">
                 <a href="/user/login" data-link="/views/user/login.ejs">
                     <span class="icon"><i class="bi bi-person-bounding-box"></i></span>
                     <span class="txt-link">Usuário</span>
                 </a>
             </li>
-    
             <li class="item-menu">
                 <a href="/carrinho" data-link="/views/carrinho.ejs">
                     <span class="icon"><i class="bi bi-cart4"></i></span>
@@ -53,19 +50,19 @@
 
         <h3>Produtos em Promoção</h3>
         <div class="produtos-grid">
-            <% if (produtos && produtos.length > 0) { %> <!-- Verifica se produtos existe e não está vazio -->
+            <% if (produtos && produtos.length > 0) { %>
                 <% produtos.forEach(produto => { %>
                     <div class="card-produto">
                         <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
                         <h4><%= produto.nome_produto %></h4>
-                        <p>Preço: R$ <%= produto.preco.toFixed(2) %></p>
+                        <p>Preço: R$ <%= parseFloat(produto.preco).toFixed(2) %></p>
+                        <a href="/produto/<%= produto.id_produto %>">Ver Mais</a>
                     </div>
                 <% }); %>
             <% } else { %>
                 <p>Nenhum produto em promoção disponível.</p>
             <% } %>
         </div>
-
     </div>
     
     <footer>

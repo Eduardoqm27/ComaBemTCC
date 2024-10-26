@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Produto = require('../models/Produto');
 const multer = require('multer');
+const { Op } = require('sequelize');
 
 // Configuração do multer para upload de imagens
 const storage = multer.diskStorage({
@@ -17,7 +18,17 @@ const upload = multer({ storage });
 // Rota para exibir os produtos da categoria
 router.get('/categoria', async (req, res) => {
     try {
-        const produtos = await Produto.findAll();
+        const { search, categoria } = req.query;
+
+        let whereClause = {};
+        if (search) {
+            whereClause.nome_produto = { [Op.like]: `%${search}%` };
+        }
+        if (categoria) {
+            whereClause.categoria = categoria;
+        }
+
+        const produtos = await Produto.findAll({ where: whereClause });
         res.render('categoria', { produtos });
     } catch (error) {
         console.error('Erro ao buscar produtos:', error);
@@ -41,7 +52,7 @@ router.post('/adicionar', upload.single('imagem'), async (req, res) => {
         });
         
         // Redireciona para a página inicial após adicionar o produto
-        res.redirect('/'); // Altera o redirecionamento para a página inicial
+        res.redirect('/'); 
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
         res.status(500).send('Erro ao adicionar produto');
@@ -52,8 +63,12 @@ router.post('/adicionar', upload.single('imagem'), async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const produto = await Produto.findByPk(req.params.id);
+        const produtosPromocao = await Produto.findAll({ where: { promocao: true } });
+        
+        console.log(produtosPromocao); // Adicione esta linha para depuração
+        
         if (produto) {
-            res.render('produto-detalhe', { produto });
+            res.render('produto-detalhe', { produto, produtosPromocao });
         } else {
             res.status(404).send('Produto não encontrado');
         }
