@@ -1,8 +1,13 @@
-function isAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) { // Supondo que está usando uma biblioteca como Passport.js
-        return next();
-    }
-    res.redirect('/user/login'); // Se não estiver logado, redireciona para a página de login
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) return next();
+    res.redirect('/login');
 }
 
-module.exports = { isAuthenticated };
+function checkRole(role) {
+    return (req, res, next) => {
+        if (req.isAuthenticated() && req.user.role === role) return next();
+        res.status(403).send('Acesso negado');
+    };
+}
+
+module.exports = { checkAuthenticated, checkRole };

@@ -1,24 +1,25 @@
 const express = require('express');
-const router = express.Router();
 const passport = require('passport');
-const AuthController = require('../controllers/AuthController');
+const bcrypt = require('bcryptjs');
+const Usuario = require('../models/Usuario');
+const router = express.Router();
 
-// Rota de cadastro
-router.post('/cadastro', AuthController.cadastro);
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
 
-// Rota de login usando Passport
-router.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/user/perfil',
-        failureRedirect: '/auth/login',
-        failureFlash: true // Mensagens flash em caso de falha
-    })(req, res, next);
+router.post('/register', async (req, res) => {
+    const { nome, email, dataNascimento, senha, role } = req.body;
+    const hashedSenha = await bcrypt.hash(senha, 10);
+    await Usuario.create({ nome, email, dataNascimento, senha: hashedSenha, role });
+    res.redirect('/login');
 });
 
 router.get('/logout', (req, res) => {
     req.logout();
-    req.flash('success_msg', 'Você saiu com sucesso!'); // Mensagem de sucesso
-    res.redirect('/auth/login'); // Redireciona para a página de login
+    res.redirect('/');
 });
 
 module.exports = router;

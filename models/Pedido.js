@@ -25,6 +25,9 @@ Pedido.associate = (models) => {
     Pedido.belongsTo(models.Usuario, {
         foreignKey: 'id_usuario'
     });
+    Pedido.hasMany(models.Entrega, { // Adicione esta linha se um Pedido tiver várias Entregas
+        foreignKey: 'id_pedido'
+    });
 };
 
 module.exports = Pedido;

@@ -2,8 +2,8 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const passport = require('./config/passport-setup'); // Importa a configuração do Passport
-const flash = require('connect-flash'); // Adiciona o connect-flash
+const passport = require('./config/passport-setup');
+const flash = require('connect-flash');
 const sequelize = require('./config/database');
 
 // Importando os modelos
@@ -15,38 +15,35 @@ const Entregador = require('./models/Entregador');
 const Endereco = require('./models/Endereco');
 
 // Importando as rotas
-const authRoutes = require('./routes/auth');
-const produtoRoutes = require('./routes/produto');
-const carrinhoRoutes = require('./routes/carrinho');
-const userRoutes = require('./routes/user');
+const authRoutes = require('./routes/auth'); // Ajuste o caminho conforme necessário
+const produtoRoutes = require('./routes/produto'); // Ajuste o caminho conforme necessário
+const carrinhoRoutes = require('./routes/carrinho'); // Ajuste o caminho conforme necessário
+const userRoutes = require('./routes/user'); // Ajuste o caminho conforme necessário
 
 const app = express();
 
 // Configuração da sessão
-const sessionMiddleware = session({
+app.use(session({
     secret: 'seu_segredo_aqui',
     resave: false,
     saveUninitialized: false,
     store: new SequelizeStore({
         db: sequelize
     })
-});
+}));
 
-app.use(sessionMiddleware); // Adiciona o middleware de sessão ao app
-app.use(passport.initialize()); // Inicializa o Passport
-app.use(passport.session()); // Usar sessões do Passport
+app.use(passport.initialize());
+app.use(passport.session());
 
-// Middleware para flash messages
 app.use(flash());
 
-// Middleware para tornar as mensagens flash disponíveis em todas as views
+// Middleware para mensagens flash
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
     next();
 });
 
-// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -56,9 +53,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Rota para a página inicial
 app.get('/', async (req, res) => {
     try {
-        const produtos = await Produto.findAll({
-            where: { promocao: true }
-        });
+        const produtos = await Produto.findAll({ where: { promocao: true } });
         res.render('index', { produtos });
     } catch (error) {
         console.error('Erro ao buscar produtos em promoção:', error);
@@ -66,15 +61,17 @@ app.get('/', async (req, res) => {
     }
 });
 
-// Definindo associações
-const defineAssociations = (models) => {
-    Usuario.associate(models);
-    Produto.associate(models);
-    Pedido.associate(models);
-    Entrega.associate(models);
-    Entregador.associate(models);
-    Endereco.associate(models);
+// Definindo associações entre os modelos
+const defineAssociations = () => {
+    Usuario.associate({ Produto, Pedido, Entrega, Entregador, Endereco });
+    Produto.associate({ Usuario, Pedido });
+    Pedido.associate({ Usuario, Entrega });
+    Entrega.associate({ Pedido, Entregador });
+    Entregador.associate({ Entrega });
+    Endereco.associate({ Usuario });
 };
+
+defineAssociations();
 
 // Rotas
 app.use('/auth', authRoutes);
@@ -86,19 +83,10 @@ app.use('/user', userRoutes);
 sequelize.sync()
     .then(() => {
         console.log('Conexão com o banco de dados estabelecida.');
-        
-        const models = {
-            Usuario,
-            Produto,
-            Pedido,
-            Entrega,
-            Entregador,
-            Endereco,
-        };
-        defineAssociations(models);
-        
         app.listen(3000, () => {
             console.log('Servidor rodando na porta 3000');
         });
     })
     .catch(err => console.error('Erro ao conectar ao banco de dados:', err));
+
+module.exports = app;

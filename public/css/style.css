@@ -29,15 +29,16 @@ nav.menu-lateral {
     left: 0;
     overflow: hidden;
     transition: 0.5s;
+    z-index: 1000; /* Adiciona z-index alto para sobrepor */
 }
 
 nav.menu-lateral:hover {
     width: 300px;
 }
 
-.btn-expandir{
+.btn-expandir {
     width: 100%;
-    padding-left: 10px ;
+    padding-left: 10px;
 }
 
 .btn-expandir > i {
@@ -77,11 +78,11 @@ ul li.item-menu a .txt-link {
 .content {
     transition: transform 0.3s ease; 
     transform: translateX(0); 
-    margin-left: 70px; 
+    margin-left: 80px; /* Alinha o conteúdo à direita do menu */
 }
 
 .menu-lateral:hover + .content {
-    transform: translateX(230px); 
+    transform: translateX(220px); /* Ajusta o espaço quando o menu é expandido */
 }
 
 footer {
@@ -111,8 +112,48 @@ footer {
     height: auto;
 }
 
+.card-produto h3 { /* Estilizando o nome do produto */
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.card-produto p { /* Estilizando o preço */
+    font-size: 1em;
+    color: #333;
+}
+
 input[type="text"], select {
     padding: 10px;
     margin: 10px 0;
     width: 200px;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    .produtos-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .produtos-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        margin-left: 0;
+        margin-right: 0; /* Remove margem esquerda em telas menores */
+    }
+    
+    .produtos-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .produtos-grid {
+        grid-template-columns: 1fr; /* 1 card por linha em telas muito pequenas */
+    }
 }

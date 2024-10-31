@@ -14,9 +14,6 @@ const Entrega = sequelize.define('Entrega', {
 });
 
 Entrega.associate = (models) => {
-    Entrega.belongsTo(models.Usuario, {
-        foreignKey: 'id_usuario'
-    });
     Entrega.belongsTo(models.Pedido, {
         foreignKey: 'id_pedido'
     });
