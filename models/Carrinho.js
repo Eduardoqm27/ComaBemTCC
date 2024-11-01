@@ -1,30 +1,33 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const Produto = require('./Produto');
 
-const Carrinho = sequelize.define('Carrinho', {
-    produtoId: {
-        type: DataTypes.INTEGER,
-        references: {
-            model: Produto,
-            key: 'id'
+const Carrinho = (sequelize) => {
+    const CarrinhoModel = sequelize.define('Carrinho', {
+        id_carrinho: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
         },
-        allowNull: false // Garantindo que o produtoId não seja nulo
-    },
-    quantidade: { // Adicionando a quantidade
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 1,
-        validate: {
-            isInt: true, // Verifica se é um número inteiro
-            min: 1 // A quantidade mínima deve ser 1
+        produtoId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'TbProduto', // A tabela correta é 'Produto'
+                key: 'id_produto'
+            }
+        },
+        quantidade: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
-    }
-}, {
-    timestamps: false
-});
+    });
 
-// Estabelecendo a relação de que um carrinho pertence a um produto
-Carrinho.belongsTo(Produto, { foreignKey: 'produtoId' });
+    CarrinhoModel.associate = (models) => {
+        CarrinhoModel.belongsTo(models.Produto, { foreignKey: 'produtoId' });
+    };
 
-module.exports = Carrinho;
+    return CarrinhoModel;
+};
+
+// Mude a exportação para que utilize a função de criação
+module.exports = Carrinho(sequelize);

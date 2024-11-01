@@ -13,14 +13,13 @@ body {
 }
 
 .container {
-    height: 100vh;
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.8); /* Fundo branco semitransparente */
+    padding: 20px;
+    padding-left: 120px; /* Espaço para o menu lateral */
 }
 
 nav.menu-lateral {
     width: 80px;
-    height: 100%;
+    height: 100vh;
     background-color: #000000;
     padding: 40px 0;
     box-shadow: 10px 0 0 #123f0f;
@@ -28,104 +27,131 @@ nav.menu-lateral {
     top: 0;
     left: 0;
     overflow: hidden;
-    transition: 0.5s;
-    z-index: 1000; /* Adiciona z-index alto para sobrepor */
+    transition: width 0.5s ease;
+    z-index: 10;
 }
 
 nav.menu-lateral:hover {
     width: 300px;
 }
 
-.btn-expandir {
-    width: 100%;
-    padding-left: 10px;
-}
-
-.btn-expandir > i {
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-}
-
 ul.ul {
-    height: 100%;
     list-style-type: none;
-}
-
-ul li.item-menu {
-    transition: 0.2s;
-}
-
-ul li.item-menu:hover {
-    background: #123f0f;
+    padding: 0;
 }
 
 ul li.item-menu a {
     color: white;
     text-decoration: none;
-    font-size: 30px;
+    font-size: 20px;
     padding: 20px 4%;
-    padding-left: 25px;
     display: flex;
-    margin-bottom: 40px;
-    line-height: 40px;
+    align-items: center;
 }
 
 ul li.item-menu a .txt-link {
-    margin-left: 50px;
+    margin-left: 40px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+nav.menu-lateral:hover ul li.item-menu a .txt-link {
+    opacity: 1;
 }
 
 .content {
-    transition: transform 0.3s ease; 
-    transform: translateX(0); 
-    margin-left: 80px; /* Alinha o conteúdo à direita do menu */
-}
-
-.menu-lateral:hover + .content {
-    transform: translateX(220px); /* Ajusta o espaço quando o menu é expandido */
-}
-
-footer {
-    background-color: #123f0f;
-    color: white;
-    text-align: center;
-    position: fixed;
-    bottom: 0;
-    margin-left: 800px;
+    padding: 20px;
+    margin-left: 100px; /* Espaço para o menu lateral fixo */
 }
 
 .produtos-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Largura mínima ajustada */
+    gap: 30px; /* Espaçamento entre os cards */
+    padding-top: 20px;
 }
 
 .card-produto {
     border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 10px;
+    padding: 15px;
     text-align: center;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.card-produto:hover {
+    transform: scale(1.05); /* Animação ao passar o mouse */
 }
 
 .card-produto img {
     max-width: 100%;
     height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
 }
 
-.card-produto h3 { /* Estilizando o nome do produto */
+.card-produto h3 {
     font-size: 1.2em;
     margin: 10px 0;
 }
 
-.card-produto p { /* Estilizando o preço */
+.card-produto p {
     font-size: 1em;
     color: #333;
 }
 
-input[type="text"], select {
-    padding: 10px;
+/* Formatação do formulário de login/cadastro */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.form-box {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.form-box h2 {
+    margin-bottom: 20px;
+    color: #123f0f;
+}
+
+.form-box input[type="text"],
+.form-box input[type="password"],
+.form-box input[type="email"] {
+    width: 100%;
+    padding: 12px;
     margin: 10px 0;
-    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-box button {
+    width: 100%;
+    padding: 12px;
+    background-color: #123f0f;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-box button:hover {
+    background-color: #0d2e0c;
 }
 
 /* Responsividade */
@@ -144,7 +170,6 @@ input[type="text"], select {
 @media (max-width: 768px) {
     body {
         margin-left: 0;
-        margin-right: 0; /* Remove margem esquerda em telas menores */
     }
     
     .produtos-grid {
@@ -154,6 +179,6 @@ input[type="text"], select {
 
 @media (max-width: 576px) {
     .produtos-grid {
-        grid-template-columns: 1fr; /* 1 card por linha em telas muito pequenas */
+        grid-template-columns: 1fr;
     }
 }

@@ -9,16 +9,17 @@ const sequelize = require('./config/database');
 // Importando os modelos
 const Usuario = require('./models/Usuario');
 const Produto = require('./models/Produto');
+const Carrinho = require('./models/Carrinho'); // Importando o modelo Carrinho
 const Pedido = require('./models/Pedido');
 const Entrega = require('./models/Entrega');
 const Entregador = require('./models/Entregador');
 const Endereco = require('./models/Endereco');
 
 // Importando as rotas
-const authRoutes = require('./routes/auth'); // Ajuste o caminho conforme necessário
-const produtoRoutes = require('./routes/produto'); // Ajuste o caminho conforme necessário
-const carrinhoRoutes = require('./routes/carrinho'); // Ajuste o caminho conforme necessário
-const userRoutes = require('./routes/user'); // Ajuste o caminho conforme necessário
+const authRoutes = require('./routes/auth');
+const produtoRoutes = require('./routes/produto');
+const carrinhoRoutes = require('./routes/carrinho');
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -27,14 +28,11 @@ app.use(session({
     secret: 'seu_segredo_aqui',
     resave: false,
     saveUninitialized: false,
-    store: new SequelizeStore({
-        db: sequelize
-    })
+    store: new SequelizeStore({ db: sequelize })
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(flash());
 
 // Middleware para mensagens flash
@@ -44,6 +42,7 @@ app.use((req, res, next) => {
     next();
 });
 
+// Configuração do Express
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -64,7 +63,7 @@ app.get('/', async (req, res) => {
 // Definindo associações entre os modelos
 const defineAssociations = () => {
     Usuario.associate({ Produto, Pedido, Entrega, Entregador, Endereco });
-    Produto.associate({ Usuario, Pedido });
+    Produto.associate({ Usuario, Pedido, Carrinho }); // Certifique-se de incluir Carrinho
     Pedido.associate({ Usuario, Entrega });
     Entrega.associate({ Pedido, Entregador });
     Entregador.associate({ Entrega });
@@ -79,8 +78,14 @@ app.use('/produto', produtoRoutes);
 app.use('/carrinho', carrinhoRoutes);
 app.use('/user', userRoutes);
 
+// Middleware para tratamento de erros
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Algo deu errado!');
+});
+
 // Sincroniza os modelos e inicia o servidor
-sequelize.sync()
+sequelize.sync({ alter: true })  // Altera a tabela se necessário
     .then(() => {
         console.log('Conexão com o banco de dados estabelecida.');
         app.listen(3000, () => {

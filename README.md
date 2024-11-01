@@ -53,6 +53,15 @@ Nova estrutura do sistema
 
 
 
-Código para inicializar o sistema no IF
+Código para instalar as dependências do sistema:
 npm install
 
+Comando para instalar o bcrypt:
+npm install bcrypt --save
+
+Comando para instalar o express:
+npm install express --save
+
+Comando para inicializar o Servidor:
+node app.js ou
+npm start
