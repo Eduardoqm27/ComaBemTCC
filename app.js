@@ -9,7 +9,7 @@ const sequelize = require('./config/database');
 // Importando os modelos
 const Usuario = require('./models/Usuario');
 const Produto = require('./models/Produto');
-const Carrinho = require('./models/Carrinho'); // Importando o modelo Carrinho
+const Carrinho = require('./models/Carrinho');
 const Pedido = require('./models/Pedido');
 const Entrega = require('./models/Entrega');
 const Entregador = require('./models/Entregador');
@@ -25,7 +25,7 @@ const app = express();
 
 // Configuração da sessão
 app.use(session({
-    secret: 'seu_segredo_aqui',
+    secret: 'seu_segredo_aqui', // Certifique-se de alterar para algo seguro
     resave: false,
     saveUninitialized: false,
     store: new SequelizeStore({ db: sequelize })
