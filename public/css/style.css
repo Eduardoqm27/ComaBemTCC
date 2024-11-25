@@ -43,8 +43,9 @@ ul.ul {
 ul li.item-menu a {
     color: white;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 30px;
     padding: 20px 4%;
+    padding-left: 25px;
     display: flex;
     align-items: center;
 }

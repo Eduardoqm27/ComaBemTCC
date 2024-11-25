@@ -6,14 +6,8 @@ const passport = require('./config/passport-setup');
 const flash = require('connect-flash');
 const sequelize = require('./config/database');
 
-// Importando os modelos
-const Usuario = require('./models/Usuario');
+// Corrigido para importar diretamente o modelo Produto
 const Produto = require('./models/Produto');
-const Carrinho = require('./models/Carrinho');
-const Pedido = require('./models/Pedido');
-const Entrega = require('./models/Entrega');
-const Entregador = require('./models/Entregador');
-const Endereco = require('./models/Endereco');
 
 // Importando as rotas
 const authRoutes = require('./routes/auth');
@@ -25,7 +19,7 @@ const app = express();
 
 // Configuração da sessão
 app.use(session({
-    secret: 'seu_segredo_aqui', // Certifique-se de alterar para algo seguro
+    secret: 'seu_segredo_aqui',
     resave: false,
     saveUninitialized: false,
     store: new SequelizeStore({ db: sequelize })
@@ -60,17 +54,13 @@ app.get('/', async (req, res) => {
     }
 });
 
-// Definindo associações entre os modelos
-const defineAssociations = () => {
-    Usuario.associate({ Produto, Pedido, Entrega, Entregador, Endereco });
-    Produto.associate({ Usuario, Pedido, Carrinho }); // Certifique-se de incluir Carrinho
-    Pedido.associate({ Usuario, Entrega });
-    Entrega.associate({ Pedido, Entregador });
-    Entregador.associate({ Entrega });
-    Endereco.associate({ Usuario });
-};
-
-defineAssociations();
+// Rota para o perfil do usuário
+app.get('/profile', (req, res) => {
+    if (!req.isAuthenticated()) {
+        return res.redirect('/auth/login'); // Se não estiver autenticado, redireciona para login
+    }
+    res.render('perfil', { user: req.user }); // Exibe o perfil do usuário logado
+});
 
 // Rotas
 app.use('/auth', authRoutes);
@@ -85,7 +75,7 @@ app.use((err, req, res, next) => {
 });
 
 // Sincroniza os modelos e inicia o servidor
-sequelize.sync({ alter: true })  // Altera a tabela se necessário
+sequelize.sync({ alter: true })
     .then(() => {
         console.log('Conexão com o banco de dados estabelecida.');
         app.listen(3000, () => {

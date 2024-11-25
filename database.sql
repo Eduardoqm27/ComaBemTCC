@@ -14,14 +14,14 @@ CREATE TABLE Usuarios (
 
 CREATE TABLE TbEndereco (
     id_endereco INT AUTO_INCREMENT PRIMARY KEY,
-    usuarioId INT NOT NULL,
+    usuario_id INT NOT NULL,
     cidade VARCHAR(255) NOT NULL,
     estado VARCHAR(20) NOT NULL,
     bairro VARCHAR(255) NOT NULL,
     numero VARCHAR(10) NOT NULL,
     telefone VARCHAR(15) NOT NULL,
     cep CHAR(8) NOT NULL,
-    FOREIGN KEY (usuarioId) REFERENCES Usuarios(id) ON DELETE CASCADE
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE TbEntregador (
@@ -64,7 +64,7 @@ CREATE TABLE TbEntrega (
 
 CREATE TABLE Carrinhos (
     id_carrinho INT AUTO_INCREMENT PRIMARY KEY,
-    produtoId INT NOT NULL,
+    produto_id INT NOT NULL,
     quantidade INT NOT NULL DEFAULT 1 CHECK (quantidade >= 1),
-    FOREIGN KEY (produtoId) REFERENCES TbProduto(id_produto) ON DELETE CASCADE
+    FOREIGN KEY (produto_id) REFERENCES TbProduto(id_produto) ON DELETE CASCADE
 );
