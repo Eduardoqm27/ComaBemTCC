@@ -9,50 +9,52 @@
 </head>
 <body>
     <header>
-        <img src="/img/logoCB.png" alt="Imagem Logo"/>
+        <div class="header-container">
+            <img src="/img/logoCB.png" alt="Imagem Logo" class="logo"/>
+            <form action="/pesquisar" method="GET" class="search-form">
+                <input type="text" name="query" placeholder="Pesquisar produtos..." class="search-input" />
+                <button type="submit" class="search-btn"><i class="bi bi-search"></i></button>
+            </form>
+            <a href="/carrinho" class="cart-link">
+                <i class="bi bi-cart4 cart-icon"></i>
+            </a>
+        </div>
     </header>
+
     <nav class="menu-lateral"> 
-    <div class="btn-expandir">
-        <i class="bi bi-list"></i>
-    </div>
+        <div class="btn-expandir">
+            <i class="bi bi-list"></i>
+        </div>
 
-    <ul class="ul">
-        <!-- Link para a página inicial -->
-        <li class="item-menu">
-            <a href="/" data-link="/views/home.ejs">
-                <span class="icon"><i class="bi bi-house"></i></span>
-                <span class="txt-link">Início</span>
-            </a>
-        </li>
-
-        <!-- Link para Categorias de Produtos -->
-        <li class="item-menu">
-            <a href="/produto/categoria" data-link="/views/categoria/categoria.ejs">
-                <span class="icon"><i class="bi bi-columns-gap"></i></span>
-                <span class="txt-link">Categorias</span>
-            </a>
-        </li>
-
-        <!-- Link para a página de Perfil do Usuário (não login, mas o perfil após login) -->
-        <li class="item-menu">
-            <a href="/perfil" data-link="/views/user/perfil.ejs"> <!-- Redireciona para o perfil do usuário -->
-                <span class="icon"><i class="bi bi-person-bounding-box"></i></span>
-                <span class="txt-link">Usuário</span>
-            </a>
-        </li>
-
-        <!-- Link para o Carrinho -->
-        <li class="item-menu">
-            <a href="/carrinho" data-link="/views/carrinho.ejs">
-                <span class="icon"><i class="bi bi-cart4"></i></span>
-                <span class="txt-link">Carrinho</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+        <ul class="ul">
+            <li class="item-menu">
+                <a href="/" data-link="/views/home.ejs">
+                    <span class="icon"><i class="bi bi-house"></i></span>
+                    <span class="txt-link">Início</span>
+                </a>
+            </li>
+            <li class="item-menu">
+                <a href="/produto/categoria" data-link="/views/categoria/categoria.ejs">
+                    <span class="icon"><i class="bi bi-columns-gap"></i></span>
+                    <span class="txt-link">Categorias</span>
+                </a>
+            </li>
+            <li class="item-menu">
+                <a href="/perfil" data-link="/views/user/perfil.ejs">
+                    <span class="icon"><i class="bi bi-person-bounding-box"></i></span>
+                    <span class="txt-link">Usuário</span>
+                </a>
+            </li>            
+            <li class="item-menu">
+                <a href="/carrinho" data-link="/views/carrinho.ejs">
+                    <span class="icon"><i class="bi bi-cart4"></i></span>
+                    <span class="txt-link">Carrinho</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 
     <div class="content">
-
         <h1>Produtos em Promoção</h1>
         <div class="produtos-grid">
             <% if (produtos && produtos.length > 0) { %>
@@ -69,7 +71,7 @@
             <% } %>
         </div>
     </div>
-    
+
     <footer>
         <p>&copy; 2024 ComaBemTCC</p>
     </footer>

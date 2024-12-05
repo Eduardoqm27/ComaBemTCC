@@ -1,5 +1,5 @@
 const Usuario = require('../models/Usuario');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     cadastro: async (req, res) => {
@@ -15,7 +15,7 @@ module.exports = {
 
         try {
             await Usuario.create({ nome, email, senha: hashedPassword, data_nasc });
-            res.redirect('/user/login');
+            res.redirect('/auth/login');
         } catch (err) {
             console.error(err); // Adicionando log de erro para depuração
             res.status(500).send("Erro ao cadastrar usuário");
@@ -29,7 +29,7 @@ module.exports = {
             const user = await Usuario.findOne({ where: { email } });
             if (user && await bcrypt.compare(senha, user.senha)) {
                 req.session.userId = user.id; // Armazenar o ID do usuário na sessão
-                res.redirect('/');  // Redireciona para a página principal após login
+                res.redirect('/user/perfil');  // Redireciona para a página de perfil após login
             } else {
                 res.status(401).send("Usuário ou senha incorretos");
             }

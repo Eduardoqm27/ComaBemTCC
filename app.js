@@ -6,7 +6,7 @@ const passport = require('./config/passport-setup');
 const flash = require('connect-flash');
 const sequelize = require('./config/database');
 
-// Corrigido para importar diretamente o modelo Produto
+// Importando os modelos
 const Produto = require('./models/Produto');
 
 // Importando as rotas
@@ -19,17 +19,24 @@ const app = express();
 
 // Configuração da sessão
 app.use(session({
-    secret: 'seu_segredo_aqui',
+    secret: 'seu_segredo_aqui',  // Altere para um segredo mais seguro
     resave: false,
     saveUninitialized: false,
-    store: new SequelizeStore({ db: sequelize })
+    store: new SequelizeStore({ db: sequelize }),
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24,  // A sessão dura 1 dia
+        secure: false  // Defina como true se estiver utilizando HTTPS
+    }
 }));
 
+// Inicializando o Passport para autenticação
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Usando o middleware de flash para mensagens temporárias
 app.use(flash());
 
-// Middleware para mensagens flash
+// Middleware para capturar mensagens flash e enviar para as views
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
@@ -57,12 +64,12 @@ app.get('/', async (req, res) => {
 // Rota para o perfil do usuário
 app.get('/profile', (req, res) => {
     if (!req.isAuthenticated()) {
-        return res.redirect('/auth/login'); // Se não estiver autenticado, redireciona para login
+        return res.redirect('/auth/login');  // Redireciona se o usuário não estiver autenticado
     }
-    res.render('perfil', { user: req.user }); // Exibe o perfil do usuário logado
+    res.render('perfil', { user: req.user });  // Passa o usuário autenticado para a view
 });
 
-// Rotas
+// Roteamento
 app.use('/auth', authRoutes);
 app.use('/produto', produtoRoutes);
 app.use('/carrinho', carrinhoRoutes);

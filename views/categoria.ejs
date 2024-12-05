@@ -9,7 +9,16 @@
 </head>
 <body>
     <header>
-        <img src="/img/logoCB.png" alt="Imagem Logo"/>
+        <div class="header-container">
+            <img src="/img/logoCB.png" alt="Imagem Logo" class="logo"/>
+            <form action="/pesquisar" method="GET" class="search-form">
+                <input type="text" name="query" placeholder="Pesquisar produtos..." class="search-input" />
+                <button type="submit" class="search-btn"><i class="bi bi-search"></i></button>
+            </form>
+            <a href="/carrinho" class="cart-link">
+                <i class="bi bi-cart4 cart-icon"></i>
+            </a>
+        </div>
     </header>
     <nav class="menu-lateral"> 
         <div class="btn-expandir">
