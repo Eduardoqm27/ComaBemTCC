@@ -21,11 +21,16 @@ const Pedido = sequelize.define('Pedido', {
     }
 });
 
+// Associação entre Pedido e Usuario (um usuário pode ter vários pedidos)
 Pedido.associate = (models) => {
     Pedido.belongsTo(models.Usuario, {
         foreignKey: 'id_usuario'
     });
-    Pedido.hasMany(models.Entrega, { // Adicione esta linha se um Pedido tiver várias Entregas
+    Pedido.hasMany(models.Entrega, { // Um Pedido pode ter várias Entregas
+        foreignKey: 'id_pedido'
+    });
+    Pedido.belongsToMany(models.TbProduto, {
+        through: 'PedidoProduto',  // Tabela intermediária entre Pedido e Produto
         foreignKey: 'id_pedido'
     });
 };

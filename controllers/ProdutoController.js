@@ -2,44 +2,80 @@ const Produto = require('../models/Produto');
 const { Op } = require('sequelize');
 
 module.exports = {
-    listarProdutos: async (req, res) => {
+    // Tela Inicial (Destaques)
+    telaInicial: async (req, res) => {
         try {
             const produtos = await Produto.findAll();
-            const produtosPromocao = produtos.filter(produto => produto.promocao);
+            const produtosPromocao = produtos.filter(produto => produto.promocao); // Filtra os produtos com promoção
             res.render('index', { produtos: produtosPromocao });
         } catch (err) {
             res.status(500).send("Erro ao listar produtos");
         }
     },
 
-    // Função de pesquisa de produtos
-    pesquisarProdutos: async (req, res) => {
-        const { termo } = req.query;
+    // Página de Vegetais
+    categoriaVegetais: async (req, res) => {
         try {
-            const produtos = await Produto.findAll({
-                where: {
-                    nome_produto: { [Op.like]: `%${termo}%` }
-                }
-            });
-            res.json(produtos); // Retorna os produtos encontrados como JSON
+            const produtos = await Produto.findAll({ where: { categoria: 'vegetal' } });
+            res.render('categoria', { produtos });
         } catch (err) {
-            console.error("Erro na pesquisa:", err);
-            res.status(500).json({ error: "Erro ao buscar produtos" });
+            res.status(500).send("Erro ao listar vegetais");
         }
     },
 
-    // Função para obter detalhes do produto
-    detalhesProduto: async (req, res) => {
-        const { id } = req.params;
+    // Página de Kits
+    categoriaKits: async (req, res) => {
         try {
-            const produto = await Produto.findByPk(id);
-            if (!produto) {
-                return res.status(404).send("Produto não encontrado");
-            }
-            res.render('produto-detalhe', { produto });
+            const produtos = await Produto.findAll({ where: { categoria: 'kit' } });
+            res.render('kits', { produtos });
         } catch (err) {
-            console.error("Erro ao obter detalhes do produto:", err);
-            res.status(500).send("Erro ao obter detalhes do produto");
+            res.status(500).send("Erro ao listar kits");
+        }
+    },
+
+    // Página de Ofertas (Promoções)
+    ofertas: async (req, res) => {
+        try {
+            const produtosPromocao = await Produto.findAll({ where: { promocao: true } });
+            res.render('ofertas', { produtosPromocao });
+        } catch (err) {
+            res.status(500).send("Erro ao listar ofertas");
+        }
+    },
+
+    // Página Sobre Nós
+    sobreNos: (req, res) => {
+        res.render('sobre');
+    },
+
+    // Página de Formulário de Adição de Produto (Para Vendedores)
+    adicionarProduto: async (req, res) => {
+        try {
+            const categorias = await Produto.findAll({ attributes: ['categoria'] });
+            res.render('adicionar-produto', { categorias });
+        } catch (err) {
+            res.status(500).send("Erro ao carregar categorias");
+        }
+    },
+
+    // Adicionar produto ao banco de dados
+    salvarProduto: async (req, res) => {
+        const { nome, marca, descricao, preco, unidade, categoria, destaque, promocao } = req.body;
+        try {
+            await Produto.create({
+                nome_produto: nome,
+                marca,
+                descricao,
+                preco,
+                unidade,
+                categoria,
+                destaque,
+                promocao,
+                imagem: req.file ? req.file.path : null
+            });
+            res.redirect('/produtos'); // Redireciona para a tela de produtos (ou qualquer outra que você prefira)
+        } catch (err) {
+            res.status(500).send("Erro ao adicionar produto");
         }
     }
 };

@@ -37,10 +37,13 @@ const ProdutoModel = sequelize.define('TbProduto', {
     }
 });
 
-// Definindo associações (se houver)
+// Definindo a associação com o Carrinho (um produto pode estar em vários carrinhos)
 ProdutoModel.associate = (models) => {
     ProdutoModel.hasMany(models.Carrinho, { foreignKey: 'produtoId' });
+    ProdutoModel.belongsToMany(models.Pedido, {
+        through: 'PedidoProduto',  // Tabela intermediária entre Pedido e Produto
+        foreignKey: 'id_produto'
+    });
 };
 
-// Exportando o modelo diretamente
 module.exports = ProdutoModel;

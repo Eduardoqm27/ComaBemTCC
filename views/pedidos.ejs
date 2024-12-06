@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Pedidos - ComaBemTCC</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="pedidos-container">
+        <h2>Histórico de Pedidos</h2>
+        <% if (pedidos.length > 0) { %>
+            <ul class="pedidos-list">
+                <% pedidos.forEach(pedido => { %>
+                    <li>
+                        <p><strong>Pedido #<%= pedido.id %></strong></p>
+                        <p>Status: <%= pedido.status %></p>
+                        <p>Total: R$ <%= pedido.total.toFixed(2) %></p>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>Você ainda não fez nenhum pedido.</p>
+        <% } %>
+    </div>
+</body>
+</html>

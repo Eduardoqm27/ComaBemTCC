@@ -30,4 +30,7 @@ const Usuario = sequelize.define('Usuario', {
     updatedAt: 'updatedAt'
 });
 
+// Associação com pedidos (um usuário pode ter vários pedidos)
+Usuario.hasMany(require('./Pedido'), { foreignKey: 'id_usuario' });
+
 module.exports = Usuario;

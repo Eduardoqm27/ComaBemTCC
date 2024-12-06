@@ -1,0 +1,25 @@
+<h2>Histórico de Pedidos</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID do Pedido</th>
+            <th>Data</th>
+            <th>Total</th>
+            <th>Pagamento</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% pedidos.forEach(pedido => { %>
+        <tr>
+            <td><%= pedido.id_pedido %></td>
+            <td><%= pedido.data.toLocaleString() %></td>
+            <td><%= pedido.total %></td>
+            <td><%= pedido.pagto %></td>
+            <td>
+                <a href="/pedido/<%= pedido.id_pedido %>">Detalhes</a>
+            </td>
+        </tr>
+        <% }) %>
+    </tbody>
+</table>

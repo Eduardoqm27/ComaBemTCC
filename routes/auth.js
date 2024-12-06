@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Rota para exibir o formulário de login
 router.get('/login', (req, res) => {
-    res.render('login'); // Exibe a view de login
+    res.render('login');
 });
 
 // Rota para processar o login

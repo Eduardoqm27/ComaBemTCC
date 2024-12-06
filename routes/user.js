@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Usuario = require('../models/Usuario');
 const Pedido = require('../models/Pedido');
-const bcrypt = require('bcryptjs');  // Alterado para bcryptjs
+const bcrypt = require('bcryptjs'); // Alterado para bcryptjs
 const { checkAuthenticated } = require('../middlewares/auth');
 
 // Página de login/cadastro
@@ -31,7 +31,7 @@ router.get('/perfil', checkAuthenticated, async (req, res) => {
 // Lógica para login do usuário
 router.post('/login', async (req, res) => {
     const { email, senha } = req.body;
-    
+
     try {
         const usuario = await Usuario.findOne({ where: { email } });
         if (!usuario) {
@@ -70,11 +70,11 @@ router.post('/cadastro', async (req, res) => {
         const hashedPassword = await bcrypt.hash(senha, 10);
 
         // Cria o usuário no banco de dados
-        const usuario = await Usuario.create({ 
-            nome, 
-            email, 
+        const usuario = await Usuario.create({
+            nome,
+            email,
             senha: hashedPassword,
-            data_nasc 
+            data_nasc
         });
 
         // Atribui o ID do usuário à sessão

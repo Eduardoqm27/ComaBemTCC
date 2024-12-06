@@ -50,9 +50,9 @@ router.post('/adicionar', upload.single('imagem'), async (req, res) => {
             imagem: req.file.filename,
             promocao: promocao ? true : false
         });
-        
+
         // Redireciona para a página inicial após adicionar o produto
-        res.redirect('/'); 
+        res.redirect('/');
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
         res.status(500).send('Erro ao adicionar produto');
@@ -64,9 +64,9 @@ router.get('/:id', async (req, res) => {
     try {
         const produto = await Produto.findByPk(req.params.id);
         const produtosPromocao = await Produto.findAll({ where: { promocao: true } });
-        
+
         console.log(produtosPromocao); // Adicione esta linha para depuração
-        
+
         if (produto) {
             res.render('produto-detalhe', { produto, produtosPromocao });
         } else {
