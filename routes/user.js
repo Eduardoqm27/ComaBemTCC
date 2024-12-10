@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Usuario = require('../models/Usuario');
 const Pedido = require('../models/Pedido');
-const bcrypt = require('bcryptjs'); // Alterado para bcryptjs
+const bcrypt = require('bcryptjs');
 const { checkAuthenticated } = require('../middlewares/auth');
 
 // Página de login/cadastro
@@ -35,18 +35,14 @@ router.post('/login', async (req, res) => {
     try {
         const usuario = await Usuario.findOne({ where: { email } });
         if (!usuario) {
-            console.log('Usuário não encontrado');
             return res.status(401).send('Email ou senha inválidos');
         }
 
-        // Verifica se a senha está correta
         const senhaValida = await bcrypt.compare(senha, usuario.senha);
         if (!senhaValida) {
-            console.log('Senha inválida');
             return res.status(401).send('Email ou senha inválidos');
         }
 
-        // Atribui o ID do usuário à sessão
         req.session.userId = usuario.id;
         res.redirect('/user/perfil');
     } catch (error) {
@@ -60,16 +56,12 @@ router.post('/cadastro', async (req, res) => {
     const { nome, email, senha, data_nasc } = req.body;
 
     try {
-        // Verifica se o e-mail já está cadastrado
         const usuarioExistente = await Usuario.findOne({ where: { email } });
         if (usuarioExistente) {
             return res.status(400).send('Email já está em uso.');
         }
 
-        // Gera o hash da senha
         const hashedPassword = await bcrypt.hash(senha, 10);
-
-        // Cria o usuário no banco de dados
         const usuario = await Usuario.create({
             nome,
             email,
@@ -77,7 +69,6 @@ router.post('/cadastro', async (req, res) => {
             data_nasc
         });
 
-        // Atribui o ID do usuário à sessão
         req.session.userId = usuario.id;
         res.redirect('/user/perfil');
     } catch (error) {

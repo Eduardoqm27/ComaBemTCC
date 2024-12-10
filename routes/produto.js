@@ -65,8 +65,6 @@ router.get('/:id', async (req, res) => {
         const produto = await Produto.findByPk(req.params.id);
         const produtosPromocao = await Produto.findAll({ where: { promocao: true } });
 
-        console.log(produtosPromocao); // Adicione esta linha para depuração
-
         if (produto) {
             res.render('produto-detalhe', { produto, produtosPromocao });
         } else {

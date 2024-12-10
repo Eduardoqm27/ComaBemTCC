@@ -35,14 +35,15 @@ const ProdutoModel = sequelize.define('TbProduto', {
         type: DataTypes.BOOLEAN,
         defaultValue: false
     }
+}, {
+    timestamps: true,
+    tableName: 'TbProduto'
 });
 
-// Definindo a associação com o Carrinho (um produto pode estar em vários carrinhos)
-ProdutoModel.associate = (models) => {
-    ProdutoModel.hasMany(models.Carrinho, { foreignKey: 'produtoId' });
-    ProdutoModel.belongsToMany(models.Pedido, {
-        through: 'PedidoProduto',  // Tabela intermediária entre Pedido e Produto
-        foreignKey: 'id_produto'
+ProdutoModel.associate = models => {
+    ProdutoModel.hasMany(models.Carrinhos, {
+        foreignKey: 'produto_id',
+        onDelete: 'CASCADE'
     });
 };
 
