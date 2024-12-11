@@ -13,13 +13,10 @@ const Entrega = sequelize.define('Entrega', {
     }
 });
 
+// Definindo associações com Pedido e Entregador
 Entrega.associate = (models) => {
-    Entrega.belongsTo(models.Pedido, {
-        foreignKey: 'id_pedido'
-    });
-    Entrega.belongsTo(models.Entregador, {
-        foreignKey: 'id_entregador'
-    });
+    Entrega.belongsTo(models.Pedido, { foreignKey: 'id_pedido' });
+    Entrega.belongsTo(models.Entregador, { foreignKey: 'id_entregador' });
 };
 
 module.exports = Entrega;

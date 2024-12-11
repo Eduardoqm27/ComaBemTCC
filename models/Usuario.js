@@ -23,6 +23,11 @@ const Usuario = sequelize.define('Usuario', {
     data_nasc: {
         type: DataTypes.DATE,
         allowNull: false
+    },
+    funcao: {
+        type: DataTypes.ENUM('administrador', 'vendedor', 'cliente'),
+        allowNull: false,
+        defaultValue: 'cliente'
     }
 }, {
     timestamps: true,
@@ -31,6 +36,8 @@ const Usuario = sequelize.define('Usuario', {
 });
 
 // Associação com pedidos (um usuário pode ter vários pedidos)
-Usuario.hasMany(require('./Pedido'), { foreignKey: 'id_usuario' });
+Usuario.associate = models => {
+    Usuario.hasMany(models.Pedido, { foreignKey: 'id_usuario', onDelete: 'CASCADE' });
+};
 
 module.exports = Usuario;

@@ -7,11 +7,11 @@ const Endereco = sequelize.define('Endereco', {
         autoIncrement: true,
         primaryKey: true
     },
-    usuarioId: { // Chave estrangeira para Usuario
+    usuarioId: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'Usuarios', // Assumindo que a tabela se chama 'Usuarios'
-            key: 'id' // Referência ao id do Usuario
+            model: 'Usuarios', // A tabela se chama 'Usuarios'
+            key: 'id'
         }
     },
     cidade: {
@@ -40,9 +40,9 @@ const Endereco = sequelize.define('Endereco', {
     }
 });
 
-// Definindo a função associate
+// Definindo a associação com o modelo Usuario
 Endereco.associate = (models) => {
-    Endereco.belongsTo(models.Usuario, { foreignKey: 'usuarioId' }); // Associa Endereco a Usuario
+    Endereco.belongsTo(models.Usuario, { foreignKey: 'usuarioId' });
 };
 
 module.exports = Endereco;

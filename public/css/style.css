@@ -142,19 +142,45 @@ footer {
     width: 100%;
 }
 
-/* Carrossel */
-.carrossel {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 10px;
-    margin-top: 20px;
+/* Estilo dos Cards de Produtos */
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 cards por linha */
+    gap: 20px;
 }
 
-.carrossel img {
-    width: 100%;
+.card-produto {
+    border: 1px solid #ccc;
     border-radius: 8px;
-    scroll-snap-align: center;
+    padding: 10px;
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-produto img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.card-produto h4 {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #123f0f;
+}
+
+.card-produto p {
+    font-size: 14px;
+    color: #666;
+}
+
+.card-produto .preco {
+    font-size: 18px;
+    font-weight: bold;
+    color: #0d2e0c;
+    margin-top: 5px;
 }
 
 /* Subcategorias */
@@ -192,7 +218,7 @@ footer {
     }
 
     .content {
-        padding-top: 100px; /* Ajuste para dispositivos menores */
+        padding-top: 100px; 
     }
 
     nav.menu-lateral {

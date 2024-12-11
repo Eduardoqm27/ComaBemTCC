@@ -33,7 +33,6 @@
     <ul class="ul">
         <li class="item-menu"><a href="/" class="icon"><i class="fas fa-home"></i><span class="txt-link">Destaques</span></a></li>
         <li class="item-menu"><a href="/vegetais" class="icon"><i class="fas fa-leaf"></i><span class="txt-link">Vegetais</span></a></li>
-        <li class="item-menu"><a href="/kits" class="icon"><i class="fas fa-box"></i><span class="txt-link">Kits</span></a></li>
         <li class="item-menu"><a href="/ofertas" class="icon"><i class="fas fa-tags"></i><span class="txt-link">Ofertas</span></a></li>
         <li class="item-menu"><a href="/sobre" class="icon"><i class="fas fa-info-circle"></i><span class="txt-link">Sobre Nós</span></a></li>
     </ul>
@@ -50,10 +49,12 @@
         <% if (produtos && produtos.length > 0) { %>
             <% produtos.forEach(produto => { %>
                 <div class="card-produto">
-                    <img src="<%= produto.imagemUrl %>" alt="<%= produto.nome %>">
-                    <h3><%= produto.nome %></h3>
-                    <p><%= produto.descricao %></p>
-                    <div class="price">R$ <%= produto.preco.toFixed(2).replace('.', ',') %></div>
+                    <img src="<%= produto.imagemUrl %>" alt="<%= produto.nome %>" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= produto.nome %></h5>
+                        <p class="card-text"><%= produto.descricao %></p>
+                        <div class="price">R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></div>
+                    </div>
                 </div>
             <% }) %>
         <% } else { %>

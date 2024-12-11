@@ -8,6 +8,7 @@ CREATE TABLE Usuarios (
     email VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     data_nasc DATE NOT NULL,
+    tipo_usuario ENUM('administrador', 'vendedor', 'cliente') NOT NULL,
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -39,7 +40,8 @@ CREATE TABLE TbProduto (
     marca VARCHAR(255),
     origem VARCHAR(255),
     preco DECIMAL(10, 2) NOT NULL,
-    promocao BOOLEAN DEFAULT FALSE
+    promocao BOOLEAN DEFAULT FALSE,
+    categoria ENUM('fruta', 'verdura', 'legumes', 'kits') NOT NULL
 );
 
 CREATE TABLE TbPedido (

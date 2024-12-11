@@ -16,8 +16,8 @@ router.get('/', async (req, res) => {
 // Rota para a página de categorias (Vegetais)
 router.get('/categoria', async (req, res) => {
     try {
-        const categorias = await Produto.findAll({ where: { categoria: 'Vegetais' } });
-        res.render('categoria', { categorias });
+        const produtos = await Produto.findAll({ where: { categoria: 'Vegetais' } });
+        res.render('categoria', { produtos });
     } catch (error) {
         console.error('Erro ao buscar categorias:', error);
         res.status(500).send('Erro ao carregar a página de categorias');
@@ -27,8 +27,8 @@ router.get('/categoria', async (req, res) => {
 // Rota para a página de kits
 router.get('/kits', async (req, res) => {
     try {
-        const kits = await Produto.findAll({ where: { categoria: 'Kits' } });
-        res.render('kits', { kits });
+        const produtos = await Produto.findAll({ where: { categoria: 'kits' } });
+        res.render('kits', { produtos });
     } catch (error) {
         console.error('Erro ao buscar kits:', error);
         res.status(500).send('Erro ao carregar a página de kits');
@@ -38,8 +38,8 @@ router.get('/kits', async (req, res) => {
 // Rota para a página de ofertas
 router.get('/ofertas', async (req, res) => {
     try {
-        const ofertas = await Produto.findAll({ where: { promocao: true } });
-        res.render('ofertas', { ofertas });
+        const produtos = await Produto.findAll({ where: { promocao: true } });
+        res.render('ofertas', { produtos });
     } catch (error) {
         console.error('Erro ao buscar ofertas:', error);
         res.status(500).send('Erro ao carregar a página de ofertas');

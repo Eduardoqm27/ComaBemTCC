@@ -23,34 +23,26 @@
 
 <nav class="menu-lateral">
     <ul class="ul">
-        <li class="item-menu"><a href="/" class="icon"><i class="bi bi-house"></i><span class="txt-link">Início</span></a></li>
-        <li class="item-menu"><a href="/produto/categoria" class="icon"><i class="bi bi-columns-gap"></i><span class="txt-link">Categorias</span></a></li>
-        <li class="item-menu"><a href="/user/login" class="icon"><i class="bi bi-person-bounding-box"></i><span class="txt-link">Usuário</span></a></li>
-        <li class="item-menu"><a href="/carrinho" class="icon"><i class="bi bi-cart4"></i><span class="txt-link">Carrinho</span></a></li>
+        <li class="item-menu"><a href="/">Início</a></li>
+        <li class="item-menu"><a href="/produto/categoria">Categorias</a></li>
+        <li class="item-menu"><a href="/user/login">Usuário</a></li>
+        <li class="item-menu"><a href="/carrinho">Carrinho</a></li>
     </ul>
 </nav>
 
 <div class="content">
     <h2>Ofertas Especiais</h2>
     <div class="produtos-grid">
-        <% produtos.forEach(produto => { %>
-            <% if (produto.promocao) { %>
-                <div class="card-produto">
-                    <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
-                    <h3><%= produto.nome_produto %></h3>
-                    <p>Preço Original: R$ <%= produto.preco %></p>
-                    <p>Preço Promocional: R$ <%= (produto.preco * 0.9).toFixed(2) %></p>
-                    <a href="/produto/<%= produto.id %>">Ver Mais</a>
-                </div>
-            <% } %>
+        <% produtosPromocao.forEach(produto => { %>
+            <div class="card-produto">
+                <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                <h3><%= produto.nome_produto %></h3>
+                <p>Preço: R$ <%= (Number(produto.preco) * 0.9).toFixed(2) %></p>
+                <a href="/produto/<%= produto.id %>">Ver Detalhes</a>
+            </div>
         <% }) %>
     </div>
 </div>
 
-<footer>
-    <p>&copy; 2024 ComaBemTCC</p>
-</footer>
-
-<script src="/public/js/scripts.js"></script>
 </body>
 </html>

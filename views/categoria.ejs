@@ -21,7 +21,7 @@
         </div>
     </header>
 
-    <nav class="menu-lateral"> 
+    <nav class="menu-lateral">
         <div class="btn-expandir">
             <i class="bi bi-list"></i>
         </div>
@@ -44,8 +44,10 @@
             <button class="filtro" data-categoria="todas">Todas</button>
         </div>
 
+        <!-- Botão para adicionar novo produto -->
         <button id="btnAdicionar" class="btn btn-primary">Adicionar Novo Produto</button>
         
+        <!-- Formulário de adição de produto -->
         <div id="formContainer" style="display: none;">
             <h3>Formulário para Adicionar Novo Produto</h3>
             <form action="/produto/adicionar" method="POST" enctype="multipart/form-data">
@@ -63,6 +65,9 @@
                 </select>
                 <label>
                     <input type="checkbox" name="promocao"> Em Promoção
+                </label>
+                <label>
+                    <input type="checkbox" name="destaque"> Destaque
                 </label>
                 <button type="submit">Adicionar Produto</button>
             </form>
@@ -88,6 +93,12 @@
 
     <script src="/public/js/scripts.js"></script>
     <script>
+        // Mostrar o formulário de adicionar produto quando clicar no botão
+        document.getElementById('btnAdicionar').addEventListener('click', () => {
+            const formContainer = document.getElementById('formContainer');
+            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+        });
+
         document.querySelectorAll('.filtro').forEach(btn => {
             btn.addEventListener('click', () => {
                 const categoria = btn.getAttribute('data-categoria');

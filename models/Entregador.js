@@ -21,10 +21,9 @@ const Entregador = sequelize.define('Entregador', {
     }
 });
 
-// Definindo a função associate
+// No momento, sem associações extras
 Entregador.associate = (models) => {
-    // Exemplo de associação: Entregador.hasMany(models.Pedido, { foreignKey: 'id_entregador' });
-    // Adicione aqui outras associações conforme necessário
+    // Pode adicionar mais associações aqui conforme necessário
 };
 
 module.exports = Entregador;

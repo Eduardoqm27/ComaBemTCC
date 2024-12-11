@@ -39,7 +39,7 @@ router.get('/categoria', async (req, res) => {
 // Rota para adicionar um novo produto
 router.post('/adicionar', upload.single('imagem'), async (req, res) => {
     try {
-        const { nome_produto, marca, origem, descricao, preco, categoria, promocao } = req.body;
+        const { nome_produto, marca, origem, descricao, preco, categoria, promocao, destaque } = req.body;
         const novoProduto = await Produto.create({
             nome_produto,
             marca,
@@ -48,7 +48,8 @@ router.post('/adicionar', upload.single('imagem'), async (req, res) => {
             preco,
             categoria,
             imagem: req.file.filename,
-            promocao: promocao ? true : false
+            promocao: promocao ? true : false,
+            destaque: destaque ? true : false
         });
 
         // Redireciona para a página inicial após adicionar o produto
@@ -66,13 +67,13 @@ router.get('/:id', async (req, res) => {
         const produtosPromocao = await Produto.findAll({ where: { promocao: true } });
 
         if (produto) {
-            res.render('produto-detalhe', { produto, produtosPromocao });
+            res.render('produto-detalhes', { produto, produtosPromocao });
         } else {
             res.status(404).send('Produto não encontrado');
         }
     } catch (error) {
         console.error('Erro ao buscar produto:', error);
-        res.status(500).send('Erro ao buscar produto');
+        res.status(500).send('Erro ao exibir detalhes do produto');
     }
 });
 

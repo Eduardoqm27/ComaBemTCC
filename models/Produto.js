@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const ProdutoModel = sequelize.define('TbProduto', {
+const Produto = sequelize.define('Produto', {
     id_produto: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -34,17 +34,23 @@ const ProdutoModel = sequelize.define('TbProduto', {
     promocao: {
         type: DataTypes.BOOLEAN,
         defaultValue: false
+    },
+    categoria: {
+        type: DataTypes.ENUM('verdura', 'legumes', 'fruta', 'kits'),
+        allowNull: false
+    },
+    destaque: {  // Adicionando campo de destaque para promoção
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 }, {
     timestamps: true,
-    tableName: 'TbProduto'
+    tableName: 'Produtos' // Ajuste do nome da tabela
 });
 
-ProdutoModel.associate = models => {
-    ProdutoModel.hasMany(models.Carrinhos, {
-        foreignKey: 'produto_id',
-        onDelete: 'CASCADE'
-    });
+// Definindo a associação com Carrinho
+Produto.associate = (models) => {
+    Produto.hasMany(models.Carrinho, { foreignKey: 'produtoId' });
 };
 
-module.exports = ProdutoModel;
+module.exports = Produto;
