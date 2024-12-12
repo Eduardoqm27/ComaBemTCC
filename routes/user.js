@@ -5,10 +5,6 @@ const Pedido = require('../models/Pedido');
 const bcrypt = require('bcryptjs');
 const { checkAuthenticated } = require('../middlewares/auth');
 
-// Página de login/cadastro
-router.get('/login', (req, res) => {
-    res.render('login');
-});
 
 router.get('/cadastro', (req, res) => {
     res.render('cadastro');

@@ -24,26 +24,34 @@ router.get('/categoria', async (req, res) => {
     }
 });
 
-// Rota para a página de kits
-router.get('/kits', async (req, res) => {
-    try {
-        const produtos = await Produto.findAll({ where: { categoria: 'kits' } });
-        res.render('kits', { produtos });
-    } catch (error) {
-        console.error('Erro ao buscar kits:', error);
-        res.status(500).send('Erro ao carregar a página de kits');
-    }
+
+router.get('/vegetais', (req, res) => {
+    Produto.findAll({ where: { categoria: 'verdura' } })
+        .then(produtos => {
+            res.render('categoria', { categoria: 'Vegetais', produtos });
+        })
+        .catch(err => console.error(err));
 });
 
-// Rota para a página de ofertas
-router.get('/ofertas', async (req, res) => {
-    try {
-        const produtos = await Produto.findAll({ where: { promocao: true } });
-        res.render('ofertas', { produtos });
-    } catch (error) {
-        console.error('Erro ao buscar ofertas:', error);
-        res.status(500).send('Erro ao carregar a página de ofertas');
-    }
+router.get('/kits', (req, res) => {
+    Produto.findAll({ where: { categoria: 'kits' } })
+        .then(produtos => {
+            res.render('kits', { categoria: 'Kits', produtos });
+        })
+        .catch(err => console.error(err));
+});
+
+router.get('/ofertas', (req, res) => {
+    Produto.findAll({ where: { promocao: true } })
+        .then(produtos => {
+            res.render('categoria', { categoria: 'Ofertas', produtos });
+        })
+        .catch(err => console.error(err));
+});
+
+
+router.get('/sobre', (req, res) => {
+    res.render('sobre', { title: 'Sobre Nós' });
 });
 
 module.exports = router;
