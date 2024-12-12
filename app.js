@@ -5,6 +5,7 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const passport = require('./config/passport-setup');
 const flash = require('connect-flash');
 const sequelize = require('./config/database');
+const expressLayouts = require('express-ejs-layouts');
 
 const Produto = require('./models/Produto');
 const Carrinho = require('./models/Carrinho');
@@ -45,6 +46,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.use(expressLayouts);
 
 // Usando as rotas
 app.use('/', mainRoutes);
@@ -52,35 +54,6 @@ app.use('/auth', authRoutes);
 app.use('/produto', produtoRoutes);
 app.use('/carrinho', carrinhoRoutes);
 app.use('/user', userRoutes);
-
-// Novas rotas para categorias
-app.get('/vegetais', (req, res) => {
-    Produto.findAll({ where: { categoria: 'verdura' } })
-        .then(produtos => {
-            res.render('categoria', { categoria: 'Vegetais', produtos });
-        })
-        .catch(err => console.error(err));
-});
-
-app.get('/kits', (req, res) => {
-    Produto.findAll({ where: { categoria: 'kits' } })
-        .then(produtos => {
-            res.render('kits', { categoria: 'Kits', produtos });
-        })
-        .catch(err => console.error(err));
-});
-
-app.get('/ofertas', (req, res) => {
-    Produto.findAll({ where: { promocao: true } })
-        .then(produtos => {
-            res.render('categoria', { categoria: 'Ofertas', produtos });
-        })
-        .catch(err => console.error(err));
-});
-
-app.get('/sobre-nos', (req, res) => {
-    res.render('sobre', { title: 'Sobre Nós' });
-});
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

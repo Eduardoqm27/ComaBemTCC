@@ -1,27 +1,17 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil - ComaBemTCC</title>
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-    <div class="perfil-container">
-        <h2>Perfil do Usuário</h2>
-        <% if (user) { %> <!-- Verifica se o usuário está autenticado -->
-            <div class="perfil-info">
-                <p><strong>Nome:</strong> <%= user.nome %></p>
-                <p><strong>Email:</strong> <%= user.email %></p>
-                <p><strong>Data de Nascimento:</strong> <%= user.data_nasc %></p>
-            </div>
-            <a href="/auth/logout">Logout</a> <!-- Link de logout -->
-        <% } else { %>
-            <div class="auth-options">
-                <a href="/auth/login">Login</a> <!-- Link de login -->
-                <a href="/auth/register">Cadastro</a> <!-- Link de cadastro -->
-            </div>
-        <% } %>
-    </div>
-</body>
-</html>
+
+<div class="perfil-container">
+    <h2>Perfil do Usuário</h2>
+    <% if (user) { %> <!-- Verifica se o usuário está autenticado -->
+        <div class="perfil-info">
+            <p><strong>Nome:</strong> <%= user.nome %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Data de Nascimento:</strong> <%= user.data_nasc %></p>
+        </div>
+        <a href="/auth/logout">Logout</a> <!-- Link de logout -->
+    <% } else { %>
+        <div class="auth-options">
+            <a href="/auth/login">Login</a> <!-- Link de login -->
+            <a href="/auth/register">Cadastro</a> <!-- Link de cadastro -->
+        </div>
+    <% } %>
+</div>
