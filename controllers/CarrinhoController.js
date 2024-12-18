@@ -1,91 +1,96 @@
-const Carrinho = require('../models/Carrinho');
 const Produto = require('../models/Produto');
+const Carrinho = require('../models/Carrinho');
 
-const CarrinhoController = {
-    // Método para adicionar um produto ao carrinho
-    async addToCarrinho(req, res) {
-        try {
-            const { produtoId, quantidade } = req.body;
-            const produto = await Produto.findByPk(produtoId);
-            if (!produto) {
-                return res.status(404).json({ error: 'Produto não encontrado' });
-            }
+// Adicionar produto ao carrinho
+const addProdutoCarrinho = async (req, res) => {
+    try {
+        const { produtoId, quantidade } = req.body;
 
-            const carrinho = await Carrinho.create({
-                produtoId,
-                quantidade
-            });
-            return res.status(201).json(carrinho);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
+        const produto = await Produto.findByPk(produtoId);
+        if (!produto) {
+            return res.status(404).json({ error: 'Produto não encontrado.' });
         }
-    },
 
-    // Método para listar os itens no carrinho
-    async listarCarrinho(req, res) {
-        try {
-            const carrinho = await Carrinho.findAll({
-                include: [{ model: Produto }]
-            });
-            return res.status(200).json(carrinho);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
+        // Verificar se o produto já está no carrinho
+        const carrinhoItem = await Carrinho.findOne({ where: { produtoId } });
+
+        if (carrinhoItem) {
+            carrinhoItem.quantidade += quantidade;
+            await carrinhoItem.save();
+        } else {
+            await Carrinho.create({ produtoId, quantidade });
         }
-    },
 
-    // Método para atualizar a quantidade de um produto no carrinho
-    async atualizarCarrinho(req, res) {
-        try {
-            const { id_carrinho } = req.params;  // ID do item no carrinho
-            const { quantidade } = req.body;     // Nova quantidade
-
-            const itemCarrinho = await Carrinho.findByPk(id_carrinho);
-            if (!itemCarrinho) {
-                return res.status(404).json({ error: 'Item no carrinho não encontrado' });
-            }
-
-            // Atualizando a quantidade
-            itemCarrinho.quantidade = quantidade;
-            await itemCarrinho.save();
-
-            return res.status(200).json(itemCarrinho);
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-    },
-
-    // Método para excluir um item do carrinho
-    async excluirCarrinho(req, res) {
-        try {
-            const { id_carrinho } = req.params;  // ID do item no carrinho
-
-            const itemCarrinho = await Carrinho.findByPk(id_carrinho);
-            if (!itemCarrinho) {
-                return res.status(404).json({ error: 'Item no carrinho não encontrado' });
-            }
-
-            // Excluindo o item do carrinho
-            await itemCarrinho.destroy();
-
-            return res.status(200).json({ message: 'Item excluído do carrinho com sucesso' });
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-    },
-
-    // Método para limpar o carrinho (excluir todos os itens)
-    async limparCarrinho(req, res) {
-        try {
-            const usuarioId = req.user.id; // Supondo que o usuário esteja autenticado
-
-            // Excluindo todos os itens do carrinho para o usuário
-            await Carrinho.destroy({ where: { usuarioId } });
-
-            return res.status(200).json({ message: 'Carrinho limpo com sucesso' });
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-    },
+        return res.status(200).json({ message: 'Produto adicionado ao carrinho.' });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
 };
 
-module.exports = CarrinhoController;
+// Editar quantidade de um produto no carrinho
+const editarProdutoCarrinho = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { quantidade } = req.body;
+
+        const carrinhoItem = await Carrinho.findByPk(id);
+        if (!carrinhoItem) {
+            return res.status(404).json({ error: 'Item não encontrado no carrinho.' });
+        }
+
+        carrinhoItem.quantidade = quantidade;
+        await carrinhoItem.save();
+
+        return res.status(200).json({ message: 'Quantidade atualizada com sucesso.' });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+// Remover produto do carrinho
+const removerProdutoCarrinho = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const carrinhoItem = await Carrinho.findByPk(id);
+        if (!carrinhoItem) {
+            return res.status(404).json({ error: 'Item não encontrado no carrinho.' });
+        }
+
+        await carrinhoItem.destroy();
+        return res.status(200).json({ message: 'Produto removido do carrinho.' });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+// Finalizar compra
+const finalizarCompra = async (req, res) => {
+    try {
+        const itensCarrinho = await Carrinho.findAll({
+            include: [{ model: Produto }]
+        });
+
+        if (!itensCarrinho.length) {
+            return res.status(400).json({ error: 'Carrinho vazio.' });
+        }
+
+        const total = itensCarrinho.reduce((acc, item) => {
+            return acc + item.quantidade * item.Produto.preco;
+        }, 0);
+
+        // Limpar o carrinho após a compra
+        await Carrinho.destroy({ where: {} });
+
+        return res.status(200).json({ message: 'Compra finalizada com sucesso!', total });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports = {
+    addProdutoCarrinho,
+    editarProdutoCarrinho,
+    removerProdutoCarrinho,
+    finalizarCompra
+};

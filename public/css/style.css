@@ -80,6 +80,11 @@ header .logo {
     background-color: #0a1f08;
 }
 
+/* Estilo dos conteúdos abaixo do Header */
+main {
+    padding-top: 70px; 
+}
+
 /* Estilos do Menu Lateral */
 nav.menu-lateral {
     width: 100px;
@@ -149,11 +154,85 @@ footer p {
     font-size: 15px;
 }
 
+/* Ajuste global para o conteúdo abaixo do header */
+.content {
+    margin-top: 60px; /* Espaçamento equivalente à altura do header */
+    padding: 20px; 
+}
+
+/* Botões e Formulário */
+.gerenciar-btn {
+    display: inline-block;
+    background-color: #123f0f;
+    color: white;
+    padding: 12px 24px;
+    margin-bottom: 20px; 
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease;
+    text-decoration: none;
+}
+
+.gerenciar-btn:hover {
+    background-color: #0d2e0c;
+    transform: scale(1.05); /* Aumenta o tamanho do botão */
+}
+
+.gerenciar-btn i {
+    margin-right: 8px;
+}
+
+/* Formulário de Gerenciamento */
+.form-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-container form input,
+.form-container form select,
+.form-container form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.form-container form button {
+    background-color: #123f0f;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    font-size: 16px;
+}
+
+.form-container form button:hover {
+    background-color: #0d2e0c;
+}
+
 /* Estilo dos Cards de Produtos */
 .produtos-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 5 cards por linha */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
+    justify-content: center;
 }
 
 .card-produto {
@@ -190,25 +269,108 @@ footer p {
     margin-top: 5px;
 }
 
-/* Subcategorias */
-.menu-subcategorias {
+.card-produto:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estilo do Modal de Gerenciamento de Produto */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    background-color: #e0e0e0;
-    padding: 10px;
-    display: flex;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
     justify-content: center;
-    gap: 20px;
+    align-items: center;
+    z-index: 30;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    width: 80%;
+    max-width: 700px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header,
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.modal-header h4 {
+    margin: 0;
+    font-size: 20px;
+    color: #123f0f;
+}
+
+.modal-footer {
+    justify-content: flex-end;
+}
+
+.modal-close {
+    background-color: #e0e0e0;
+    color: #123f0f;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    background-color: #ccc;
+}
+
+.modal-footer button {
+    background-color: #123f0f;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.modal-footer button:hover {
+    background-color: #0d2e0c;
+}
+
+/* Estilo para o filtro de categoria ativo */
+.filter-btn.active {
+    color: #0d2e0c; /* Cor verde para indicar a categoria ativa */
+    font-weight: bold;
+}
+
+/* Estilo do menu de filtros */
+.menu-subcategorias {
+    margin-bottom: 20px;
 }
 
 .menu-subcategorias a {
+    padding: 10px;
     color: #123f0f;
     text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
+    display: inline-block;
+    margin-right: 15px;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 .menu-subcategorias a:hover {
-    color: #0d2e0c;
+    background-color: #e0f7fa; /* Cor de destaque ao passar o mouse */
+}
+
+.product-category {
+    margin-top: 30px;
 }
 
 /* Responsividade */

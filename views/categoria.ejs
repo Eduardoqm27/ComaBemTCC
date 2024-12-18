@@ -1,28 +1,105 @@
 <main>
-<div class="produtos-grid">
-    <% produtos.forEach(produto => { %>
-        <div class="card-produto" data-categoria="<%= produto.categoria %>">
-            <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
-            <h3><%= produto.nome_produto %></h3>
-            <p>Marca: <%= produto.marca %></p>
-            <p>Origem: <%= produto.origem %></p>
-            <p>Preço: R$ <%= produto.promocao ? (Number(produto.preco) * 0.9).toFixed(2) : Number(produto.preco).toFixed(2) %></p>
-            <a href="/produto/<%= produto.id %>">Ver Mais</a>
+    <!-- Botão de Gerenciamento de Produtos -->
+    <div class="top-bar">
+        <button id="btnAdicionar" class="btn-gerenciamento">Gerenciar Produtos</button>
+    </div>
+
+    <!-- Modal de Adicionar Produto -->
+    <div id="formModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <form action="/categoria/adicionar" method="POST" enctype="multipart/form-data">
+                <h2>Adicionar Novo Produto</h2>
+                <label for="nome">Nome do Produto:</label>
+                <input type="text" name="nome" id="nome" required>
+
+                <label for="imagem">Imagem:</label>
+                <input type="file" name="imagem" id="imagem" accept="image/*" required>
+
+                <label for="categoria">Categoria:</label>
+                <select name="categoria" id="categoria" required>
+                    <option value="verduras">Verduras</option>
+                    <option value="kits">Kits</option>
+                </select>
+
+                <label for="preco">Preço:</label>
+                <input type="number" name="preco" id="preco" step="0.01" required>
+
+                <label for="marca">Marca:</label>
+                <input type="text" name="marca" id="marca">
+
+                <label for="origem">Origem:</label>
+                <input type="text" name="origem" id="origem">
+
+                <button type="submit">Adicionar Produto</button>
+            </form>
         </div>
-    <% }) %>
-</div>
-</div>
+    </div>
+
+    <!-- Filtro por Categoria -->
+    <div class="menu-subcategorias">
+        <button class="filtro" data-categoria="todas">Todas</button>
+        <button class="filtro" data-categoria="verduras">Verduras</button>
+        <button class="filtro" data-categoria="kits">Kits</button>
+    </div>
+
+    <!-- Lista de Produtos -->
+    <div class="produtos-grid">
+        <% produtos.forEach(produto => { %>
+            <div id="<%= produto.categoria %>" class="product-category">
+                <div class="card-produto" data-categoria="<%= produto.categoria %>">
+                    <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                    <h3><%= produto.nome_produto %></h3>
+                    <p>Marca: <%= produto.marca %></p>
+                    <p>Origem: <%= produto.origem %></p>
+                    <p>Preço: R$ <%= produto.promocao ? (Number(produto.preco) * 0.9).toFixed(2).replace('.', ',') : Number(produto.preco).toFixed(2).replace('.', ',') %></p>
+                    <a href="/produto/<%= produto.id %>">Ver Mais</a>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</main>
 
 <script>
-    // Mostrar o formulário de adicionar produto quando clicar no botão
+    // Alternar visibilidade do formulário de adicionar produto
     document.getElementById('btnAdicionar').addEventListener('click', () => {
-        const formContainer = document.getElementById('formContainer');
-        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+        const modal = document.getElementById('formModal');
+        modal.style.display = 'block';
     });
 
+    // Fechar o modal
+    document.getElementById('closeModal').addEventListener('click', () => {
+        const modal = document.getElementById('formModal');
+        modal.style.display = 'none';
+    });
+
+    // Fechar o modal ao clicar fora dele
+    window.addEventListener('click', (event) => {
+        const modal = document.getElementById('formModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Filtragem por categoria
     document.querySelectorAll('.filtro').forEach(btn => {
         btn.addEventListener('click', () => {
             const categoria = btn.getAttribute('data-categoria');
+
+            // Rolar suavemente até a categoria
+            const categoriaSection = document.getElementById(categoria);
+            categoriaSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+
+            // Atualizar o estado ativo do botão
+            document.querySelectorAll('.filtro').forEach(button => {
+                button.classList.remove('active'); // Remove a classe de ativo de todos os botões
+            });
+            btn.classList.add('active'); // Adiciona a classe de ativo ao botão clicado
+
+            // Exibir/ocultar produtos da categoria
             document.querySelectorAll('.card-produto').forEach(card => {
                 if (categoria === 'todas' || card.getAttribute('data-categoria') === categoria) {
                     card.style.display = 'block';
@@ -33,4 +110,3 @@
         });
     });
 </script>
-</main>

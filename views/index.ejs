@@ -1,4 +1,3 @@
-
 <main class="content">
     <section class="carrossel">
         <img src="/img/destaque1.jpg" alt="Destaque 1">
@@ -9,18 +8,18 @@
     <section class="produtos-grid">
         <% if (produtos && produtos.length > 0) { %>
             <% produtos.forEach(produto => { %>
-                <div class="card-produto">
-                    <img src="<%= produto.imagemUrl %>" alt="<%= produto.nome %>" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title"><%= produto.nome %></h5>
-                        <p class="card-text"><%= produto.descricao %></p>
-                        <div class="price">R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></div>
+                <% if (produto.destaque) { %> <!-- Exibe apenas os produtos em destaque -->
+                    <div class="card-produto">
+                        <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome %>" class="card-img-top" loading="lazy">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= produto.nome %></h5>
+                            <div class="price">R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></div>
+                        </div>
                     </div>
-                </div>
+                <% } %>
             <% }) %>
         <% } else { %>
             <p>Nenhum produto em destaque no momento.</p>
         <% } %>
     </section>
 </main>
-
