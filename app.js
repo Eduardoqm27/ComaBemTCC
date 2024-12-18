@@ -1,8 +1,6 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const passport = require('./config/passport-setup');
 const flash = require('connect-flash');
 const sequelize = require('./config/database');
 const expressLayouts = require('express-ejs-layouts');
@@ -23,7 +21,6 @@ app.use(
         secret: 'seu_segredo_aqui',
         resave: false,
         saveUninitialized: false,
-        store: new SequelizeStore({ db: sequelize }),
         cookie: {
             maxAge: 1000 * 60 * 60 * 24,
             secure: false,
@@ -31,8 +28,6 @@ app.use(
     })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(flash());
 
 app.use((req, res, next) => {

@@ -14,7 +14,7 @@
             </div>
             <div class="mb-3">
                 <label for="dataNascimento" class="form-label">Data de Nascimento</label>
-                <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required>
+                <input type="date" class="form-control" id="datanasc" name="datanasc" required>
             </div>
             <div class="mb-3">
                 <label for="senha" class="form-label">Senha</label>
@@ -26,5 +26,10 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
         </form>
+        <% if (typeof errorMessage !== 'undefined') { %>
+            <div class="error-message">
+                <%= errorMessage %>
+            </div>
+        <% } %>
     </div>
 </div>

@@ -4,7 +4,6 @@ const Produto = require('../models/Produto');
 const multer = require('multer');
 const { Op } = require('sequelize');
 
-// Configuração do multer para upload de imagens
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/img/');

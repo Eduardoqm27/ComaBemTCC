@@ -1,42 +1,93 @@
-const Usuario = require('../models/Usuario');
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcrypt");
+const usuarios = require("../models/Usuario");
 
-module.exports = {
-    cadastro: async (req, res) => {
-        const { nome, email, senha, data_nasc, tipo } = req.body; // Adicionando tipo
+const authController = {
+  login: async (req, res) => {
+    const { email, senha } = req.body;
+    try {
+      const user = await usuarios.findOne({ where: { email } });
 
-        // Verificar se todos os campos estão presentes
-        if (!nome || !email || !senha || !data_nasc || !tipo) {
-            return res.status(400).send("Todos os campos são obrigatórios.");
-        }
+      if (!user || !(await bcrypt.compare(senha, user.senha))) {
+        return res.render("index", { errorMessage: "Senha invalida!" });
+      }
 
-        // Hash da senha antes de salvar
-        const hashedPassword = await bcrypt.hash(senha, 10);
+      req.session.userId = user.id;
+      req.session.user = user;
 
-        try {
-            await Usuario.create({ nome, email, senha: hashedPassword, data_nasc, tipo });
-            res.redirect('/auth/login');
-        } catch (err) {
-            console.error(err); // Adicionando log de erro para depuração
-            res.status(500).send("Erro ao cadastrar usuário");
-        }
-    },
-
-    login: async (req, res) => {
-        const { email, senha } = req.body;
-
-        try {
-            const user = await Usuario.findOne({ where: { email } });
-            if (user && await bcrypt.compare(senha, user.senha)) {
-                req.session.userId = user.id; // Armazenar o ID do usuário na sessão
-                req.session.tipo = user.tipo; // Armazenar o tipo de usuário (vendedor ou cliente)
-                res.redirect('/user/perfil');  // Redireciona para a página de perfil após login
-            } else {
-                res.status(401).send("Usuário ou senha incorretos");
-            }
-        } catch (err) {
-            console.error(err); // Adicionando log de erro para depuração
-            res.status(500).send("Erro no login");
-        }
+      res.redirect("../user/perfil");
+    } catch (err) {
+      res.status(500).json({ error: err.message });
     }
+  },
+
+  cadastro: async (req, res) => {
+    const { nome, datanasc, funcao, email, senha } = req.body;
+    const userExists = await usuarios.findOne({ where: { email } });
+    if (userExists) {
+      return res.render("register", { errorMessage: "Email já cadastrado" });
+    }
+    const formatarData = (data) => {
+      const date = new Date(data);
+      if (isNaN(date)) {
+        throw new Error("Data inválida");
+      }
+      const ano = date.getFullYear();
+      const mes = String(date.getMonth() + 1).padStart(2, "0");
+      const dia = String(date.getDate()).padStart(2, "0");
+      return `${ano}-${mes}-${dia}`;
+    };
+
+    try {
+      const datanascFormatada = formatarData(datanasc);
+
+      try {
+        const salt = await bcrypt.genSalt(10);
+        const senhaHash = await bcrypt.hash(senha, salt);
+  
+        const newUser = {
+          nome,
+          data_nasc: datanascFormatada,
+          funcao,
+          email,
+          senha: senhaHash,
+        };
+  
+        const createdUser = await usuarios.create(newUser);
+  
+        req.session.userId = createdUser.id;
+        req.session.user = newUser;
+  
+        res.redirect("../user/perfil");
+      } catch (err) {
+        res.status(500).json({ error: err.message });
+      }
+    } catch (err) {
+      return res.render("register", {
+        errorMessage: "Data de nascimento inválida",
+      });
+    }
+  },
+
+  logout: (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.status(200).json({ message: "Logout realizado com sucesso" });
+    });
+  },
+
+  checkSession: (req, res) => {
+    if (req.session && req.session.userId) {
+      res.status(200).json({
+        isAuthenticated: true,
+        userId: req.session.userId,
+        userName: req.session.userName,
+      });
+    } else {
+      res.status(200).json({ isAuthenticated: false });
+    }
+  },
 };
+
+module.exports = authController;

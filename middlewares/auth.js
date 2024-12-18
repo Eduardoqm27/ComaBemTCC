@@ -1,13 +1,15 @@
-function checkAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) return next();
-    res.redirect('/auth/login');
-}
-
-function checkRole(role) {
+const requireAuth = (req, res, next) => {
+    if (req.session && req.session.userId) {
+      return next();
+    }
+    return res.status(401).json({ message: 'Usuário não autenticado' });
+  };
+  
+function checkFuncao(role) {
     return (req, res, next) => {
-        if (req.isAuthenticated() && req.user.role === role) return next();
+        if (req.session && req.session.userId && req.user.funcao === funcao) return next();
         res.status(403).send('Acesso negado');
     };
 }
 
-module.exports = { checkAuthenticated, checkRole };
+module.exports = { requireAuth, checkFuncao };
