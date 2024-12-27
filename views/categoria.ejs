@@ -1,113 +1,161 @@
 <main>
-    <!-- Botão de Gerenciamento de Produtos -->
-    <div class="top-bar">
-        <button id="btnAdicionar" class="btn-gerenciamento">Gerenciar Produtos</button>
-    </div>
+    <!-- Gerenciamento de Produtos -->
+    <section class="top-bar">
+        <button id="btnAdicionar" class="btn-gerenciamento" aria-label="Adicionar Produto">
+            Adicionar Produto
+        </button>
+    </section>
 
-    <!-- Modal de Adicionar Produto -->
-    <div id="formModal" class="modal">
+    <!-- Lista de Produtos -->
+    <section class="product-list">
+        <h2>Produtos Cadastrados</h2>
+        <div class="product-container">
+            <% if (produtos && produtos.length > 0) { %>
+                <% produtos.forEach((produto) => { %>
+                    <div class="product-card">
+                        <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" />
+                        <div class="product-info">
+                            <h3><%= produto.nome_produto %></h3>
+                            <p>Preço: R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></p>
+                        </div>
+                        <div class="product-actions">
+                            <form action="/produto/editar/<%= produto.id %>" method="GET">
+                                <button class="btn btn-edit">Editar</button>
+                            </form>
+                            <form action="/carrinho/adicionar" method="POST">
+                                <input type="hidden" name="produtoId" value="<%= produto.id %>">
+                                <button class="btn btn-add-cart">Carrinho</button>
+                            </form>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>Nenhum produto cadastrado ainda.</p>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Modal Adicionar Produto -->
+    <section id="formModalAdicionar" class="modal" aria-hidden="true">
         <div class="modal-content">
-            <span id="closeModal" class="close">&times;</span>
-            <form action="/categoria/adicionar" method="POST" enctype="multipart/form-data">
+            <button id="closeModalAdicionar" class="close" aria-label="Fechar Modal">&times;</button>
+            <form
+                action="/produto/adicionar"
+                method="POST"
+                enctype="multipart/form-data"
+                class="form-tematico"
+            >
                 <h2>Adicionar Novo Produto</h2>
                 <label for="nome">Nome do Produto:</label>
-                <input type="text" name="nome" id="nome" required>
+                <input type="text" name="nome_produto" id="nome" required />
 
-                <label for="imagem">Imagem:</label>
-                <input type="file" name="imagem" id="imagem" accept="image/*" required>
+                <label for="origem">Origem:</label>
+                <input type="text" name="origem" id="origem" required />
+
+                <label for="marca">Marca:</label>
+                <input type="text" name="marca" id="marca" required />
+
+                <label for="descricao">Descrição:</label>
+                <textarea name="descricao" id="descricao" required></textarea>
+
+                <label for="preco">Preço (R$):</label>
+                <input type="number" name="preco" id="preco" step="0.01" required />
+
+                <label for="foto">Foto:</label>
+                <input type="file" name="imagem" id="foto" accept="image/*" required />
+
+                <label for="desconto">Desconto (%):</label>
+                <input type="number" name="promocao" id="desconto" min="0" max="100" />
+
+                <label for="destaque">Destaque:</label>
+                <input type="checkbox" name="destaque" id="destaque" />
 
                 <label for="categoria">Categoria:</label>
                 <select name="categoria" id="categoria" required>
-                    <option value="verduras">Verduras</option>
-                    <option value="kits">Kits</option>
+                    <option value="Fruta">Fruta</option>
+                    <option value="Legume">Legume</option>
+                    <option value="Verdura">Verdura</option>
+                    <option value="Kits">Kits</option>
                 </select>
-
-                <label for="preco">Preço:</label>
-                <input type="number" name="preco" id="preco" step="0.01" required>
-
-                <label for="marca">Marca:</label>
-                <input type="text" name="marca" id="marca">
-
-                <label for="origem">Origem:</label>
-                <input type="text" name="origem" id="origem">
 
                 <button type="submit">Adicionar Produto</button>
             </form>
         </div>
-    </div>
-
-    <!-- Filtro por Categoria -->
-    <div class="menu-subcategorias">
-        <button class="filtro" data-categoria="frutas">Frutas</button>
-        <button class="filtro" data-categoria="legumes">Legumes</button>
-        <button class="filtro" data-categoria="verduras">Verduras</button>
-        <button class="filtro" data-categoria="kits">Kits</button>
-    </div>
-
-    <!-- Lista de Produtos -->
-    <div class="produtos-grid">
-        <% produtos.forEach(produto => { %>
-            <div id="<%= produto.categoria %>" class="product-category">
-                <div class="card-produto" data-categoria="<%= produto.categoria %>">
-                    <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
-                    <h3><%= produto.nome_produto %></h3>
-                    <p>Marca: <%= produto.marca %></p>
-                    <p>Origem: <%= produto.origem %></p>
-                    <p>Preço: R$ <%= produto.promocao ? (Number(produto.preco) * 0.9).toFixed(2).replace('.', ',') : Number(produto.preco).toFixed(2).replace('.', ',') %></p>
-                    <a href="/produto/<%= produto.id %>">Ver Mais</a>
-                </div>
-            </div>
-        <% }) %>
-    </div>
+    </section>
 </main>
 
 <script>
-    // Alternar visibilidade do formulário de adicionar produto
-    document.getElementById('btnAdicionar').addEventListener('click', () => {
-        const modal = document.getElementById('formModal');
-        modal.style.display = 'block';
+    const btnAdicionar = document.getElementById('btnAdicionar');
+    const modalAdicionar = document.getElementById('formModalAdicionar');
+    const closeModalAdicionar = document.getElementById('closeModalAdicionar');
+
+    btnAdicionar.addEventListener('click', () => {
+        modalAdicionar.setAttribute('aria-hidden', 'false');
+        modalAdicionar.style.display = 'block';
     });
 
-    // Fechar o modal
-    document.getElementById('closeModal').addEventListener('click', () => {
-        const modal = document.getElementById('formModal');
-        modal.style.display = 'none';
+    closeModalAdicionar.addEventListener('click', () => {
+        modalAdicionar.setAttribute('aria-hidden', 'true');
+        modalAdicionar.style.display = 'none';
     });
 
-    // Fechar o modal ao clicar fora dele
     window.addEventListener('click', (event) => {
-        const modal = document.getElementById('formModal');
-        if (event.target === modal) {
-            modal.style.display = 'none';
+        if (event.target === modalAdicionar) {
+            modalAdicionar.setAttribute('aria-hidden', 'true');
+            modalAdicionar.style.display = 'none';
         }
     });
-
-    // Filtragem por categoria
-    document.querySelectorAll('.filtro').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const categoria = btn.getAttribute('data-categoria');
-
-            // Rolar suavemente até a categoria
-            const categoriaSection = document.getElementById(categoria);
-            categoriaSection.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-
-            // Atualizar o estado ativo do botão
-            document.querySelectorAll('.filtro').forEach(button => {
-                button.classList.remove('active'); // Remove a classe de ativo de todos os botões
-            });
-            btn.classList.add('active'); // Adiciona a classe de ativo ao botão clicado
-
-            // Exibir/ocultar produtos da categoria
-            document.querySelectorAll('.card-produto').forEach(card => {
-                if (categoria === 'todas' || card.getAttribute('data-categoria') === categoria) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    });
 </script>
+
+<style>
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .product-card {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+        width: 200px;
+        text-align: center;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    .product-info {
+        margin-top: 10px;
+    }
+
+    .product-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    .btn {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .btn-edit {
+        background-color: #ffc107;
+        color: #fff;
+    }
+
+    .btn-add-cart {
+        background-color: #28a745;
+        color: #fff;
+    }
+</style>

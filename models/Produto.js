@@ -5,52 +5,56 @@ const Produto = sequelize.define('Produto', {
     id_produto: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
     },
     nome_produto: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
     },
     descricao: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.TEXT, // Use TEXT para descrições mais longas
+        allowNull: false,
     },
     imagem: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true, // Opcional caso o upload de imagem não seja obrigatório
     },
     marca: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true, // Nem todos os produtos podem ter marca
     },
     origem: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true, // Opcional
     },
     preco: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false
+        allowNull: false,
     },
     promocao: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
+        defaultValue: false,
+    },
+    porcentagemPromocao: {
+        type: DataTypes.FLOAT, // Porcentagem da promoção (0 a 100)
+        allowNull: true,
     },
     categoria: {
         type: DataTypes.ENUM('verdura', 'legumes', 'fruta', 'kits'),
-        allowNull: false
+        allowNull: false,
     },
-    destaque: {  // Adicionando campo de destaque para promoção
+    destaque: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
-    }
+        defaultValue: false,
+    },
 }, {
-    timestamps: true,
-    tableName: 'Produtos' // Ajuste do nome da tabela
+    timestamps: true, // Criação e atualização de timestamps automáticos
+    tableName: 'Produtos',
 });
 
-// Definindo a associação com Carrinho
+// Associação com o modelo de Categoria (se existir)
 Produto.associate = (models) => {
-    Produto.hasMany(models.Carrinho, { foreignKey: 'produtoId' });
+    Produto.belongsTo(models.Categoria, { foreignKey: 'categoriaId', as: 'categoria' });
 };
 
 module.exports = Produto;

@@ -39,23 +39,68 @@ router.get('/categoria', async (req, res) => {
 router.post('/adicionar', upload.single('imagem'), async (req, res) => {
     try {
         const { nome_produto, marca, origem, descricao, preco, categoria, promocao, destaque } = req.body;
-        const novoProduto = await Produto.create({
+        await Produto.create({
             nome_produto,
             marca,
             origem,
             descricao,
             preco,
             categoria,
-            imagem: req.file.filename,
-            promocao: promocao ? true : false,
-            destaque: destaque ? true : false
+            imagem: req.file ? req.file.filename : null,
+            promocao: promocao || 0,
+            destaque: destaque === 'on'
         });
-
-        // Redireciona para a página inicial após adicionar o produto
-        res.redirect('/');
+        res.redirect('/categoria');
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
-        res.status(500).send('Erro ao adicionar produto');
+        res.status(500).send('Erro ao adicionar produto.');
+    }
+});
+
+// Rota para editar produto
+router.post('/editar', upload.single('imagem'), async (req, res) => {
+    try {
+        const { id, nome_produto, marca, origem, descricao, preco, categoria, promocao, destaque } = req.body;
+        const produto = await Produto.findByPk(id);
+
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado');
+        }
+
+        await produto.update({
+            nome_produto,
+            marca,
+            origem,
+            descricao,
+            preco,
+            categoria,
+            imagem: req.file ? req.file.filename : produto.imagem,
+            promocao: promocao || 0,
+            destaque: destaque === 'on'
+        });
+
+        res.redirect('/categoria');
+    } catch (error) {
+        console.error('Erro ao editar produto:', error);
+        res.status(500).send('Erro ao editar produto.');
+    }
+});
+
+// Rota para excluir produto
+router.post('/excluir', async (req, res) => {
+    try {
+        const { id } = req.body;
+        const produto = await Produto.findByPk(id);
+
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado');
+        }
+
+        await produto.destroy();
+        res.redirect('/categoria');
+    } catch (error) {
+        console.error('Erro ao excluir produto:', error);
+        res.status(500).send('Erro ao excluir produto.');
     }
 });
 
