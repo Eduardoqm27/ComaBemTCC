@@ -1,97 +1,70 @@
-// Função para carregar conteúdo dinamicamente
-function loadContent(content) {
-    const contentDiv = document.querySelector('.content');
-    
-    if (contentDiv) {
-        switch(content) {
-            case 'home':
-                contentDiv.innerHTML = '<h2>Bem-vindo à Página Inicial</h2><p>Aqui está o conteúdo da página inicial.</p>';
-                break;
-            case 'categorias':
-                contentDiv.innerHTML = '<h2>Categorias</h2><p>Aqui estão as categorias de produtos.</p>';
-                break;
-            case 'usuario':
-                contentDiv.innerHTML = '<h2>Página do Usuário</h2><p>Aqui estão as informações do usuário.</p>';
-                break;
-            case 'carrinho':
-                contentDiv.innerHTML = '<h2>Carrinho de Compras</h2><p>Aqui está o carrinho de compras.</p>';
-                break;
-            default:
-                contentDiv.innerHTML = '<h2>Conteúdo Não Encontrado</h2>';
-        }
-    }
-}
+// Alternar visibilidade do menu lateral
+document.addEventListener('DOMContentLoaded', () => {
+    const menu = document.querySelector('nav.menu-lateral');
+    const toggleBtn = document.querySelector('.btn-expandir');
 
-// Função para inicializar os eventos de navegação dinâmica
-function initNavigation() {
-    const menuItems = document.querySelectorAll('.item-menu a');
-    
-    menuItems.forEach(item => {
-        item.addEventListener('click', function(event) {
-            event.preventDefault();
-            const content = this.getAttribute('data-content');
-            loadContent(content);
-        });
+    toggleBtn.addEventListener('click', () => {
+        menu.classList.toggle('expandido');
     });
-}
-
-// Função para alternar exibição do formulário de adição de produtos
-function toggleForm() {
-    const formContainer = document.getElementById('formContainer');
-    if (formContainer) {
-        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
-    }
-}
-
-// Função para aplicar filtro de categoria
-function applyCategoryFilter() {
-    const filtros = document.querySelectorAll('.filtro');
-    filtros.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const categoria = btn.getAttribute('data-categoria');
-            document.querySelectorAll('.card-produto').forEach(card => {
-                card.style.display = (categoria === 'todas' || card.getAttribute('data-categoria') === categoria) ? 'block' : 'none';
-            });
-        });
-    });
-}
-
-// Função de pesquisa de produtos
-function searchProducts() {
-    const searchInput = document.getElementById('searchInput');
-    const termo = searchInput.value;
-
-    fetch(`/produto/pesquisar?termo=${termo}`)
-        .then(response => response.json())
-        .then(produtos => {
-            const contentDiv = document.querySelector('.content');
-            contentDiv.innerHTML = ''; // Limpa conteúdo atual
-
-            produtos.forEach(produto => {
-                const produtoCard = `
-                    <div class="card-produto" data-categoria="${produto.categoria}">
-                        <h3>${produto.nome_produto}</h3>
-                        <p>Preço: ${produto.preco}</p>
-                        ${produto.promocao ? '<span>Promoção!</span>' : ''}
-                    </div>
-                `;
-                contentDiv.innerHTML += produtoCard;
-            });
-        })
-        .catch(error => console.error('Erro ao buscar produtos:', error));
-}
-
-// Inicializar navegação e funcionalidades
-document.addEventListener('DOMContentLoaded', function() {
-    initNavigation();
-    init();
-    applyCategoryFilter();
-
-    // Botão de exibição do formulário de adição de produtos
-    const addButton = document.getElementById('btnAdicionar');
-    if (addButton) addButton.addEventListener('click', toggleForm);
-
-    // Botão de pesquisa
-    const searchButton = document.getElementById('searchButton');
-    if (searchButton) searchButton.addEventListener('click', searchProducts);
 });
+
+// Inicializar o carrinho
+function inicializarCarrinho() {
+    const botaoAddCarrinho = document.querySelectorAll('.btn-add-carrinho');
+    botaoAddCarrinho.forEach(botao => {
+        botao.addEventListener('click', () => {
+            const produtoId = botao.dataset.id;
+            adicionarAoCarrinho(produtoId);
+        });
+    });
+}
+
+// Função para adicionar produto ao carrinho
+function adicionarAoCarrinho(produtoId) {
+    fetch(`/carrinho/adicionar/${produtoId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert('Produto adicionado ao carrinho!');
+        })
+        .catch(err => console.error('Erro ao adicionar ao carrinho:', err));
+}
+
+// Sistema de pesquisa
+const searchForm = document.querySelector('.search-form');
+if (searchForm) {
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchInput = document.querySelector('.search-input').value;
+
+        fetch(`/produtos/pesquisar?query=${encodeURIComponent(searchInput)}`)
+            .then(response => response.json())
+            .then(data => {
+                exibirResultados(data);
+            })
+            .catch(err => console.error('Erro na pesquisa:', err));
+    });
+}
+
+// Exibir resultados da pesquisa
+function exibirResultados(produtos) {
+    const container = document.querySelector('.produtos-grid');
+    container.innerHTML = ''; // Limpar os resultados anteriores
+
+    produtos.forEach(produto => {
+        const card = document.createElement('div');
+        card.classList.add('card-produto');
+
+        card.innerHTML = `
+            <img src="/uploads/${produto.imagem}" alt="${produto.nome}">
+            <h4>${produto.nome}</h4>
+            <p class="preco">R$ ${produto.preco.toFixed(2)}</p>
+        `;
+
+        container.appendChild(card);
+    });
+}

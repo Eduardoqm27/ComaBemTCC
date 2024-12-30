@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const path = require('path');
 
-const Produto = sequelize.define('Produto', {
+const Produto = sequelize.define('TbProduto', {
     id_produto: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -12,20 +13,20 @@ const Produto = sequelize.define('Produto', {
         allowNull: false,
     },
     descricao: {
-        type: DataTypes.TEXT, // Use TEXT para descrições mais longas
+        type: DataTypes.TEXT,
         allowNull: false,
     },
     imagem: {
         type: DataTypes.STRING,
-        allowNull: true, // Opcional caso o upload de imagem não seja obrigatório
+        allowNull: true,
     },
     marca: {
         type: DataTypes.STRING,
-        allowNull: true, // Nem todos os produtos podem ter marca
+        allowNull: true,
     },
     origem: {
         type: DataTypes.STRING,
-        allowNull: true, // Opcional
+        allowNull: true,
     },
     preco: {
         type: DataTypes.DECIMAL(10, 2),
@@ -48,7 +49,7 @@ const Produto = sequelize.define('Produto', {
         defaultValue: false,
     },
 }, {
-    timestamps: true, // Criação e atualização de timestamps automáticos
+    timestamps: true,
     tableName: 'Produtos',
 });
 

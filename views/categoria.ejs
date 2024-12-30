@@ -1,9 +1,54 @@
 <main>
     <!-- Gerenciamento de Produtos -->
     <section class="top-bar">
-        <button id="btnAdicionar" class="btn-gerenciamento" aria-label="Adicionar Produto">
+        <button id="btnToggleForm" class="btn-gerenciamento" aria-label="Adicionar Produto">
             Adicionar Produto
         </button>
+    </section>
+
+    <!-- Formulário de Adicionar Produto -->
+    <section id="formAdicionarProduto" class="form-container hidden">
+        <form
+            action="/produto/adicionar"
+            method="POST"
+            enctype="multipart/form-data"
+            class="form-tematico"
+        >
+            <h2>Adicionar Novo Produto</h2>
+            <label for="nome">Nome do Produto:</label>
+            <input type="text" name="nome_produto" id="nome" required />
+
+            <label for="origem">Origem:</label>
+            <input type="text" name="origem" id="origem" required />
+
+            <label for="marca">Marca:</label>
+            <input type="text" name="marca" id="marca" required />
+
+            <label for="descricao">Descrição:</label>
+            <textarea name="descricao" id="descricao" required></textarea>
+
+            <label for="preco">Preço (R$):</label>
+            <input type="number" name="preco" id="preco" step="0.01" required />
+
+            <label for="foto">Foto:</label>
+            <input type="file" name="imagem" id="foto" accept="image/*" required />
+
+            <label for="desconto">Desconto (%):</label>
+            <input type="number" name="promocao" id="desconto" min="0" max="100" />
+
+            <label for="destaque">Destaque:</label>
+            <input type="checkbox" name="destaque" id="destaque" />
+
+            <label for="categoria">Categoria:</label>
+            <select name="categoria" id="categoria" required>
+                <option value="Fruta">Fruta</option>
+                <option value="Legume">Legume</option>
+                <option value="Verdura">Verdura</option>
+                <option value="Kits">Kits</option>
+            </select>
+
+            <button type="submit" class="btn">Adicionar Produto</button>
+        </form>
     </section>
 
     <!-- Lista de Produtos -->
@@ -26,6 +71,12 @@
                                 <input type="hidden" name="produtoId" value="<%= produto.id %>">
                                 <button class="btn btn-add-cart">Carrinho</button>
                             </form>
+                            <form action="/produto/destaque/<%= produto.id %>" method="POST">
+                                <button class="btn btn-highlight">Destaque</button>
+                            </form>
+                            <form action="/produto/promocao/<%= produto.id %>" method="POST">
+                                <button class="btn btn-discount">Ofertas</button>
+                            </form>
                         </div>
                     </div>
                 <% }); %>
@@ -34,128 +85,4 @@
             <% } %>
         </div>
     </section>
-
-    <!-- Modal Adicionar Produto -->
-    <section id="formModalAdicionar" class="modal" aria-hidden="true">
-        <div class="modal-content">
-            <button id="closeModalAdicionar" class="close" aria-label="Fechar Modal">&times;</button>
-            <form
-                action="/produto/adicionar"
-                method="POST"
-                enctype="multipart/form-data"
-                class="form-tematico"
-            >
-                <h2>Adicionar Novo Produto</h2>
-                <label for="nome">Nome do Produto:</label>
-                <input type="text" name="nome_produto" id="nome" required />
-
-                <label for="origem">Origem:</label>
-                <input type="text" name="origem" id="origem" required />
-
-                <label for="marca">Marca:</label>
-                <input type="text" name="marca" id="marca" required />
-
-                <label for="descricao">Descrição:</label>
-                <textarea name="descricao" id="descricao" required></textarea>
-
-                <label for="preco">Preço (R$):</label>
-                <input type="number" name="preco" id="preco" step="0.01" required />
-
-                <label for="foto">Foto:</label>
-                <input type="file" name="imagem" id="foto" accept="image/*" required />
-
-                <label for="desconto">Desconto (%):</label>
-                <input type="number" name="promocao" id="desconto" min="0" max="100" />
-
-                <label for="destaque">Destaque:</label>
-                <input type="checkbox" name="destaque" id="destaque" />
-
-                <label for="categoria">Categoria:</label>
-                <select name="categoria" id="categoria" required>
-                    <option value="Fruta">Fruta</option>
-                    <option value="Legume">Legume</option>
-                    <option value="Verdura">Verdura</option>
-                    <option value="Kits">Kits</option>
-                </select>
-
-                <button type="submit">Adicionar Produto</button>
-            </form>
-        </div>
-    </section>
 </main>
-
-<script>
-    const btnAdicionar = document.getElementById('btnAdicionar');
-    const modalAdicionar = document.getElementById('formModalAdicionar');
-    const closeModalAdicionar = document.getElementById('closeModalAdicionar');
-
-    btnAdicionar.addEventListener('click', () => {
-        modalAdicionar.setAttribute('aria-hidden', 'false');
-        modalAdicionar.style.display = 'block';
-    });
-
-    closeModalAdicionar.addEventListener('click', () => {
-        modalAdicionar.setAttribute('aria-hidden', 'true');
-        modalAdicionar.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === modalAdicionar) {
-            modalAdicionar.setAttribute('aria-hidden', 'true');
-            modalAdicionar.style.display = 'none';
-        }
-    });
-</script>
-
-<style>
-    .product-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-    }
-
-    .product-card {
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 10px;
-        width: 200px;
-        text-align: center;
-        background-color: #f9f9f9;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .product-card img {
-        width: 100%;
-        height: auto;
-        border-radius: 10px;
-    }
-
-    .product-info {
-        margin-top: 10px;
-    }
-
-    .product-actions {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
-
-    .btn {
-        padding: 5px 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 15px;
-    }
-
-    .btn-edit {
-        background-color: #ffc107;
-        color: #fff;
-    }
-
-    .btn-add-cart {
-        background-color: #28a745;
-        color: #fff;
-    }
-</style>

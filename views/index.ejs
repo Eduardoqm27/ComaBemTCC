@@ -10,16 +10,16 @@
             <% produtos.forEach(produto => { %>
                 <% if (produto.destaque) { %> <!-- Exibe apenas os produtos em destaque -->
                     <div class="card-produto">
-                        <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome %>" class="card-img-top" loading="lazy">
+                        <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" class="card-img-top" loading="lazy">
                         <div class="card-body">
-                            <h5 class="card-title"><%= produto.nome %></h5>
+                            <h5 class="card-title"><%= produto.nome_produto %></h5>
                             <div class="price">R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></div>
                         </div>
                     </div>
                 <% } %>
             <% }) %>
         <% } else { %>
-            <p>Nenhum produto em destaque no momento.</p>
+            <p>Nenhum produto encontrado.</p>
         <% } %>
     </section>
 </main>

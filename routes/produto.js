@@ -4,21 +4,23 @@ const Produto = require('../models/Produto');
 const multer = require('multer');
 const { Op } = require('sequelize');
 
+// Configuração do multer para upload de imagens
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/img/');
+        cb(null, 'public/img/');  // Pasta onde as imagens serão armazenadas
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
+        cb(null, Date.now() + '-' + file.originalname);  // Nome único para cada imagem
     }
 });
 const upload = multer({ storage });
 
-// Rota para exibir os produtos da categoria
+// Rota para exibir produtos filtrados por categoria e/ou busca
 router.get('/categoria', async (req, res) => {
     try {
         const { search, categoria } = req.query;
 
+        // Construção dinâmica da cláusula where
         let whereClause = {};
         if (search) {
             whereClause.nome_produto = { [Op.like]: `%${search}%` };
@@ -31,7 +33,7 @@ router.get('/categoria', async (req, res) => {
         res.render('categoria', { produtos });
     } catch (error) {
         console.error('Erro ao buscar produtos:', error);
-        res.status(500).send('Erro ao carregar a página de categorias');
+        res.status(500).send('Erro ao carregar a página de categorias.');
     }
 });
 
@@ -39,6 +41,7 @@ router.get('/categoria', async (req, res) => {
 router.post('/adicionar', upload.single('imagem'), async (req, res) => {
     try {
         const { nome_produto, marca, origem, descricao, preco, categoria, promocao, destaque } = req.body;
+
         await Produto.create({
             nome_produto,
             marca,
@@ -46,10 +49,11 @@ router.post('/adicionar', upload.single('imagem'), async (req, res) => {
             descricao,
             preco,
             categoria,
-            imagem: req.file ? req.file.filename : null,
-            promocao: promocao || 0,
+            imagem: req.file ? req.file.filename : null,  // Armazenando o nome da imagem
+            promocao: promocao === 'on',
             destaque: destaque === 'on'
         });
+
         res.redirect('/categoria');
     } catch (error) {
         console.error('Erro ao adicionar produto:', error);
@@ -57,16 +61,17 @@ router.post('/adicionar', upload.single('imagem'), async (req, res) => {
     }
 });
 
-// Rota para editar produto
+// Rota para editar um produto existente
 router.post('/editar', upload.single('imagem'), async (req, res) => {
     try {
         const { id, nome_produto, marca, origem, descricao, preco, categoria, promocao, destaque } = req.body;
         const produto = await Produto.findByPk(id);
 
         if (!produto) {
-            return res.status(404).send('Produto não encontrado');
+            return res.status(404).send('Produto não encontrado.');
         }
 
+        // Atualizando os dados do produto
         await produto.update({
             nome_produto,
             marca,
@@ -74,8 +79,8 @@ router.post('/editar', upload.single('imagem'), async (req, res) => {
             descricao,
             preco,
             categoria,
-            imagem: req.file ? req.file.filename : produto.imagem,
-            promocao: promocao || 0,
+            imagem: req.file ? req.file.filename : produto.imagem,  // Verifica se há imagem nova
+            promocao: promocao === 'on',
             destaque: destaque === 'on'
         });
 
@@ -86,14 +91,14 @@ router.post('/editar', upload.single('imagem'), async (req, res) => {
     }
 });
 
-// Rota para excluir produto
+// Rota para excluir um produto
 router.post('/excluir', async (req, res) => {
     try {
         const { id } = req.body;
         const produto = await Produto.findByPk(id);
 
         if (!produto) {
-            return res.status(404).send('Produto não encontrado');
+            return res.status(404).send('Produto não encontrado.');
         }
 
         await produto.destroy();
@@ -104,20 +109,21 @@ router.post('/excluir', async (req, res) => {
     }
 });
 
-// Rota para visualizar o produto detalhado
+// Rota para exibir os detalhes de um produto
 router.get('/:id', async (req, res) => {
     try {
         const produto = await Produto.findByPk(req.params.id);
         const produtosPromocao = await Produto.findAll({ where: { promocao: true } });
 
         if (produto) {
+            // Renderiza a página de detalhes do produto
             res.render('produto-detalhes', { produto, produtosPromocao });
         } else {
-            res.status(404).send('Produto não encontrado');
+            res.status(404).send('Produto não encontrado.');
         }
     } catch (error) {
         console.error('Erro ao buscar produto:', error);
-        res.status(500).send('Erro ao exibir detalhes do produto');
+        res.status(500).send('Erro ao exibir detalhes do produto.');
     }
 });
 
