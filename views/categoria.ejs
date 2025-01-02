@@ -1,9 +1,7 @@
 <main>
     <!-- Gerenciamento de Produtos -->
     <section class="top-bar">
-        <button id="btnToggleForm" class="btn-gerenciamento" aria-label="Adicionar Produto">
-            Adicionar Produto
-        </button>
+        <button id="btnToggleForm" class="btn-gerenciamento">Adicionar Produto</button>
     </section>
 
     <!-- Formulário de Adicionar Produto -->
@@ -58,25 +56,10 @@
             <% if (produtos && produtos.length > 0) { %>
                 <% produtos.forEach((produto) => { %>
                     <div class="product-card">
-                        <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" />
+                        <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" />
                         <div class="product-info">
                             <h3><%= produto.nome_produto %></h3>
                             <p>Preço: R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></p>
-                        </div>
-                        <div class="product-actions">
-                            <form action="/produto/editar/<%= produto.id %>" method="GET">
-                                <button class="btn btn-edit">Editar</button>
-                            </form>
-                            <form action="/carrinho/adicionar" method="POST">
-                                <input type="hidden" name="produtoId" value="<%= produto.id %>">
-                                <button class="btn btn-add-cart">Carrinho</button>
-                            </form>
-                            <form action="/produto/destaque/<%= produto.id %>" method="POST">
-                                <button class="btn btn-highlight">Destaque</button>
-                            </form>
-                            <form action="/produto/promocao/<%= produto.id %>" method="POST">
-                                <button class="btn btn-discount">Ofertas</button>
-                            </form>
                         </div>
                     </div>
                 <% }); %>
@@ -86,3 +69,8 @@
         </div>
     </section>
 </main>
+<script>
+    document.getElementById('btnToggleForm').addEventListener('click', () => {
+        document.getElementById('formAdicionarProduto').classList.toggle('hidden');
+    });
+</script>

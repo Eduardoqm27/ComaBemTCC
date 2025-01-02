@@ -7,10 +7,10 @@ const { Op } = require('sequelize');
 // Configuração do multer para upload de imagens
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/img/');  // Pasta onde as imagens serão armazenadas
+        cb(null, 'public/img/'); // Pasta onde as imagens serão armazenadas
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);  // Nome único para cada imagem
+        cb(null, Date.now() + '-' + file.originalname); // Nome único para cada imagem
     }
 });
 const upload = multer({ storage });
@@ -49,7 +49,7 @@ router.post('/adicionar', upload.single('imagem'), async (req, res) => {
             descricao,
             preco,
             categoria,
-            imagem: req.file ? req.file.filename : null,  // Armazenando o nome da imagem
+            imagem: req.file ? req.file.filename : null, // Armazenando o nome da imagem
             promocao: promocao === 'on',
             destaque: destaque === 'on'
         });
@@ -62,9 +62,10 @@ router.post('/adicionar', upload.single('imagem'), async (req, res) => {
 });
 
 // Rota para editar um produto existente
-router.post('/editar', upload.single('imagem'), async (req, res) => {
+router.post('/editar/:id', upload.single('imagem'), async (req, res) => {
     try {
-        const { id, nome_produto, marca, origem, descricao, preco, categoria, promocao, destaque } = req.body;
+        const { id } = req.params;
+        const { nome_produto, marca, origem, descricao, preco, categoria, promocao, destaque } = req.body;
         const produto = await Produto.findByPk(id);
 
         if (!produto) {
@@ -79,7 +80,7 @@ router.post('/editar', upload.single('imagem'), async (req, res) => {
             descricao,
             preco,
             categoria,
-            imagem: req.file ? req.file.filename : produto.imagem,  // Verifica se há imagem nova
+            imagem: req.file ? req.file.filename : produto.imagem, // Verifica se há imagem nova
             promocao: promocao === 'on',
             destaque: destaque === 'on'
         });
@@ -91,39 +92,67 @@ router.post('/editar', upload.single('imagem'), async (req, res) => {
     }
 });
 
-// Rota para excluir um produto
-router.post('/excluir', async (req, res) => {
+// Rota para destacar um produto
+router.post('/destaque/:id', async (req, res) => {
     try {
-        const { id } = req.body;
+        const { id } = req.params;
         const produto = await Produto.findByPk(id);
 
         if (!produto) {
             return res.status(404).send('Produto não encontrado.');
         }
 
-        await produto.destroy();
+        await produto.update({ destaque: !produto.destaque }); // Alterna o destaque
         res.redirect('/categoria');
     } catch (error) {
-        console.error('Erro ao excluir produto:', error);
-        res.status(500).send('Erro ao excluir produto.');
+        console.error('Erro ao destacar produto:', error);
+        res.status(500).send('Erro ao destacar produto.');
     }
 });
 
-// Rota para exibir os detalhes de um produto
+// Rota para aplicar promoção a um produto
+router.post('/promocao/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const produto = await Produto.findByPk(id);
+
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado.');
+        }
+
+        await produto.update({ promocao: !produto.promocao }); // Alterna o status de promoção
+        res.redirect('/categoria');
+    } catch (error) {
+        console.error('Erro ao aplicar promoção no produto:', error);
+        res.status(500).send('Erro ao aplicar promoção no produto.');
+    }
+});
+
+// Rota para listar produtos em promoção
+router.get('/ofertas', async (req, res) => {
+    try {
+        const produtosPromocao = await Produto.findAll({ where: { promocao: true } });
+        res.render('ofertas', { produtosPromocao });
+    } catch (error) {
+        console.error('Erro ao carregar as ofertas:', error);
+        res.status(500).send('Erro ao carregar as ofertas.');
+    }
+});
+
+// Rota para exibir detalhes de um produto
 router.get('/:id', async (req, res) => {
     try {
-        const produto = await Produto.findByPk(req.params.id);
-        const produtosPromocao = await Produto.findAll({ where: { promocao: true } });
+        const { id } = req.params;
+        const produto = await Produto.findByPk(id);
 
-        if (produto) {
-            // Renderiza a página de detalhes do produto
-            res.render('produto-detalhes', { produto, produtosPromocao });
-        } else {
-            res.status(404).send('Produto não encontrado.');
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado.');
         }
+
+        res.render('produto', { produto });
     } catch (error) {
-        console.error('Erro ao buscar produto:', error);
-        res.status(500).send('Erro ao exibir detalhes do produto.');
+        console.error('Erro ao carregar o produto:', error);
+        res.status(500).send('Erro ao carregar o produto.');
     }
 });
 
