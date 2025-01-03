@@ -27,6 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 .catch((err) => console.error('Erro na pesquisa:', err));
         });
     }
+
+    // Evento do botão "Adicionar"
+    const btnAdicionar = document.querySelector('#btn-adicionar');
+    if (btnAdicionar) {
+        btnAdicionar.addEventListener('click', () => {
+            window.location.href = '/adicionar';
+        });
+    }
 });
 
 // Função para inicializar o carrinho

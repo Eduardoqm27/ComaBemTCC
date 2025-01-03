@@ -1,4 +1,8 @@
 <main class="content">
+    <% if (user && user.isLoggedIn) { %>
+        <button class="btn-adicionar" onclick="window.location.href='/adicionar'">Adicionar</button>
+    <% } %>
+
     <section class="carrossel">
         <img src="/img/destaque1.jpg" alt="Destaque 1">
         <img src="/img/destaque2.jpg" alt="Destaque 2">
