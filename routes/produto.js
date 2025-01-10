@@ -56,12 +56,15 @@ router.post('/adicionar-produto', upload.single('imagem'), produtoController.cri
 
 // Rota para exibir o formulário de edição de um produto (GET)
 router.get('/editar-produto/:id', produtoController.editarProduto); // Exibe o formulário de edição
+router.post('/editar-produto', upload.single('imagem'), produtoController.editarProduto);
 
 // Rota para editar um produto via PUT (Atualização)
 router.put('/editar-produto/:id', upload.single('imagem'), produtoController.atualizarProduto); // Atualiza o produto no banco
 
 // Rota para deletar um produto (DELETE)
 router.delete('/deletar-produto/:id', produtoController.deletarProduto);
+router.post('/deletar-produto', upload.single('imagem'), produtoController.deletarProduto);
+
 ; // Deleta o produto do banco
 
 module.exports = router;
