@@ -3,27 +3,104 @@
         <button class="btn-adicionar" onclick="window.location.href='/adicionar'">Adicionar</button>
     <% } %>
 
-    <section class="carrossel">
-        <img src="/img/destaque1.jpg" alt="Destaque 1">
-        <img src="/img/destaque2.jpg" alt="Destaque 2">
-        <img src="/img/destaque3.jpg" alt="Destaque 3">
+    <section class="produtos-grid">
+        <!-- Fruta 1 -->
+        <div class="card-produto">
+            <img src="https://hortifruti.com.br/media/catalog/product/cache/90a67334732b2408839e146d4f241496/1/0/100171-maca-red-unidade.jpg" alt="Maçã Vermelha" class="card-img-top" loading="lazy">
+            <div class="card-body">
+                <h5 class="card-title">Maçã Vermelha</h5>
+                <p class="card-description">Doce e crocante, ideal para lanches e sobremesas. Cultivada organicamente.</p>
+                <div class="price">R$ 4,99/un</div>
+            </div>
+        </div>
+        
+        <!-- Fruta 2 -->
+        <div class="card-produto">
+            <img src="https://ceagesp.gov.br/wp-content/uploads/2019/12/Banana_pratapng.png" alt="Banana Prata" class="card-img-top" loading="lazy">
+            <div class="card-body">
+                <h5 class="card-title">Banana Prata</h5>
+                <p class="card-description">Fonte de energia, perfeita para refeições rápidas ou smoothies.</p>
+                <div class="price">R$ 2,49/kg</div>
+            </div>
+        </div>
+        
+        <!-- Fruta 3 -->
+        <div class="card-produto">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Summer_99.jpg" alt="Melancia" class="card-img-top" loading="lazy">
+            <div class="card-body">
+                <h5 class="card-title">Melancia</h5>
+                <p class="card-description">Refrescante e suculenta, ideal para os dias quentes de verão.</p>
+                <div class="price">R$ 3,99/kg</div>
+            </div>
+        </div>
     </section>
 
-    <section class="produtos-grid">
-        <% if (produtos && produtos.length > 0) { %>
-            <% produtos.forEach(produto => { %>
-                <% if (produto.destaque) { %> <!-- Exibe apenas os produtos em destaque -->
-                    <div class="card-produto">
-                        <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" class="card-img-top" loading="lazy">
-                        <div class="card-body">
-                            <h5 class="card-title"><%= produto.nome_produto %></h5>
-                            <div class="price">R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></div>
-                        </div>
-                    </div>
-                <% } %>
-            <% }) %>
-        <% } else { %>
-            <p>Nenhum produto encontrado.</p>
-        <% } %>
-    </section>
+    <style>
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card-produto {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card-produto:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-img-top {
+            width: 100%;
+            height: 200px;
+            object-fit: cover; /* Padroniza o tamanho das imagens */
+            border-bottom: 1px solid #ddd;
+        }
+
+        .card-body {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .btn-adicionar {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-adicionar:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </main>

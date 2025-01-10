@@ -1,29 +1,30 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Produto = require('./Produto');  
 
 const Carrinho = sequelize.define('Carrinho', {
     id_carrinho: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
     },
     produtoId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'TbProduto', // A tabela correta é 'TbProduto'
-            key: 'id_produto'
-        }
+            model: 'Produtos', 
+            key: 'id_produto', 
+        },
     },
     quantidade: {
         type: DataTypes.INTEGER,
-        allowNull: false
-    }
+        allowNull: false,
+    },
+}, {
+    timestamps: true,
+    tableName: 'Carrinhos',
 });
 
-// Definindo a associação com o modelo Produto
-Carrinho.associate = (models) => {
-    Carrinho.belongsTo(models.Produto, { foreignKey: 'produtoId' });
-};
+Carrinho.belongsTo(Produto, { as: 'produto', foreignKey: 'produtoId' });
 
 module.exports = Carrinho;

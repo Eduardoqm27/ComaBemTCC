@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express'); 
 const authController = require('../controllers/AuthController');
 const router = express.Router();
 
@@ -13,16 +13,9 @@ router.get('/register', (req, res) => {
 });
 
 // Rota para registrar um novo usuário
-router.post('/register', authController.cadastro)
+router.post('/register', authController.cadastro);
 
 // Rota para fazer logout
-router.get('/logout', (req, res) => {
-    req.logout((err) => {
-        if (err) {
-            console.log(err);
-        }
-        res.redirect('/');
-    });
-});
+router.get('/logout', authController.logout);
 
 module.exports = router;

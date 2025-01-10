@@ -5,6 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <title>Carrinho</title>
+    <style>
+        /* Estilização do produto no carrinho */
+        .carrinho-produtos {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .item-carrinho {
+            display: flex;
+            align-items: center;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .item-carrinho:hover {
+            transform: translateY(-5px);
+        }
+
+        .item-carrinho img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+
+        .item-carrinho h4 {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-carrinho p {
+            font-size: 1em;
+            color: #666;
+        }
+
+        .item-carrinho button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .item-carrinho button:hover {
+            background-color: #c0392b;
+        }
+
+        .content {
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .content button {
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .content button:hover {
+            background-color: #27ae60;
+        }
+    </style>
 </head>
 <body>
     <div class="container" style="background-image: url('/img/logo.png'); background-size: cover;">
@@ -43,29 +139,24 @@
         <div class="content">
             <h1>Carrinho de Compras</h1>
             <div class="carrinho-produtos">
-                <% if (itens.length > 0) { %>
-                    <% itens.forEach(item => { %>
-                        <div class="item-carrinho">
-                            <img src="/img/<%= item.Produto.imagem %>" alt="<%= item.Produto.nome_produto %>">
-                            <h4><%= item.Produto.nome_produto %></h4>
-                            <p>Preço: R$ <%= item.Produto.preco.toFixed(2) %></p>
-                            <p>Quantidade: <%= item.quantidade %></p>
-                            <button onclick="removerItem('<%= item.id %>')">Remover</button>
-                        </div>
-                    <% }); %>
-                <% } else { %>
-                    <p>O carrinho está vazio.</p>
-                <% } %>
+                <div class="item-carrinho">
+                    <img src="https://media.istockphoto.com/id/452352231/pt/foto/anan%C3%A1s.jpg?s=612x612&w=0&k=20&c=fiGx6-PTjEpIsHT4-uZbnf4biaP7HWjWLQowGEzRZLE=" alt="Produto Exemplo">
+                    <div>
+                        <h4>Abacaxi</h4>
+                        <p>Quantidade Comprada: 2</p>
+                    </div>
+                    <button onclick="removerItem()">Remover</button>
+                </div>
             </div>
-            <p>Subtotal: R$ <%= subtotal.toFixed(2) %></p>
+            <p>Subtotal: R$ 50,00</p>
             <button onclick="finalizarCompra()">Finalizar Compra</button>
         </div>
     </div>
 
     <script>
-        function removerItem(id) {
+        function removerItem() {
             // Lógica para remover item do carrinho
-            alert("Removendo item " + id);
+            alert("Removendo item");
             // Redirecionar ou atualizar a página conforme necessário
         }
 

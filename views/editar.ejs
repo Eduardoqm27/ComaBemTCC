@@ -1,0 +1,33 @@
+<form action="/editar-produto/<%= produto.id %>" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PUT"> <!-- Permite o método PUT -->
+
+    <label for="nome_produto">Nome:</label>
+    <input type="text" name="nome_produto" value="<%= produto.nome_produto %>" required>
+
+    <label for="descricao">Descrição:</label>
+    <textarea name="descricao" required><%= produto.descricao %></textarea>
+
+    <label for="preco">Preço:</label>
+    <input type="number" name="preco" value="<%= produto.preco %>" required>
+
+    <label for="categoria">Categoria:</label>
+    <input type="text" name="categoria" value="<%= produto.categoria %>" required>
+
+    <label for="imagem">Imagem:</label>
+    <input type="file" name="imagem">
+
+    <label for="promocao">Promoção:</label>
+    <input type="checkbox" name="promocao" <%= produto.promocao ? 'checked' : '' %>>
+
+    <label for="destaque">Destaque:</label>
+    <input type="checkbox" name="destaque" <%= produto.destaque ? 'checked' : '' %>>
+
+    <button type="submit">Atualizar Produto</button>
+</form>
+
+<!-- Formulário para deletar o produto -->
+<form action="/deletar-produto/<%= produto.id %>" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este produto?');">
+    <!-- Campo oculto que simula o método DELETE -->
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" class="btn btn-danger">Deletar Produto</button>
+</form>

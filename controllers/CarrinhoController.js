@@ -68,7 +68,7 @@ const removerProdutoCarrinho = async (req, res) => {
 const finalizarCompra = async (req, res) => {
     try {
         const itensCarrinho = await Carrinho.findAll({
-            include: [{ model: Produto }]
+            include: [{ model: Produto, as: 'produto' }]
         });
 
         if (!itensCarrinho.length) {
@@ -76,7 +76,7 @@ const finalizarCompra = async (req, res) => {
         }
 
         const total = itensCarrinho.reduce((acc, item) => {
-            return acc + item.quantidade * item.Produto.preco;
+            return acc + item.quantidade * item.produto.preco;
         }, 0);
 
         // Limpar o carrinho após a compra

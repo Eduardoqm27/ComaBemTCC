@@ -1,15 +1,19 @@
 const requireAuth = (req, res, next) => {
-    if (req.session && req.session.userId) {
+  if (req.session && req.session.userId) {
+    return next();
+  }
+
+  return res.redirect('/auth/login');
+};
+
+const checkFuncao = (funcao) => {
+  return (req, res, next) => {
+    if (req.session && req.session.userId && req.user?.funcao === funcao) {
       return next();
     }
-    return res.status(401).json({ message: 'Usuário não autenticado' });
+
+    res.redirect('/acesso-negado');
   };
-  
-function checkFuncao(role) {
-    return (req, res, next) => {
-        if (req.session && req.session.userId && req.user.funcao === funcao) return next();
-        res.status(403).send('Acesso negado');
-    };
-}
+};
 
 module.exports = { requireAuth, checkFuncao };

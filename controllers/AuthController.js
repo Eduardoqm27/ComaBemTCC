@@ -43,7 +43,7 @@ const authController = {
       try {
         const salt = await bcrypt.genSalt(10);
         const senhaHash = await bcrypt.hash(senha, salt);
-  
+
         const newUser = {
           nome,
           data_nasc: datanascFormatada,
@@ -51,12 +51,12 @@ const authController = {
           email,
           senha: senhaHash,
         };
-  
+
         const createdUser = await usuarios.create(newUser);
-  
+
         req.session.userId = createdUser.id;
         req.session.user = newUser;
-  
+
         res.redirect("../user/perfil");
       } catch (err) {
         res.status(500).json({ error: err.message });
@@ -68,12 +68,14 @@ const authController = {
     }
   },
 
+  // Alterado: Função de logout
   logout: (req, res) => {
     req.session.destroy((err) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.status(200).json({ message: "Logout realizado com sucesso" });
+      // Após destruir a sessão, redireciona o usuário para o login
+      res.redirect('/auth/login');
     });
   },
 

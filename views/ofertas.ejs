@@ -1,13 +1,118 @@
-<div class="content">
-    <h2>Ofertas Especiais</h2>
-    <div class="produtos-grid">
-        <% produtosPromocao.forEach(produto => { %>
-            <div class="card-produto">
-                <img src="/img/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
-                <h3><%= produto.nome_produto %></h3>
-                <p>Preço: R$ <%= (Number(produto.preco) * 0.9).toFixed(2) %></p>
-                <a href="/produto/<%= produto.id %>">Ver Detalhes</a>
-            </div>
-        <% }) %>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofertas</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 100px 0;
+            color: #e63946;
+            font-size: 2em;
+        }
+
+        .produtos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .produto {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .produto:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .produto img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .produto h2 {
+            font-size: 1.4em;
+            margin: 15px;
+            color: #444;
+        }
+
+        .produto p {
+            margin: 10px 15px;
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        .produto p.strong {
+            color: #e63946;
+        }
+
+        .preco-original {
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .preco-desconto {
+            font-size: 1.1em;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .desconto {
+            font-size: 1em;
+            color: #e63946;
+            font-weight: bold;
+        }
+
+        .no-ofertas {
+            text-align: center;
+            font-size: 1.2em;
+            color: #777;
+            margin: 30px 0;
+        }
+    </style>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ofertas</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Ofertas Especiais</h1>
+    <div class="produtos">
+        <% if (produtos && produtos.length > 0) { %>
+            <% produtos.forEach((produto) => { %>
+                <div class="produto">
+                    <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" />
+                    <h3><%= produto.nome_produto %></h3>
+                    <p>Preço: R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></p>
+                    <p>Desconto: <%= produto.desconto %>%</p>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>Nenhuma oferta disponível no momento.</p>
+        <% } %>
     </div>
-</div>
+</body>
+</html>
+

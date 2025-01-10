@@ -1,17 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #444;
+        }
 
-<div class="perfil-container">
-    <h2>Perfil do Usuário</h2>
-    <% if (user) { %> <!-- Verifica se o usuário está autenticado -->
-        <div class="perfil-info">
-            <p><strong>Nome:</strong> <%= user.nome %></p>
-            <p><strong>Email:</strong> <%= user.email %></p>
-            <p><strong>Data de Nascimento:</strong> <%= user.data_nasc %></p>
-        </div>
-        <a href="/auth/logout">Logout</a> <!-- Link de logout -->
-    <% } else { %>
-        <div class="auth-options">
-            <a href="/auth/login">Login</a> <!-- Link de login -->
-            <a href="/auth/register">Cadastro</a> <!-- Link de cadastro -->
-        </div>
-    <% } %>
-</div>
+        .perfil-container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            width: 380px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .perfil-container:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .perfil-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.7em;
+            font-weight: 600;
+        }
+
+        .perfil-info {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .perfil-info p {
+            margin: 12px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .perfil-info p strong {
+            color: #007bff;
+        }
+
+        .auth-message {
+            margin-top: 30px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .auth-message p {
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+
+        .auth-message a.link {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .auth-message a.link:hover {
+            color: #0056b3;
+        }
+
+        .btn {
+            display: inline-block;
+            margin: 15px 0;
+            padding: 12px 18px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="perfil-container">
+        <h2>Perfil do Usuário</h2>
+        <% if (user) { %>
+            <div class="perfil-info">
+                <p><strong>Nome:</strong> <%= user.nome %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <p><strong>Data de Nascimento:</strong> <%= user.data_nasc %></p>
+            </div>
+            <a href="/auth/logout" class="btn">Logout</a> 
+        <% } else { %>
+            <div class="auth-message">
+                <p>Você precisa <a href="/auth/register" class="link">se cadastrar</a> ou, caso já tenha conta, <a href="/auth/login" class="link">efetuar o login</a>.</p>
+            </div>
+        <% } %>
+    </div>
+
+</body>
+</html>

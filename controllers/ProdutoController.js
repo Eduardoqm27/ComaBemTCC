@@ -1,5 +1,4 @@
 const Produto = require('../models/Produto');
-const Categoria = require('../models/Categoria');
 const multer = require('multer');
 const path = require('path');
 
@@ -14,7 +13,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Função utilitária para validar dados obrigatórios
+// Função utilitária para validar campos obrigatórios
 const validarCamposObrigatorios = (campos) => {
     for (const [campo, valor] of Object.entries(campos)) {
         if (!valor) return `${campo} é obrigatório.`;
@@ -22,137 +21,128 @@ const validarCamposObrigatorios = (campos) => {
     return null;
 };
 
-// Método para criar um novo produto
+// Função para criar produto
 const criarProduto = async (req, res) => {
     try {
-        const { nome, descricao, preco, categoriaId, promocao, porcentagemPromocao, destaque } = req.body;
-        const imagem = req.file ? req.file.filename : null;
+        const { nome_produto, descricao, preco, categoria } = req.body;
 
-        // Validação de campos obrigatórios
-        const erroValidacao = validarCamposObrigatorios({ nome, descricao, preco, categoriaId });
-        if (erroValidacao) {
-            return res.status(400).json({ error: erroValidacao });
-        }
+        // Validar campos obrigatórios
+        const erro = validarCamposObrigatorios({ nome_produto, descricao, preco, categoria });
+        if (erro) return res.status(400).send(erro);
 
-        // Verificando se a categoria existe
-        const categoria = await Categoria.findByPk(categoriaId);
-        if (!categoria) {
-            return res.status(404).json({ error: 'Categoria não encontrada.' });
-        }
-
-        // Criando o novo produto
-        const produto = await Produto.create({
-            nome,
+        // Criar novo produto
+        const novoProduto = await Produto.create({
+            nome_produto,
             descricao,
             preco,
-            imagem,
-            categoriaId,
-            promocao: promocao || false,
-            destaque: destaque || false,
-            porcentagemPromocao: promocao ? porcentagemPromocao || 0 : 0
+            categoria,
+            imagem: req.file ? req.file.filename : null, // Salva a imagem se houver
+            promocao: req.body.promocao === 'on',
+            destaque: req.body.destaque === 'on',
         });
 
-        return res.status(201).json(produto);
+        res.redirect('/categoria'); // Redireciona para a categoria após a criação
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error('Erro ao criar produto:', error);
+        res.status(500).send('Erro ao criar produto.');
     }
 };
 
-// Método para listar todos os produtos
-const listarProdutos = async (req, res) => {
+// Função para editar produto
+const editarProduto = async (req, res) => {
     try {
-        const produtos = await Produto.findAll({
-            include: [{ model: Categoria }]
-        });
-
-        return res.status(200).json(produtos);
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
-};
-
-// Método para listar produtos por categoria
-const listarProdutosPorCategoria = async (req, res) => {
-    try {
-        const { categoriaId } = req.params;
-        const produtos = await Produto.findAll({
-            where: { categoriaId },
-            include: [{ model: Categoria }]
-        });
-
-        return res.status(200).json(produtos);
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
-};
-
-// Método para listar os produtos em promoção
-const listarProdutosPromocao = async (req, res) => {
-    try {
-        const produtos = await Produto.findAll({
-            where: { promocao: true },
-            include: [{ model: Categoria }]
-        });
-
-        return res.status(200).json(produtos);
-    } catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
-};
-
-// Método para exibir detalhes de um produto
-const mostrarProduto = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const produto = await Produto.findByPk(id, {
-            include: [{ model: Categoria }]
-        });
-
+        const produto = await Produto.findByPk(req.params.id);
         if (!produto) {
-            return res.status(404).json({ error: 'Produto não encontrado.' });
+            return res.status(404).send('Produto não encontrado.');
         }
-
-        return res.status(200).json(produto);
+        res.render('editar-produto', { produto });  // Renderiza a página de edição
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error('Erro ao carregar produto para edição:', error);
+        res.status(500).send('Erro ao carregar produto para edição.');
     }
 };
 
-// Método para atualizar os dados de um produto
+// Função para atualizar produto
 const atualizarProduto = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { nome, descricao, preco, categoriaId, promocao, porcentagemPromocao, destaque } = req.body;
-        const imagem = req.file ? req.file.filename : null;
-
-        const produto = await Produto.findByPk(id);
+        const produto = await Produto.findByPk(req.params.id);
         if (!produto) {
-            return res.status(404).json({ error: 'Produto não encontrado.' });
+            return res.status(404).send('Produto não encontrado.');
         }
 
-        // Atualizando os dados do produto
+        // Atualizando produto com novos valores
         await produto.update({
-            nome: nome || produto.nome,
-            descricao: descricao || produto.descricao,
-            preco: preco || produto.preco,
-            imagem: imagem || produto.imagem,
-            categoriaId: categoriaId || produto.categoriaId,
-            promocao: promocao !== undefined ? promocao : produto.promocao,
-            destaque: destaque !== undefined ? destaque : produto.destaque,
-            porcentagemPromocao: promocao ? porcentagemPromocao || produto.porcentagemPromocao : 0
+            nome_produto: req.body.nome_produto,
+            descricao: req.body.descricao,
+            preco: req.body.preco,
+            categoria: req.body.categoria,
+            imagem: req.file ? req.file.filename : produto.imagem, // Se imagem foi enviada, atualiza
+            promocao: req.body.promocao === 'on',
+            destaque: req.body.destaque === 'on',
         });
 
-        return res.status(200).json(produto);
+        res.redirect('/categoria'); // Redireciona para a categoria após atualização
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error('Erro ao atualizar produto:', error);
+        res.status(500).send('Erro ao atualizar produto.');
     }
+};
+
+// Função para deletar produto
+const deletarProduto = async (req, res) => {
+    try {
+        const produto = await Produto.findByPk(req.params.id);
+        if (!produto) {
+            return res.status(404).send('Produto não encontrado.');
+        }
+        await produto.destroy();
+        // Após a exclusão, redireciona de volta para a página de edição
+        res.redirect(`/editar-produto/${req.params.id}`);
+    } catch (error) {
+        console.error('Erro ao deletar produto:', error);
+        res.status(500).send('Erro ao deletar produto.');
+    }
+};
+
+
+// Funções para listar produtos por categoria
+const listarProdutosPorCategoria = async (categoria, res) => {
+    try {
+        const produtos = await Produto.findAll({ where: { categoria } });
+        res.render('categoria', { produtos });
+    } catch (error) {
+        res.status(500).send(`Erro ao listar produtos da categoria ${categoria}.`);
+    }
+};
+
+// Função para listar vegetais
+const listarVegetais = (req, res) => listarProdutosPorCategoria('Vegetais', res);
+
+// Função para listar kits
+const listarKits = (req, res) => listarProdutosPorCategoria('Kits', res);
+
+// Função para listar ofertas
+const listarOfertas = async (req, res) => {
+    try {
+        const produtos = await Produto.findAll({ where: { promocao: true } });
+        res.render('ofertas', { produtos });
+    } catch (error) {
+        res.status(500).send('Erro ao listar ofertas.');
+    }
+};
+
+// Função para exibir o formulário de adicionar produto
+const formularioAdicionarProduto = (req, res) => {
+    res.render('adicionar-produto');
 };
 
 module.exports = {
     criarProduto,
-    listarProdutos,
-    listarProdutosPorCategoria,
-    listarProdutosPromocao,
-    mostrarProduto,
-    atualizarProduto
+    editarProduto,
+    atualizarProduto,
+    deletarProduto,
+    listarVegetais,
+    listarKits,
+    listarOfertas,
+    formularioAdicionarProduto
 };

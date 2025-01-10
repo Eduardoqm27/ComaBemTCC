@@ -3,13 +3,26 @@ const router = express.Router();
 const Carrinho = require('../models/Carrinho');
 const Produto = require('../models/Produto');
 
+// Controlador de Carrinho
+const carrinhoController = require('../controllers/carrinhoController');
+
 // Rota para visualizar o carrinho
 router.get('/', async (req, res) => {
     try {
         const itensCarrinho = await Carrinho.findAll({
-            include: { model: Produto, attributes: ['nome', 'preco'] } // Inclui nome e preço do produto
+            include: { 
+                model: Produto, 
+                as: 'produto',  // Adicionando o alias correto
+                attributes: ['nome_produto', 'preco', 'imagem']  // Certifique-se de que os atributos estão corretos
+            }
         });
-        res.render('carrinho', { itensCarrinho });
+
+        // Calcular subtotal
+        const subtotal = itensCarrinho.reduce((acc, item) => {
+            return acc + item.quantidade * item.produto.preco;
+        }, 0);
+
+        res.render('carrinho', { itensCarrinho, subtotal });
     } catch (error) {
         console.error('Erro ao carregar o carrinho:', error);
         res.status(500).send('Erro ao carregar o carrinho');
@@ -30,48 +43,67 @@ router.post('/adicionar', async (req, res) => {
     }
 });
 
-// Rota para criar novo produto com destaque ou desconto
-router.post('/novo-produto', async (req, res) => {
+// Rota para editar a quantidade de um item no carrinho
+router.put('/editar/:id', async (req, res) => {
     try {
-        const { nome, preco, categoria, descricao, destaque, desconto } = req.body;
+        const { id } = req.params;
+        const { quantidade } = req.body;
 
-        const precoComDesconto = desconto ? preco - (preco * (desconto / 100)) : preco;
-
-        const novoProduto = await Produto.create({
-            nome,
-            preco: precoComDesconto,
-            categoria,
-            descricao,
-            destaque: destaque ? true : false,
-        });
-
-        if (destaque) {
-            // Redireciona para o index se o produto for destaque
-            res.redirect('/index');
-        } else if (desconto) {
-            // Redireciona para ofertas se o produto tiver desconto
-            res.redirect('/ofertas');
-        } else {
-            // Caso contrário, redireciona para a página de categorias
-            res.redirect('/categoria');
+        const carrinhoItem = await Carrinho.findByPk(id);
+        if (!carrinhoItem) {
+            return res.status(404).send('Item não encontrado no carrinho');
         }
+
+        carrinhoItem.quantidade = quantidade;
+        await carrinhoItem.save();
+
+        res.redirect('/carrinho');
     } catch (error) {
-        console.error('Erro ao criar novo produto:', error);
-        res.status(500).send('Erro ao criar novo produto');
+        console.error('Erro ao editar produto no carrinho:', error);
+        res.status(500).send('Erro ao editar produto no carrinho');
     }
 });
 
-// Rota para visualizar detalhes do produto
-router.get('/detalhes/:id', async (req, res) => {
+// Rota para remover item do carrinho
+router.delete('/remover/:id', async (req, res) => {
     try {
-        const produto = await Produto.findByPk(req.params.id);
-        if (!produto) {
-            return res.status(404).send('Produto não encontrado');
+        const { id } = req.params;
+
+        const carrinhoItem = await Carrinho.findByPk(id);
+        if (!carrinhoItem) {
+            return res.status(404).send('Item não encontrado no carrinho');
         }
-        res.render('detalhes', { produto });
+
+        await carrinhoItem.destroy();
+        res.redirect('/carrinho');
     } catch (error) {
-        console.error('Erro ao carregar detalhes do produto:', error);
-        res.status(500).send('Erro ao carregar detalhes do produto');
+        console.error('Erro ao remover produto do carrinho:', error);
+        res.status(500).send('Erro ao remover produto do carrinho');
+    }
+});
+
+// Rota para finalizar a compra
+router.post('/finalizar', async (req, res) => {
+    try {
+        const itensCarrinho = await Carrinho.findAll({
+            include: { model: Produto, as: 'produto' }
+        });
+
+        if (!itensCarrinho.length) {
+            return res.status(400).send('Carrinho vazio.');
+        }
+
+        const total = itensCarrinho.reduce((acc, item) => {
+            return acc + item.quantidade * item.produto.preco;
+        }, 0);
+
+        // Limpar o carrinho após a compra
+        await Carrinho.destroy({ where: {} });
+
+        res.send(`Compra finalizada com sucesso! Total: R$ ${total.toFixed(2)}`);
+    } catch (error) {
+        console.error('Erro ao finalizar compra:', error);
+        res.status(500).send('Erro ao finalizar compra');
     }
 });
 

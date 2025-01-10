@@ -1,24 +1,205 @@
-<div class="content">
-    <h2>Adicionar Novo Produto</h2>
-    <form action="/produto/adicionar" method="POST" enctype="multipart/form-data">
-        <label for="nome_produto">Nome do Produto:</label>
-        <input type="text" id="nome_produto" name="nome_produto" required>
-        
-        <label for="descricao">Descrição:</label>
-        <textarea id="descricao" name="descricao" required></textarea>
-        
-        <label for="preco">Preço:</label>
-        <input type="number" id="preco" name="preco" step="0.01" required>
-        
-        <label for="categoria">Categoria:</label>
-        <select id="categoria" name="categoria" required>
-            <option value="kits">Kits</option>
-            <option value="ofertas">Ofertas</option>
-        </select>
-        
-        <label for="imagem">Imagem:</label>
-        <input type="file" id="imagem" name="imagem" accept="image/*" required>
-        
-        <button type="submit">Adicionar Produto</button>
-    </form>
-</div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Produto</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            width: 40%;
+            text-align: center;
+            color: #333;
+            margin-top: 40pt;
+            padding: 20px 0;
+            margin-right: 300pt;
+            margin-left: 410pt;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 30pt ;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-input, .form-textarea, .form-select, .form-file {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .form-input::placeholder, .form-textarea::placeholder, .form-select::placeholder {
+            color: #aaa;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        .form-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .form-button:hover {
+            background-color: #45a049;
+        }
+
+        .product-list {
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 10px;
+        }
+
+        .product-info h3 {
+            font-size: 16px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .product-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Tabela de Produto</h1>
+    </div>
+
+    <div class="form-container">
+        <form action="/adicionar-produto" method="POST" enctype="multipart/form-data" class="product-form">
+            <label for="nome_produto" class="form-label">Nome do Produto:</label>
+            <input type="text" id="nome_produto" name="nome_produto" class="form-input" placeholder="Digite o nome do produto" required>
+
+            <label for="descricao" class="form-label">Descrição:</label>
+            <textarea id="descricao" name="descricao" class="form-textarea" placeholder="Descreva o produto" required></textarea>
+
+            <label for="preco" class="form-label">Preço:</label>
+            <input type="number" id="preco" name="preco" class="form-input" step="0.01" placeholder="Defina o preço" required>
+
+            <label for="categoria" class="form-label">Categoria:</label>
+            <select id="categoria" name="categoria" class="form-select" required>
+                <option value="verdura">Verdura</option>
+                <option value="legumes">Legumes</option>
+                <option value="fruta">Fruta</option>
+                <option value="kits">Kits</option>
+            </select>
+
+            <label for="imagem" class="form-label">Imagem:</label>
+            <input type="file" id="imagem" name="imagem" class="form-file" accept="image/*" required>
+
+            <label for="desconto" class="form-label">Desconto (%):</label>
+            <input type="number" id="desconto" name="desconto" class="form-input" step="0.01" placeholder="Digite o desconto (opcional)">
+
+            <label for="destaque" class="form-label">Destaque:</label>
+            <input type="checkbox" id="destaque" name="destaque" class="form-checkbox">
+
+            <button type="submit" class="form-button">Adicionar Produto</button>
+        </form>
+    </div>
+
+    <section class="product-list">
+        <h2>Produtos Cadastrados</h2>
+        <div class="product-container">
+            <% if (produtos && produtos.length > 0) { %>
+                <% produtos.forEach((produto) => { %>
+                    <div class="product-card">
+                        <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" class="product-image" />
+                        <div class="product-info">
+                            <h3><%= produto.nome_produto %></h3>
+                            <p>Preço: R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></p>
+                            <p><%= produto.categoria %></p>
+                        </div>
+                        <div class="product-actions">
+                            <a href="/editar-produto/<%= produto.id %>" class="form-button">Editar</a>
+                            <form action="/deletar-produto/<%= produto.id %>" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este produto?');">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button type="submit">Deletar Produto</button>
+                            </form>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>Nenhum produto cadastrado ainda.</p>
+            <% } %>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('btnToggleForm').addEventListener('click', () => {
+            document.getElementById('formAdicionarProduto').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
