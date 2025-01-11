@@ -104,7 +104,6 @@ const deletarProduto = async (req, res) => {
     }
 };
 
-
 // Funções para listar produtos por categoria
 const listarProdutosPorCategoria = async (categoria, res) => {
     try {

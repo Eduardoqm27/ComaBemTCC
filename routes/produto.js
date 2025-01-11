@@ -65,6 +65,4 @@ router.put('/editar-produto/:id', upload.single('imagem'), produtoController.atu
 router.delete('/deletar-produto/:id', produtoController.deletarProduto);
 router.post('/deletar-produto', upload.single('imagem'), produtoController.deletarProduto);
 
-; // Deleta o produto do banco
-
 module.exports = router;
