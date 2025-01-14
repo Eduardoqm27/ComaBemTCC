@@ -5,7 +5,7 @@ const path = require('path');
 // Listar Produtos
 const listarProdutos = async (req, res) => {
     try {
-        const produtos = await Produto.findAll();
+        const produtos = await Produto.findAll({ tableName: 'tbproduto' }); // Nome correto da tabela
         const categorias = {
             kits: produtos.filter(produto => produto.categoria === 'kits'),
             verduras: produtos.filter(produto => produto.categoria === 'verdura'),
@@ -28,21 +28,21 @@ const criarProduto = async (req, res) => {
         let preco_com_desconto = preco;
         let promocao = false;
 
-        // Se houver desconto, calcula o preço com o desconto
+        // Calcula preço com desconto, se aplicável
         if (desconto && desconto > 0) {
             preco_com_desconto = preco - (preco * (desconto / 100));
-            promocao = true; // Marca o produto como promoção
+            promocao = true;
         }
 
         await Produto.create({
             nome_produto,
             descricao,
             preco,
-            preco_com_desconto,  // Armazena o preço com desconto
+            preco_com_desconto,
             categoria,
             imagem,
-            promocao,  // Marca o produto como em promoção
-            desconto,  // Armazena o valor do desconto
+            promocao,
+            desconto,
         });
 
         res.redirect('/produtos');
@@ -52,28 +52,41 @@ const criarProduto = async (req, res) => {
     }
 };
 
-
 // Atualizar Produto
 const atualizarProduto = async (req, res) => {
     try {
         const { id } = req.params;
         const { nome_produto, descricao, preco, categoria } = req.body;
-        const imagem = req.file ? req.file.filename : undefined;
+        const desconto = req.body.desconto || 0; // Se não informado, assume 0
         const produto = await Produto.findByPk(id);
 
         if (!produto) {
             return res.status(404).json({ sucesso: false, mensagem: 'Produto não encontrado.' });
         }
 
-        if (imagem && produto.imagem) {
+        let preco_com_desconto = preco;
+        if (desconto > 0) {
+            preco_com_desconto = preco - (preco * (desconto / 100));
+        }
+
+        if (req.file && produto.imagem) {
             fs.unlinkSync(path.join(__dirname, '..', 'public', 'uploads', produto.imagem));
         }
 
-        await produto.update({ nome_produto, descricao, preco, categoria, ...(imagem && { imagem }) });
-        res.json({ sucesso: true });
+        await produto.update({
+            nome_produto,
+            descricao,
+            preco,
+            categoria,
+            imagem: req.file ? req.file.filename : produto.imagem,
+            promocao: desconto > 0,
+            preco_desconto: preco_com_desconto,
+        });
+
+        res.json({ sucesso: true, mensagem: 'Produto atualizado com sucesso.' });
     } catch (error) {
         console.error('Erro ao atualizar produto:', error.message);
-        res.status(500).json({ sucesso: false, mensagem: 'Erro ao atualizar produto.' });
+        res.status(500).json({ sucesso: false, mensagem: 'Erro interno ao atualizar produto.' });
     }
 };
 
@@ -88,16 +101,22 @@ const excluirProduto = async (req, res) => {
         }
 
         if (produto.imagem) {
-            fs.unlinkSync(path.join(__dirname, '..', 'public', 'uploads', produto.imagem));
+            const imagePath = path.join(__dirname, '..', 'public', 'uploads', produto.imagem);
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
         }
 
         await produto.destroy();
-        res.json({ sucesso: true });
+        res.json({ sucesso: true, mensagem: 'Produto excluído com sucesso.' });
     } catch (error) {
         console.error('Erro ao excluir produto:', error.message);
-        res.status(500).json({ sucesso: false, mensagem: 'Erro ao excluir produto.' });
+        res.status(500).json({ sucesso: false, mensagem: 'Erro interno ao excluir produto.' });
     }
 };
+
+
+
 
 // Editar Produto
 const editarProduto = async (req, res) => {
@@ -105,14 +124,12 @@ const editarProduto = async (req, res) => {
         const { id } = req.params;
         const produto = await Produto.findByPk(id);
 
-        if (!produto) {
-            return res.status(404).json({ sucesso: false, mensagem: 'Produto não encontrado.' });
-        }
+        if (!produto) return res.status(404).send('Produto não encontrado.');
 
         res.render('editar-produto', { produto });
     } catch (error) {
-        console.error('Erro ao editar produto:', error.message);
-        res.status(500).json({ sucesso: false, mensagem: 'Erro ao editar produto.' });
+        console.error('Erro ao carregar página de edição:', error.message);
+        res.status(500).send('Erro ao carregar página de edição.');
     }
 };
 

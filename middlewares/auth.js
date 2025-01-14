@@ -1,6 +1,6 @@
 const requireAuth = (req, res, next) => {
   if (req.session && req.session.userId) {
-    return next();
+      return next();
   }
 
   return res.redirect('/auth/login');
@@ -8,11 +8,11 @@ const requireAuth = (req, res, next) => {
 
 const checkFuncao = (funcao) => {
   return (req, res, next) => {
-    if (req.session && req.session.userId && req.user?.funcao === funcao) {
-      return next();
-    }
+      if (req.session && req.session.userId && req.user?.funcao === funcao) {
+          return next();
+      }
 
-    res.redirect('/acesso-negado');
+      res.redirect('/acesso-negado');
   };
 };
 

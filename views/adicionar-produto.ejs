@@ -196,11 +196,11 @@
         <tbody>
             <% if (produtos && produtos.length > 0) { %>
                 <% produtos.forEach(produto => { %>
-                    <tr data-id="<%= produto.id %>">
-                        <form onsubmit="atualizarProduto(event, '<%= produto.id %>')">
+                    <tr data-id="<%= produto.id_produto %>">
+                        <form onsubmit="atualizarProduto(event, '<%= produto.id_produto %>')">
                             <td>
                                 <% if (produto.imagem) { %>
-                                    <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                                    <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" style="width: 100px; height: auto;">
                                 <% } else { %>
                                     <span>Sem imagem</span>
                                 <% } %>
@@ -217,15 +217,14 @@
                             </td>
                             <td>
                                 <select name="categoria" required>
-                                    <option value="verdura" <%= produto.categoria === "verdura" ? "selected" : "" %>>Verdura</option>
-                                    <option value="legumes" <%= produto.categoria === "legumes" ? "selected" : "" %>>Legumes</option>
-                                    <option value="fruta" <%= produto.categoria === "fruta" ? "selected" : "" %>>Fruta</option>
-                                    <option value="kits" <%= produto.categoria === "kits" ? "selected" : "" %>>Kits</option>
+                                    <% ['verdura', 'legumes', 'fruta', 'kits'].forEach(cat => { %>
+                                        <option value="<%= cat %>" <%= produto.categoria === cat ? 'selected' : '' %>><%= cat.charAt(0).toUpperCase() + cat.slice(1) %></option>
+                                    <% }); %>
                                 </select>
                             </td>
                             <td>
                                 <button type="submit" class="btn-edit">Salvar</button>
-                                <button type="button" class="btn-delete" onclick="excluirProduto('<%= produto.id %>')">Excluir</button>
+                                <button type="button" class="btn-delete" onclick="excluirProduto('<%= produto.id_produto %>')">Excluir</button>
                             </td>
                         </form>
                     </tr>
@@ -236,35 +235,51 @@
                 </tr>
             <% } %>
         </tbody>
-    </table>
-
-    <script>
-        function previewImage(event) {
-            const reader = new FileReader();
-            const imagePreview = document.getElementById('imagePreview');
-            reader.onload = function() {
-                imagePreview.style.display = 'block';
-                imagePreview.src = reader.result;
-            }
-            reader.readAsDataURL(event.target.files[0]);
-        }
-
-        function excluirProduto(id) {
-            if (confirm('Deseja realmente excluir este produto?')) {
-                fetch(`/adicionar-produto/${id}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.sucesso) {
-                        alert('Produto excluído com sucesso.');
-                        window.location.reload();
+        
+        <script>
+        async function excluirProduto(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                try {
+                    const response = await fetch(`/excluir-produto/${id}`, { method: 'DELETE' });
+                    const result = await response.json();
+        
+                    if (result.sucesso) {
+                        alert(result.mensagem);
+                        location.reload();
                     } else {
-                        alert('Erro ao excluir produto.');
+                        alert(result.mensagem || 'Erro ao excluir produto.');
                     }
-                });
+                } catch (error) {
+                    alert('Erro ao excluir produto.');
+                    console.error(error);
+                }
             }
         }
-    </script>
+        
+        async function atualizarProduto(event, id) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+        
+            try {
+                const response = await fetch(`/atualizar-produto/${id}`, {
+                    method: 'PUT',
+                    body: formData,
+                });
+        
+                const result = await response.json();
+                if (result.sucesso) {
+                    alert(result.mensagem);
+                    location.reload();
+                } else {
+                    alert(result.mensagem || 'Erro ao atualizar produto.');
+                }
+            } catch (error) {
+                alert('Erro ao atualizar produto.');
+                console.error(error);
+            }
+        }
+        </script>
+        
+    
 </body>
 </html>

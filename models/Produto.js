@@ -1,4 +1,4 @@
-// Melhorias no modelo Produto
+// Modelo corrigido do Produto
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
@@ -27,6 +27,9 @@ const Produto = sequelize.define('Produto', {
     imagem: {
         type: DataTypes.STRING,
         allowNull: true,
+        validate: {
+            isUrl: { msg: 'A imagem deve ser uma URL válida.' },
+        },
     },
     marca: {
         type: DataTypes.STRING,
@@ -45,14 +48,10 @@ const Produto = sequelize.define('Produto', {
         },
     },
     categoria: {
-        type: DataTypes.STRING,
+        type: DataTypes.ENUM('verdura', 'legumes', 'fruta', 'kits'),
         allowNull: false,
         validate: {
             notEmpty: { msg: 'A categoria não pode estar vazia.' },
-            isIn: {
-                args: [['verdura', 'legumes', 'fruta', 'kits']],
-                msg: 'A categoria deve ser uma das seguintes: verdura, legumes, fruta, kits.',
-            },
         },
     },
     promocao: {
@@ -80,7 +79,7 @@ const Produto = sequelize.define('Produto', {
         },
     },
 }, {
-    tableName: 'produtos',
+    tableName: 'tbproduto',
     timestamps: true,
     hooks: {
         beforeSave: (produto) => {

@@ -35,6 +35,15 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
+// Middleware para validar ID
+const validateId = (req, res, next) => {
+    const { id } = req.params;
+    if (!id || isNaN(Number(id))) {
+        return res.status(400).json({ sucesso: false, mensagem: 'ID inválido.' });
+    }
+    next();
+};
+
 // Rota para a página inicial (Destaques)
 router.get('/', async (req, res) => {
     try {
@@ -46,15 +55,13 @@ router.get('/', async (req, res) => {
     }
 });
 
-
-
 // Rota para a página de ofertas
 router.get('/ofertas', async (req, res) => {
     try {
         const produtos = await Produto.findAll({
             where: {
                 desconto: {
-                    [Op.gt]: 0,  // Verifica se o desconto é maior que 0
+                    [Op.gt]: 0, // Verifica se o desconto é maior que 0
                 }
             }
         });
@@ -64,8 +71,6 @@ router.get('/ofertas', async (req, res) => {
         res.status(500).send('Erro ao carregar a página de Ofertas');
     }
 });
-
-
 
 // Rota para a categoria "Kits"
 router.get('/kits', async (req, res) => {
@@ -95,43 +100,21 @@ router.get('/adicionar-produto', async (req, res) => {
 });
 
 // Rota para adicionar um novo produto
-router.post('/adicionar-produto', upload.single('imagem'), async (req, res) => {
-    try {
-        const { nome_produto, marca, origem, descricao, preco, categoria, promocao, destaque } = req.body;
-
-        if (!nome_produto || !descricao || !preco || !categoria) {
-            return res.status(400).send('Todos os campos obrigatórios precisam ser preenchidos.');
+router.post('/adicionar-produto', (req, res, next) => {
+    upload.single('imagem')(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(400).send('Erro no upload da imagem: ' + err.message);
+        } else if (err) {
+            return res.status(400).send('Erro: ' + err.message);
         }
-
-        if (isNaN(preco) || preco <= 0) {
-            return res.status(400).send('O preço deve ser um número válido e maior que 0.');
-        }
-
-        await Produto.create({
-            nome_produto,
-            marca,
-            origem,
-            descricao,
-            preco,
-            categoria,
-            imagem: req.file ? req.file.filename : null,
-            promocao: promocao === 'on',
-            destaque: destaque === 'on',
-        });
-
-        res.redirect('/adicionar-produto');
-    } catch (error) {
-        console.error('Erro ao adicionar produto:', error);
-        res.status(500).send('Erro ao adicionar produto.');
-    }
-});
+        next();
+    });
+}, produtoController.criarProduto);
 
 // Rotas de CRUD de produtos via API
-// Rota para a página de edição do produto
 router.get('/produtos', produtoController.listarProdutos); // Listar produtos
-router.post('/adicionar-produto', upload.single('imagem'), produtoController.criarProduto); 
-router.put('/adicionar-produto/:id', upload.single('imagem'), produtoController.atualizarProduto); // Atualizar produto
-router.delete('/adicionar-produto/:id', produtoController.excluirProduto); // Excluir produto
-router.get('/editar-produto/:id', produtoController.editarProduto); // Editar produto
+router.get('/editar-produto/:id', validateId, produtoController.editarProduto); // Editar produto
+router.put('/atualizar-produto/:id', validateId, upload.single('imagem'), produtoController.atualizarProduto); 
+router.delete('/excluir-produto/:id', validateId, produtoController.excluirProduto); // Excluir produto
 
 module.exports = router;
