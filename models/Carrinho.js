@@ -1,3 +1,4 @@
+// models/Carrinho.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const Produto = require('./Produto');  
@@ -12,17 +13,18 @@ const Carrinho = sequelize.define('Carrinho', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'tbproduto', // Nome correto da tabela
-            key: 'id_produto', // Coluna de chave estrangeira
+            model: Produto, // Referência direta ao modelo Produto
+            key: 'id_produto', // Nome correto da chave estrangeira
         },
     },
     quantidade: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 1, // Define um valor padrão
     },
 }, {
     timestamps: true,
-    tableName: 'Carrinhos', // Nome correto da tabela Carrinho
+    tableName: 'Carrinhos', // Nome da tabela no banco
 });
 
 Carrinho.belongsTo(Produto, { as: 'produto', foreignKey: 'produtoId' });

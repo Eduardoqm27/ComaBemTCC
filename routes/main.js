@@ -3,34 +3,26 @@ const router = express.Router();
 const Produto = require('../models/Produto');
 const multer = require('multer');
 const path = require('path');
+const { Op } = require('sequelize');
 const produtoController = require('../controllers/ProdutoController');
 
-// Middleware para obter o usuário da sessão e disponibilizá-lo nas views
+// Middleware para disponibilizar o usuário da sessão nas views
 router.use((req, res, next) => {
-    res.locals.user = req.session.user || null; // Define `user` como variável local para todas as views
+    res.locals.user = req.session?.user || null;
     next();
 });
 
 // Configuração do multer para upload de imagens com validação de tipo
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'public/uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}${path.extname(file.originalname)}`);
-    }
+    destination: (req, file, cb) => cb(null, 'public/uploads/'),
+    filename: (req, file, cb) => cb(null, `${Date.now()}${path.extname(file.originalname)}`)
 });
 
 const fileFilter = (req, file, cb) => {
     const fileTypes = /jpeg|jpg|png|gif/;
     const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = fileTypes.test(file.mimetype);
-
-    if (extname && mimetype) {
-        return cb(null, true);
-    } else {
-        cb(new Error('Apenas arquivos de imagem (jpeg, jpg, png, gif) são permitidos.'));
-    }
+    extname && mimetype ? cb(null, true) : cb(new Error('Apenas arquivos de imagem são permitidos.'));
 };
 
 const upload = multer({ storage, fileFilter });
@@ -51,7 +43,7 @@ router.get('/', async (req, res) => {
         res.render('index', { produtos });
     } catch (error) {
         console.error('Erro ao buscar produtos em promoção:', error);
-        res.status(500).send('Erro ao carregar a página inicial');
+        res.status(500).send('Erro ao carregar a página inicial.');
     }
 });
 
@@ -60,15 +52,13 @@ router.get('/ofertas', async (req, res) => {
     try {
         const produtos = await Produto.findAll({
             where: {
-                desconto: {
-                    [Op.gt]: 0, // Verifica se o desconto é maior que 0
-                }
+                desconto: { [Op.gt]: 0 }
             }
         });
         res.render('ofertas', { categoria: 'Ofertas', produtos });
     } catch (error) {
         console.error('Erro ao buscar ofertas:', error);
-        res.status(500).send('Erro ao carregar a página de Ofertas');
+        res.status(500).send('Erro ao carregar a página de Ofertas.');
     }
 });
 
@@ -79,7 +69,7 @@ router.get('/kits', async (req, res) => {
         res.render('kits', { categoria: 'Kits', produtos });
     } catch (error) {
         console.error('Erro ao buscar produtos da categoria Kits:', error);
-        res.status(500).send('Erro ao carregar a página de Kits');
+        res.status(500).send('Erro ao carregar a página de Kits.');
     }
 });
 
@@ -95,7 +85,7 @@ router.get('/adicionar-produto', async (req, res) => {
         res.render('adicionar-produto', { produtos });
     } catch (error) {
         console.error('Erro ao buscar produtos:', error);
-        res.status(500).send('Erro ao carregar a página de adicionar produto');
+        res.status(500).send('Erro ao carregar a página de adicionar produto.');
     }
 });
 
@@ -114,7 +104,7 @@ router.post('/adicionar-produto', (req, res, next) => {
 // Rotas de CRUD de produtos via API
 router.get('/produtos', produtoController.listarProdutos); // Listar produtos
 router.get('/editar-produto/:id', validateId, produtoController.editarProduto); // Editar produto
-router.put('/atualizar-produto/:id', validateId, upload.single('imagem'), produtoController.atualizarProduto); 
+router.put('/atualizar-produto/:id', validateId, upload.single('imagem'), produtoController.atualizarProduto); // Atualizar produto
 router.delete('/excluir-produto/:id', validateId, produtoController.excluirProduto); // Excluir produto
 
 module.exports = router;

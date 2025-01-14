@@ -1,88 +1,107 @@
-const Produto = require('../models/Produto');
+// routes/carrinho.js
+const express = require('express');
+const router = express.Router();
 const Carrinho = require('../models/Carrinho');
+const Produto = require('../models/Produto');
+const methodOverride = require('method-override');
 
-// Adicionar produto ao carrinho
-// Adicionar produto ao carrinho
-// Adicionar produto ao carrinho
-const addProdutoCarrinho = async (req, res) => {
+// Middleware para sobrescrever métodos HTTP
+router.use(methodOverride('_method'));
+
+// Rota para visualizar o carrinho
+router.get('/', async (req, res) => {
     try {
-        let { produtoId } = req.body; // Obtemos o produtoId do formulário
-        produtoId = parseInt(produtoId, 10); // Certifique-se de que produtoId é um número inteiro
-        
+        const carrinho = await Carrinho.findAll({
+            include: { 
+                model: Produto, 
+                as: 'produto',
+                attributes: ['id_produto', 'nome_produto', 'preco', 'imagem'] // Garantindo que estamos selecionando os atributos corretos
+            }
+        });
+
+        const subtotal = carrinho.reduce((acc, item) => {
+            return acc + item.quantidade * item.produto.preco;
+        }, 0);
+
+        res.render('carrinho', { carrinho, subtotal });
+    } catch (error) {
+        console.error('Erro ao carregar o carrinho:', error);
+        res.status(500).send('Erro ao carregar o carrinho');
+    }
+});
+
+// Rota para adicionar produto ao carrinho
+router.post('/adicionar', async (req, res) => {
+    try {
+        let { produtoId } = req.body;
+        console.log('produtoId recebido no backend:', produtoId);
+
+        produtoId = parseInt(produtoId, 10);
         if (isNaN(produtoId) || produtoId <= 0) {
             return res.status(400).json({ error: 'ID do produto inválido.' });
         }
-        
 
         const produto = await Produto.findByPk(produtoId);
         if (!produto) {
             return res.status(404).json({ error: 'Produto não encontrado.' });
         }
 
-        // Verificar se o produto já está no carrinho
-        const carrinhoItem = await Carrinho.findOne({ where: { produtoId } });
-
-        if (carrinhoItem) {
-            carrinhoItem.quantidade += 1;
-            await carrinhoItem.save();
-        } else {
-            await Carrinho.create({ produtoId, quantidade: 1 });
-        }
-
-        return res.redirect('/carrinho'); // Redireciona para a página do carrinho
+        await Carrinho.create({ produtoId, quantidade: 1 });
+        res.redirect('/carrinho');
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error('Erro ao adicionar produto ao carrinho:', error);
+        res.status(500).send('Erro ao adicionar produto ao carrinho');
     }
-};
+});
 
-
-
-// Editar quantidade de um produto no carrinho
-const editarProdutoCarrinho = async (req, res) => {
+// Rota para editar a quantidade de um item no carrinho
+router.put('/editar/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { quantidade } = req.body;
 
         const carrinhoItem = await Carrinho.findByPk(id);
         if (!carrinhoItem) {
-            return res.status(404).json({ error: 'Item não encontrado no carrinho.' });
+            return res.status(404).send('Item não encontrado no carrinho');
         }
 
         carrinhoItem.quantidade = quantidade;
         await carrinhoItem.save();
 
-        return res.status(200).json({ message: 'Quantidade atualizada com sucesso.' });
+        res.redirect('/carrinho');
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error('Erro ao editar produto no carrinho:', error);
+        res.status(500).send('Erro ao editar produto no carrinho');
     }
-};
+});
 
-// Remover produto do carrinho
-const removerProdutoCarrinho = async (req, res) => {
+// Rota para remover item do carrinho
+router.delete('/remover/:id', async (req, res) => {
     try {
         const { id } = req.params;
 
         const carrinhoItem = await Carrinho.findByPk(id);
         if (!carrinhoItem) {
-            return res.status(404).json({ error: 'Item não encontrado no carrinho.' });
+            return res.status(404).send('Item não encontrado no carrinho');
         }
 
         await carrinhoItem.destroy();
-        return res.status(200).json({ message: 'Produto removido do carrinho.' });
+        res.redirect('/carrinho');
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error('Erro ao remover produto do carrinho:', error);
+        res.status(500).send('Erro ao remover produto do carrinho');
     }
-};
+});
 
-// Finalizar compra
-const finalizarCompra = async (req, res) => {
+// Rota para finalizar a compra
+router.post('/finalizar', async (req, res) => {
     try {
         const itensCarrinho = await Carrinho.findAll({
-            include: [{ model: Produto, as: 'produto' }]
+            include: { model: Produto, as: 'produto' }
         });
 
         if (!itensCarrinho.length) {
-            return res.status(400).json({ error: 'Carrinho vazio.' });
+            return res.status(400).send('Carrinho vazio.');
         }
 
         const total = itensCarrinho.reduce((acc, item) => {
@@ -92,15 +111,11 @@ const finalizarCompra = async (req, res) => {
         // Limpar o carrinho após a compra
         await Carrinho.destroy({ where: {} });
 
-        return res.status(200).json({ message: 'Compra finalizada com sucesso!', total });
+        res.send(`Compra finalizada com sucesso! Total: R$ ${total.toFixed(2)}`);
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        console.error('Erro ao finalizar compra:', error);
+        res.status(500).send('Erro ao finalizar compra');
     }
-};
+});
 
-module.exports = {
-    addProdutoCarrinho,
-    editarProdutoCarrinho,
-    removerProdutoCarrinho,
-    finalizarCompra
-};
+module.exports = router;

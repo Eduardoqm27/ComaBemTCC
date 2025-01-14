@@ -101,41 +101,59 @@
             background-color: #27ae60;
         }
     </style>
+    <script>
+        function confirmarRemocao(produtoId) {
+            if (confirm("Tem certeza de que deseja remover este produto?")) {
+                document.getElementById(`remover-form-${produtoId}`).submit();
+            }
+        }
+
+        function finalizarCompra() {
+            if (confirm("Tem certeza que deseja finalizar a compra?")) {
+                alert("Compra finalizada com sucesso!");
+                // Simular limpeza do carrinho e redirecionamento
+                fetch('/carrinho/limpar', { method: 'POST' }) // Certifique-se de criar essa rota no backend
+                    .then(() => {
+                        window.location.href = '/';
+                    })
+                    .catch(err => console.error("Erro ao limpar o carrinho:", err));
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container" style="background-image: url('/img/logo.png'); background-size: cover;">
         <nav class="menu-lateral"> 
-        <div class="btn-expandir">
-            <i class="bi bi-list"></i>
-        </div>
-
-        <ul class="ul">
-            <li class="item-menu">
-                <a href="/" data-link="/views/home.ejs">
-                    <span class="icon"><i class="bi bi-house"></i></span>
-                    <span class="txt-link">Início</span>
-                </a>
-            </li>
-            <li class="item-menu">
-                <a href="/produto/categoria" data-link="/views/categoria/categoria.ejs">
-                    <span class="icon"><i class="bi bi-columns-gap"></i></span>
-                    <span class="txt-link">Categorias</span>
-                </a>
-            </li>
-            <li class="item-menu">
-                <a href="/user/login" data-link="/views/user/login.ejs">
-                    <span class="icon"><i class="bi bi-person-bounding-box"></i></span>
-                    <span class="txt-link">Usuário</span>
-                </a>
-            </li>
-            <li class="item-menu">
-                <a href="/carrinho" data-link="/views/carrinho.ejs">
-                    <span class="icon"><i class="bi bi-cart4"></i></span>
-                    <span class="txt-link">Carrinho</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+            <div class="btn-expandir">
+                <i class="bi bi-list"></i>
+            </div>
+            <ul class="ul">
+                <li class="item-menu">
+                    <a href="/" data-link="/views/home.ejs">
+                        <span class="icon"><i class="bi bi-house"></i></span>
+                        <span class="txt-link">Início</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/produto/categoria" data-link="/views/categoria/categoria.ejs">
+                        <span class="icon"><i class="bi bi-columns-gap"></i></span>
+                        <span class="txt-link">Categorias</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/user/login" data-link="/views/user/login.ejs">
+                        <span class="icon"><i class="bi bi-person-bounding-box"></i></span>
+                        <span class="txt-link">Usuário</span>
+                    </a>
+                </li>
+                <li class="item-menu">
+                    <a href="/carrinho" data-link="/views/carrinho.ejs">
+                        <span class="icon"><i class="bi bi-cart4"></i></span>
+                        <span class="txt-link">Carrinho</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
         <div class="content">
             <h1>Carrinho de Compras</h1>
             <div class="carrinho-produtos">
@@ -148,18 +166,20 @@
                             <h4><%= item.nome_produto %></h4>
                             <p>Quantidade: <%= item.quantidade %></p>
                         </div>
-                        <form action="/carrinho/remover" method="POST">
+                        <form id="remover-form-<%= item.id %>" action="/carrinho/remover" method="POST">
                             <input type="hidden" name="produtoId" value="<%= item.id %>">
-                            <button type="submit">Remover</button>
+                            <button type="button" onclick="confirmarRemocao(<%= item.id %>)">Remover</button>
                         </form>
                     </div>
                 <% }); %>
             </div>
             <p>Subtotal: R$ <%= subtotal %></p>
-            <form action="/carrinho/finalizar" method="POST">
-                <button type="submit">Finalizar Compra</button>
-            </form>
+            <button onclick="finalizarCompra()">Finalizar Compra</button>
         </div>
+        <form action="/carrinho/limpar?_method=DELETE" method="POST">
+            <button type="submit" class="btn btn-danger">Limpar Carrinho</button>
+        </form>
+        
     </div>
 </body>
 </html>
