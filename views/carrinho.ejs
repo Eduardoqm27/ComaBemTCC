@@ -139,32 +139,27 @@
         <div class="content">
             <h1>Carrinho de Compras</h1>
             <div class="carrinho-produtos">
-                <div class="item-carrinho">
-                    <img src="https://media.istockphoto.com/id/452352231/pt/foto/anan%C3%A1s.jpg?s=612x612&w=0&k=20&c=fiGx6-PTjEpIsHT4-uZbnf4biaP7HWjWLQowGEzRZLE=" alt="Produto Exemplo">
-                    <div>
-                        <h4>Abacaxi</h4>
-                        <p>Quantidade Comprada: 2</p>
+                <% carrinho.forEach(item => { %>
+                    <div class="item-carrinho">
+                        <% if (item.imagem) { %>
+                            <img src="/uploads/<%= item.imagem %>" alt="<%= item.nome_produto %>">
+                        <% } %>
+                        <div>
+                            <h4><%= item.nome_produto %></h4>
+                            <p>Quantidade: <%= item.quantidade %></p>
+                        </div>
+                        <form action="/carrinho/remover" method="POST">
+                            <input type="hidden" name="produtoId" value="<%= item.id %>">
+                            <button type="submit">Remover</button>
+                        </form>
                     </div>
-                    <button onclick="removerItem()">Remover</button>
-                </div>
+                <% }); %>
             </div>
-            <p>Subtotal: R$ 50,00</p>
-            <button onclick="finalizarCompra()">Finalizar Compra</button>
+            <p>Subtotal: R$ <%= subtotal %></p>
+            <form action="/carrinho/finalizar" method="POST">
+                <button type="submit">Finalizar Compra</button>
+            </form>
         </div>
     </div>
-
-    <script>
-        function removerItem() {
-            // Lógica para remover item do carrinho
-            alert("Removendo item");
-            // Redirecionar ou atualizar a página conforme necessário
-        }
-
-        function finalizarCompra() {
-            // Lógica para finalizar a compra
-            alert("Finalizando compra");
-            // Redirecionar ou processar a compra conforme necessário
-        }
-    </script>
 </body>
 </html>

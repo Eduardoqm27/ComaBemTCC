@@ -2,9 +2,17 @@ const Produto = require('../models/Produto');
 const Carrinho = require('../models/Carrinho');
 
 // Adicionar produto ao carrinho
+// Adicionar produto ao carrinho
+// Adicionar produto ao carrinho
 const addProdutoCarrinho = async (req, res) => {
     try {
-        const { produtoId, quantidade } = req.body;
+        let { produtoId } = req.body; // Obtemos o produtoId do formulário
+        produtoId = parseInt(produtoId, 10); // Certifique-se de que produtoId é um número inteiro
+        
+        if (isNaN(produtoId) || produtoId <= 0) {
+            return res.status(400).json({ error: 'ID do produto inválido.' });
+        }
+        
 
         const produto = await Produto.findByPk(produtoId);
         if (!produto) {
@@ -15,17 +23,19 @@ const addProdutoCarrinho = async (req, res) => {
         const carrinhoItem = await Carrinho.findOne({ where: { produtoId } });
 
         if (carrinhoItem) {
-            carrinhoItem.quantidade += quantidade;
+            carrinhoItem.quantidade += 1;
             await carrinhoItem.save();
         } else {
-            await Carrinho.create({ produtoId, quantidade });
+            await Carrinho.create({ produtoId, quantidade: 1 });
         }
 
-        return res.status(200).json({ message: 'Produto adicionado ao carrinho.' });
+        return res.redirect('/carrinho'); // Redireciona para a página do carrinho
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }
 };
+
+
 
 // Editar quantidade de um produto no carrinho
 const editarProdutoCarrinho = async (req, res) => {

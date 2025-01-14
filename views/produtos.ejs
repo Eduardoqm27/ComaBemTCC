@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;  /* Centraliza horizontalmente */
+            align-items: center;      /* Centraliza verticalmente */
+            min-height: 100vh;        /* Garante que ocupe toda a altura da tela */
+        }
+
+        .content {
+            width: 100%;
+            max-width: 1100px;        /* Limita a largura máxima */
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 2%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+            padding: 10px 0;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .produtos-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .produto-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .produto-card h3 {
+            color: #5a5a5a;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .produto-card p {
+            color: #777;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .produto-card .preco {
+            font-size: 1.1rem;
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .produto-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive for small screens */
+        @media (max-width: 768px) {
+            .produtos-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .produtos-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Produtos</h1>
+
+        <% if (categorias.kits.length > 0) { %>
+            <h2>Kits</h2>
+            <div class="produtos-container">
+                <% categorias.kits.forEach(produto => { %>
+                    <div class="produto-card">
+                        <% if (produto.imagem) { %>
+                            <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                        <% } %>
+                        <h3><%= produto.nome_produto %></h3>
+                        <p><%= produto.descricao %></p>
+                        <p class="preco">R$ <%= produto.preco %></p>
+                        <!-- Formulário para adicionar ao carrinho -->
+                        <form action="/carrinho/adicionar" method="POST">
+                            <input type="hidden" name="produtoId" value="<%= produto.id %>">
+                            <button type="submit">Adicionar ao Carrinho</button>
+                        </form>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+
+        <% if (categorias.verduras.length > 0) { %>
+            <h2>Verduras</h2>
+            <div class="produtos-container">
+                <% categorias.verduras.forEach(produto => { %>
+                    <div class="produto-card">
+                        <% if (produto.imagem) { %>
+                            <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                        <% } %>
+                        <h3><%= produto.nome_produto %></h3>
+                        <p><%= produto.descricao %></p>
+                        <p class="preco">R$ <%= produto.preco %></p>
+                        <!-- Formulário para adicionar ao carrinho -->
+                        <form action="/carrinho/adicionar" method="POST">
+                            <input type="hidden" name="produtoId" value="<%= produto.id %>">
+                            <button type="submit">Adicionar ao Carrinho</button>
+                        </form>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+
+        <% if (categorias.vegetais.length > 0) { %>
+            <h2>Vegetais</h2>
+            <div class="produtos-container">
+                <% categorias.vegetais.forEach(produto => { %>
+                    <div class="produto-card">
+                        <% if (produto.imagem) { %>
+                            <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                        <% } %>
+                        <h3><%= produto.nome_produto %></h3>
+                        <p><%= produto.descricao %></p>
+                        <p class="preco">R$ <%= produto.preco %></p>
+                        <!-- Formulário para adicionar ao carrinho -->
+                        <form action="/carrinho/adicionar" method="POST">
+                            <input type="hidden" name="produtoId" value="<%= produto.id %>">
+                            <button type="submit">Adicionar ao Carrinho</button>
+                        </form>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+
+        <% if (categorias.frutas.length > 0) { %>
+            <h2>Frutas</h2>
+            <div class="produtos-container">
+                <% categorias.frutas.forEach(produto => { %>
+                    <div class="produto-card">
+                        <% if (produto.imagem) { %>
+                            <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                        <% } %>
+                        <h3><%= produto.nome_produto %></h3>
+                        <p><%= produto.descricao %></p>
+                        <p class="preco">R$ <%= produto.preco %></p>
+                        <!-- Formulário para adicionar ao carrinho -->
+                        <form action="/carrinho/adicionar" method="POST">
+                            <input type="hidden" name="produtoId" value="<%= produto.id %>">
+                            <button type="submit">Adicionar ao Carrinho</button>
+                        </form>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

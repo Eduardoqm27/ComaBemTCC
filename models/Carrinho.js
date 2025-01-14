@@ -12,8 +12,8 @@ const Carrinho = sequelize.define('Carrinho', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Produtos', 
-            key: 'id_produto', 
+            model: 'tbproduto', // Nome correto da tabela
+            key: 'id_produto', // Coluna de chave estrangeira
         },
     },
     quantidade: {
@@ -22,7 +22,7 @@ const Carrinho = sequelize.define('Carrinho', {
     },
 }, {
     timestamps: true,
-    tableName: 'Carrinhos',
+    tableName: 'Carrinhos', // Nome correto da tabela Carrinho
 });
 
 Carrinho.belongsTo(Produto, { as: 'produto', foreignKey: 'produtoId' });

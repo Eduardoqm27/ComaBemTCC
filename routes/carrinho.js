@@ -29,19 +29,31 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Rota para adicionar item ao carrinho
 router.post('/adicionar', async (req, res) => {
     try {
-        const { produtoId } = req.body;
-        const quantidade = 1; // Quantidade padrão
+        let { produtoId } = req.body;
+        console.log('produtoId recebido no backend:', produtoId);  // Adiciona um log aqui
 
-        await Carrinho.create({ produtoId, quantidade });
+        produtoId = parseInt(produtoId, 10);
+        if (isNaN(produtoId) || produtoId <= 0) {
+            return res.status(400).json({ error: 'ID do produto inválido.' });
+        }
+        
+
+        const produto = await Produto.findByPk(produtoId);
+        if (!produto) {
+            return res.status(404).json({ error: 'Produto não encontrado.' });
+        }
+
+        await Carrinho.create({ produtoId, quantidade: 1 });
         res.redirect('/carrinho');
     } catch (error) {
         console.error('Erro ao adicionar produto ao carrinho:', error);
         res.status(500).send('Erro ao adicionar produto ao carrinho');
     }
 });
+
+
 
 // Rota para editar a quantidade de um item no carrinho
 router.put('/editar/:id', async (req, res) => {

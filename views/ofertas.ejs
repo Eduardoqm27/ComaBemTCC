@@ -90,29 +90,29 @@
             margin: 30px 0;
         }
     </style>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ofertas</title>
-    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
     <h1>Ofertas Especiais</h1>
-    <div class="produtos">
-        <% if (produtos && produtos.length > 0) { %>
-            <% produtos.forEach((produto) => { %>
+    <% if (produtos.length > 0) { %> <!-- Verifica se há produtos -->
+        <div class="produtos">
+            <% produtos.forEach(produto => { %> <!-- Itera sobre os produtos -->
                 <div class="produto">
-                    <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" />
-                    <h3><%= produto.nome_produto %></h3>
-                    <p>Preço: R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></p>
-                    <p>Desconto: <%= produto.desconto %>%</p>
+                    <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>">
+                    <h2><%= produto.nome_produto %></h2>
+                    <% if (produto.desconto > 0) { %>
+                        <p class="preco-original">Preço Original: R$ <s><%= produto.preco.toFixed(2) %></s></p>
+                        <p class="preco-desconto">Preço com Desconto: R$ <%= produto.preco_com_desconto.toFixed(2) %></p>
+                        <p class="desconto">Desconto: <%= produto.desconto %>%</p>
+                    <% } else { %>
+                        <p class="preco-desconto">Preço: R$ <%= produto.preco.toFixed(2) %></p>
+                    <% } %>
+                    <p><%= produto.descricao %></p>
                 </div>
             <% }); %>
-        <% } else { %>
-            <p>Nenhuma oferta disponível no momento.</p>
-        <% } %>
-    </div>
+        </div>
+    <% } else { %>
+        <p class="no-ofertas">Nenhuma oferta disponível no momento.</p>
+    <% } %>
 </body>
 </html>
 

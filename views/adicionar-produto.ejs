@@ -1,38 +1,33 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adicionar Produto</title>
+    <title>Gerenciar Produtos</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
+            background-color: #f2f2f2;
             margin: 0;
             padding: 0;
+            padding-bottom: 20px;
         }
-
+        
         .header {
-            width: 40%;
             text-align: center;
-            color: #333;
-            margin-top: 40pt;
-            padding: 20px 0;
-            margin-right: 300pt;
-            margin-left: 410pt;
             background-color: #4CAF50;
             color: white;
-            border-radius: 30pt ;
+            padding: 20px;
+            margin-bottom: 30px;
         }
 
         .form-container {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 25px;
+            border-radius: 10px;
             max-width: 600px;
-            margin: 20px auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 0 auto 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .form-label {
@@ -42,32 +37,28 @@
             font-weight: bold;
         }
 
-        .form-input, .form-textarea, .form-select, .form-file {
+        .form-input, .form-textarea, .form-select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 16px;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            border-radius: 5px;
             font-size: 14px;
         }
 
-        .form-input::placeholder, .form-textarea::placeholder, .form-select::placeholder {
-            color: #aaa;
-        }
-
-        .form-textarea {
-            resize: vertical;
-            height: 120px;
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
         }
 
         .form-button {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 14px;
             font-size: 16px;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s;
@@ -77,76 +68,99 @@
             background-color: #45a049;
         }
 
-        .product-list {
-            margin: 20px auto;
-            max-width: 1200px;
-            padding: 0 20px;
-        }
-
-        .product-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .product-card {
+        table {
+            width: 85%;
+            margin: 0 auto;
+            border-collapse: collapse;
             background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            width: 200px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px 15px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
         }
 
-        .product-card:hover {
-            transform: scale(1.05);
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
         }
 
-        .product-card img {
-            width: 100%;
-            height: 150px;
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+
+        img {
+            max-width: 50px;
+            max-height: 50px;
             object-fit: cover;
+            border-radius: 5px;
         }
 
-        .product-info {
-            padding: 10px;
+        .btn-edit, .btn-delete {
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+            border: none;
+            color: white;
+            transition: background-color 0.3s;
         }
 
-        .product-info h3 {
-            font-size: 16px;
-            color: #333;
-            margin: 10px 0;
+        .btn-edit {
+            background-color: #2196F3;
         }
 
-        .product-info p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #777;
+        .btn-edit:hover {
+            background-color: #1e88e5;
         }
 
-        .hidden {
-            display: none;
+        .btn-delete {
+            background-color: #e53935;
+        }
+
+        .btn-delete:hover {
+            background-color: #d32f2f;
+        }
+
+        @media (max-width: 768px) {
+            .form-container, table {
+                width: 95%;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            table th, table td {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+
+            img {
+                max-width: 40px;
+                max-height: 40px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Tabela de Produto</h1>
+        <h1>Gerenciar Produtos</h1>
     </div>
 
     <div class="form-container">
-        <form action="/adicionar-produto" method="POST" enctype="multipart/form-data" class="product-form">
+        <form action="/adicionar-produto" method="POST" enctype="multipart/form-data">
             <label for="nome_produto" class="form-label">Nome do Produto:</label>
-            <input type="text" id="nome_produto" name="nome_produto" class="form-input" placeholder="Digite o nome do produto" required>
+            <input type="text" id="nome_produto" name="nome_produto" class="form-input" required>
 
             <label for="descricao" class="form-label">Descrição:</label>
-            <textarea id="descricao" name="descricao" class="form-textarea" placeholder="Descreva o produto" required></textarea>
+            <textarea id="descricao" name="descricao" class="form-textarea" required></textarea>
 
             <label for="preco" class="form-label">Preço:</label>
-            <input type="number" id="preco" name="preco" class="form-input" step="0.01" placeholder="Defina o preço" required>
+            <input type="number" id="preco" name="preco" class="form-input" step="0.01" min="0" required>
 
             <label for="categoria" class="form-label">Categoria:</label>
             <select id="categoria" name="categoria" class="form-select" required>
@@ -156,50 +170,116 @@
                 <option value="kits">Kits</option>
             </select>
 
-            <label for="imagem" class="form-label">Imagem:</label>
-            <input type="file" id="imagem" name="imagem" class="form-file" accept="image/*" required>
+            <label for="imagem" class="form-label">Imagem do Produto:</label>
+            <input type="file" id="imagem" name="imagem" class="form-input" accept="image/*" onchange="previewImage(event)">
+            <img id="imagePreview" style="display:none; max-width: 150px; margin-top: 10px;">
 
             <label for="desconto" class="form-label">Desconto (%):</label>
-            <input type="number" id="desconto" name="desconto" class="form-input" step="0.01" placeholder="Digite o desconto (opcional)">
+            <input type="number" id="desconto" name="desconto" class="form-input" step="0.01" min="0" max="100">
 
-            <label for="destaque" class="form-label">Destaque:</label>
-            <input type="checkbox" id="destaque" name="destaque" class="form-checkbox">
 
             <button type="submit" class="form-button">Adicionar Produto</button>
         </form>
     </div>
 
-    <section class="product-list">
-        <h2>Produtos Cadastrados</h2>
-        <div class="product-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Imagem</th>
+                <th>Nome</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Categoria</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
             <% if (produtos && produtos.length > 0) { %>
-                <% produtos.forEach((produto) => { %>
-                    <div class="product-card">
-                        <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" class="product-image" />
-                        <div class="product-info">
-                            <h3><%= produto.nome_produto %></h3>
-                            <p>Preço: R$ <%= parseFloat(produto.preco).toFixed(2).replace('.', ',') %></p>
-                            <p><%= produto.categoria %></p>
-                        </div>
-                        <div class="product-actions">
-                            <a href="/editar-produto/<%= produto.id %>" class="form-button">Editar</a>
-                            <form action="/deletar-produto/<%= produto.id %>" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este produto?');">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button type="submit">Deletar Produto</button>
-                            </form>
-                        </div>
-                    </div>
+                <% produtos.forEach(produto => { %>
+                    <tr data-id="<%= produto.id_produto %>">
+                        <form onsubmit="atualizarProduto(event, '<%= produto.id_produto %>')">
+                            <td>
+                                <% if (produto.imagem) { %>
+                                    <img src="/uploads/<%= produto.imagem %>" alt="<%= produto.nome_produto %>" style="width: 100px; height: auto;">
+                                <% } else { %>
+                                    <span>Sem imagem</span>
+                                <% } %>
+                                <input type="file" name="imagem">
+                            </td>
+                            <td>
+                                <input type="text" name="nome_produto" value="<%= produto.nome_produto || '' %>" required>
+                            </td>
+                            <td>
+                                <textarea name="descricao" required><%= produto.descricao || '' %></textarea>
+                            </td>
+                            <td>
+                                <input type="number" name="preco" step="0.01" value="<%= produto.preco || 0 %>" min="0" required>
+                            </td>
+                            <td>
+                                <select name="categoria" required>
+                                    <% ['verdura', 'legumes', 'fruta', 'kits'].forEach(cat => { %>
+                                        <option value="<%= cat %>" <%= produto.categoria === cat ? 'selected' : '' %>><%= cat.charAt(0).toUpperCase() + cat.slice(1) %></option>
+                                    <% }); %>
+                                </select>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn-edit">Salvar</button>
+                                <button type="button" class="btn-delete" onclick="excluirProduto('<%= produto.id_produto %>')">Excluir</button>
+                            </td>
+                        </form>
+                    </tr>
                 <% }); %>
             <% } else { %>
-                <p>Nenhum produto cadastrado ainda.</p>
+                <tr>
+                    <td colspan="6">Nenhum produto encontrado.</td>
+                </tr>
             <% } %>
-        </div>
-    </section>
-
-    <script>
-        document.getElementById('btnToggleForm').addEventListener('click', () => {
-            document.getElementById('formAdicionarProduto').classList.toggle('hidden');
-        });
-    </script>
+        </tbody>
+        
+        <script>
+        async function excluirProduto(id) {
+            if (confirm('Tem certeza que deseja excluir este produto?')) {
+                try {
+                    const response = await fetch(`/excluir-produto/${id}`, { method: 'DELETE' });
+                    const result = await response.json();
+        
+                    if (result.sucesso) {
+                        alert(result.mensagem);
+                        location.reload();
+                    } else {
+                        alert(result.mensagem || 'Erro ao excluir produto.');
+                    }
+                } catch (error) {
+                    alert('Erro ao excluir produto.');
+                    console.error(error);
+                }
+            }
+        }
+        
+        async function atualizarProduto(event, id) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+        
+            try {
+                const response = await fetch(`/atualizar-produto/${id}`, {
+                    method: 'PUT',
+                    body: formData,
+                });
+        
+                const result = await response.json();
+                if (result.sucesso) {
+                    alert(result.mensagem);
+                    location.reload();
+                } else {
+                    alert(result.mensagem || 'Erro ao atualizar produto.');
+                }
+            } catch (error) {
+                alert('Erro ao atualizar produto.');
+                console.error(error);
+            }
+        }
+        </script>
+        
+    
 </body>
 </html>

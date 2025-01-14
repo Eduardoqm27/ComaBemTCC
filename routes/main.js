@@ -3,7 +3,7 @@ const router = express.Router();
 const Produto = require('../models/Produto');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+const produtoController = require('../controllers/ProdutoController');
 
 // Middleware para obter o usuário da sessão e disponibilizá-lo nas views
 router.use((req, res, next) => {
@@ -11,51 +11,61 @@ router.use((req, res, next) => {
     next();
 });
 
-// Configuração do multer para upload de imagens
+// Configuração do multer para upload de imagens com validação de tipo
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadDir = 'public/uploads/';
-        
-        // Verifica se o diretório existe, caso contrário, cria
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-
-        cb(null, uploadDir); // Pasta onde as imagens serão armazenadas
+        cb(null, 'public/uploads/');
     },
     filename: (req, file, cb) => {
-        cb(null, `${Date.now()}${path.extname(file.originalname)}`); // Nome único para cada imagem
+        cb(null, `${Date.now()}${path.extname(file.originalname)}`);
     }
 });
-const upload = multer({ storage });
+
+const fileFilter = (req, file, cb) => {
+    const fileTypes = /jpeg|jpg|png|gif/;
+    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = fileTypes.test(file.mimetype);
+
+    if (extname && mimetype) {
+        return cb(null, true);
+    } else {
+        cb(new Error('Apenas arquivos de imagem (jpeg, jpg, png, gif) são permitidos.'));
+    }
+};
+
+const upload = multer({ storage, fileFilter });
+
+// Middleware para validar ID
+const validateId = (req, res, next) => {
+    const { id } = req.params;
+    if (!id || isNaN(Number(id))) {
+        return res.status(400).json({ sucesso: false, mensagem: 'ID inválido.' });
+    }
+    next();
+};
 
 // Rota para a página inicial (Destaques)
 router.get('/', async (req, res) => {
     try {
         const produtos = await Produto.findAll({ where: { promocao: true } });
-        res.render('index', { produtos }); // `user` já está disponível em res.locals
+        res.render('index', { produtos });
     } catch (error) {
         console.error('Erro ao buscar produtos em promoção:', error);
         res.status(500).send('Erro ao carregar a página inicial');
     }
 });
 
-// Rota para a página de vegetais
-router.get('/vegetais', async (req, res) => {
-    try {
-        const produtos = await Produto.findAll({ where: { categoria: 'verdura' } });
-        res.render('vegetais', { categoria: 'Vegetais', produtos }); // Renderiza uma view específica para vegetais
-    } catch (error) {
-        console.error('Erro ao buscar produtos da categoria Vegetais:', error);
-        res.status(500).send('Erro ao carregar a página de Vegetais');
-    }
-});
-
 // Rota para a página de ofertas
 router.get('/ofertas', async (req, res) => {
     try {
-        const produtos = await Produto.findAll({ where: { promocao: true } });
-        res.render('ofertas', { categoria: 'Ofertas', produtos }); // Renderiza uma view específica para ofertas
+        const produtos = await Produto.findAll({
+            where: {
+                desconto: {
+                    [Op.gt]: 0, // Verifica se o desconto é maior que 0
+                }
+            }
+        });
+        res.render('ofertas', { categoria: 'Ofertas', produtos });
     } catch (error) {
         console.error('Erro ao buscar ofertas:', error);
         res.status(500).send('Erro ao carregar a página de Ofertas');
@@ -66,7 +76,7 @@ router.get('/ofertas', async (req, res) => {
 router.get('/kits', async (req, res) => {
     try {
         const produtos = await Produto.findAll({ where: { categoria: 'kits' } });
-        res.render('kits', { categoria: 'Kits', produtos }); // Renderiza uma view específica para kits
+        res.render('kits', { categoria: 'Kits', produtos });
     } catch (error) {
         console.error('Erro ao buscar produtos da categoria Kits:', error);
         res.status(500).send('Erro ao carregar a página de Kits');
@@ -90,31 +100,21 @@ router.get('/adicionar-produto', async (req, res) => {
 });
 
 // Rota para adicionar um novo produto
-router.post('/adicionar-produto', upload.single('imagem'), async (req, res) => {
-    try {
-        const { nome_produto, marca, origem, descricao, preco, categoria, promocao, destaque } = req.body;
-
-        if (!nome_produto || !descricao || !preco || !categoria) {
-            return res.status(400).send('Todos os campos obrigatórios precisam ser preenchidos.');
+router.post('/adicionar-produto', (req, res, next) => {
+    upload.single('imagem')(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
+            return res.status(400).send('Erro no upload da imagem: ' + err.message);
+        } else if (err) {
+            return res.status(400).send('Erro: ' + err.message);
         }
+        next();
+    });
+}, produtoController.criarProduto);
 
-        const produto = await Produto.create({
-            nome_produto,
-            marca,
-            origem,
-            descricao,
-            preco,
-            categoria,
-            imagem: req.file ? req.file.filename : null,
-            promocao: promocao === 'on',
-            destaque: destaque === 'on',
-        });
-
-        res.redirect(`/produto/${produto.id}`); // Redireciona para a página do produto recém-adicionado
-    } catch (error) {
-        console.error('Erro ao adicionar produto:', error);
-        res.status(500).send('Erro ao adicionar produto.');
-    }
-});
+// Rotas de CRUD de produtos via API
+router.get('/produtos', produtoController.listarProdutos); // Listar produtos
+router.get('/editar-produto/:id', validateId, produtoController.editarProduto); // Editar produto
+router.put('/atualizar-produto/:id', validateId, upload.single('imagem'), produtoController.atualizarProduto); 
+router.delete('/excluir-produto/:id', validateId, produtoController.excluirProduto); // Excluir produto
 
 module.exports = router;
